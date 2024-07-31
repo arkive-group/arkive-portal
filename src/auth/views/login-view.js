@@ -75,18 +75,18 @@ export default function LoginView() {
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5 }}>
       <Typography variant="h4">Welcome to the Arkive Portal</Typography>
-      {/* <Stack direction="row" spacing={0.5}>
+      <Stack direction="row" spacing={0.5}>
         <Typography variant="body2">New user?</Typography>
 
         <Link
           component={RouterLink}
-          // href={paths.auth.register}
-          href="#"
+          href={paths.auth.register}
+          // href="#"
           variant="subtitle2"
         >
           Sign Up
         </Link>
-      </Stack> */}
+      </Stack>
     </Stack>
   )
 
