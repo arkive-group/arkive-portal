@@ -56,7 +56,7 @@ export function useNavData() {
           },
           {
             title: 'Sync + Upload',
-            path: paths.other,
+            path: paths.sync,
             icon: ICONS.user,
           },
           {

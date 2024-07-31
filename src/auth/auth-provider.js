@@ -177,8 +177,6 @@ export function AuthProvider({ children }) {
     ? 'authenticated'
     : 'unauthenticated'
 
-  console.log('checkAuthenticated', checkAuthenticated)
-
   const status = state.loading ? 'loading' : checkAuthenticated
 
   const memoizedValue = useMemo(
