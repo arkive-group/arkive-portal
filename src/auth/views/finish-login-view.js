@@ -68,7 +68,7 @@ export default function FinishLogiView() {
         variant="contained"
         loading={isSubmitting}
       >
-        Enter Plailister
+        Enter Arkive Portal
       </LoadingButton>
 
       <Link

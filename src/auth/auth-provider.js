@@ -6,11 +6,11 @@ import { initializeApp } from 'firebase/app'
 import {
   getAuth,
   signOut,
-  signInWithPopup,
+  // signInWithPopup,
   onAuthStateChanged,
-  GoogleAuthProvider,
+  // GoogleAuthProvider,
   signInWithEmailAndPassword,
-  signInWithCustomToken,
+  // signInWithCustomToken,
   sendSignInLinkToEmail,
   signInWithEmailLink,
 } from 'firebase/auth'
@@ -29,6 +29,8 @@ import { FIREBASE_API } from 'src/config-global'
 
 //
 import { AuthContext } from './auth-context'
+import { useRouter } from 'src/routes/hooks'
+import { paths } from '@/routes/paths'
 
 // ----------------------------------------------------------------------
 
@@ -57,6 +59,7 @@ const reducer = (state, action) => {
 // ----------------------------------------------------------------------
 
 export function AuthProvider({ children }) {
+  const router = useRouter()
   const [state, dispatch] = useReducer(reducer, initialState)
   const findUserByEmail = async email => {
     try {
@@ -69,6 +72,7 @@ export function AuthProvider({ children }) {
         return { id: userDoc.id, ...userDoc.data() }
       } else {
         console.log('No user found with the given email.')
+        return null
       }
     } catch (error) {
       console.error(error)
@@ -148,10 +152,36 @@ export function AuthProvider({ children }) {
     return useCredentials
   }, [])
 
-  const loginWithLink = useCallback(async email => {
-    console.log(email)
+  const signup = useCallback(async data => {
+    const usersCollection = collection(DB, 'users')
     try {
-      await sendSignInLinkToEmail(AUTH, email, actionCodeSettings)
+      const user = await setDoc(doc(usersCollection, data.email), {
+        email: data.email,
+        first_name: data.first_name,
+        last_name: data.last_name,
+        role: data.role,
+        company: data.company,
+        phoneNumber: data.phoneNumber,
+      })
+      console.log('User created:', user)
+      return user
+    } catch (error) {
+      console.error('Error creating user:', error)
+      return null
+    }
+  }, [])
+
+  const loginWithLink = useCallback(async email => {
+    try {
+      console.log(email)
+      const userData = await findUserByEmail(email)
+      console.log('userData', userData)
+      if (userData) {
+        await sendSignInLinkToEmail(AUTH, email, actionCodeSettings)
+        router.push(paths.auth.verify + `?email=${email}`)
+      } else {
+        router.push(paths.auth.register + `?email=${email}`)
+      }
     } catch (error) {
       console.error('Error sending email link:', error)
     }
@@ -169,6 +199,7 @@ export function AuthProvider({ children }) {
   // LOGOUT
   const logout = useCallback(async () => {
     await signOut(AUTH)
+    router.push(paths.auth.login)
   }, [])
 
   // ----------------------------------------------------------------------
@@ -189,6 +220,7 @@ export function AuthProvider({ children }) {
       //
       login,
       logout,
+      signup,
       loginWithLink,
       checkLoginLink,
     }),
@@ -198,6 +230,7 @@ export function AuthProvider({ children }) {
       //
       login,
       logout,
+      signup,
       loginWithLink,
       checkLoginLink,
     ],

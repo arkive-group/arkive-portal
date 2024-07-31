@@ -30,7 +30,7 @@ import { RouterLink } from '@/routes/components'
 // ----------------------------------------------------------------------
 
 export default function LoginView() {
-  const { login, loginWithGoogle, loginWithLink } = useAuthContext()
+  const { loginWithLink } = useAuthContext()
 
   const router = useRouter()
 
@@ -62,9 +62,7 @@ export default function LoginView() {
 
   const onSubmit = handleSubmit(async data => {
     try {
-      const res = await loginWithLink?.(data.email)
-
-      router.push(paths.auth.verify + `?email=${data.email}`)
+      await loginWithLink?.(data.email)
     } catch (error) {
       console.error(error)
       reset()

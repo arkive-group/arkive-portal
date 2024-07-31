@@ -37,9 +37,9 @@ export default function AuthLayout({ children, image, title }) {
       sx={{
         width: 1,
         mx: 'auto',
-        maxWidth: 480,
+        maxWidth: 500,
         px: { xs: 2, md: 8 },
-        pt: { xs: 15, md: 20 },
+        pt: { xs: 12, md: 15 },
         pb: { xs: 15, md: 0 },
       }}
     >
@@ -63,7 +63,7 @@ export default function AuthLayout({ children, image, title }) {
       component="main"
       direction="row"
       sx={{
-        minHeight: '100vh',
+        height: '100vh',
         width: '100%',
       }}
     >
