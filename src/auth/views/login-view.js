@@ -19,7 +19,7 @@ import { paths } from 'src/routes/paths'
 import { useRouter } from 'src/routes/hooks'
 
 // auth
-import { useAuthContext } from '@/auth/hooks'
+import { useAuthContext } from '@/auth/hooks/use-auth-context'
 // components
 import Iconify from 'src/components/iconify'
 import FormProvider, { RHFTextField } from 'src/components/hook-form'
@@ -63,7 +63,8 @@ export default function LoginView() {
   const onSubmit = handleSubmit(async data => {
     try {
       // await login?.(data.email, data.password)
-      await loginWithLink?.(data.email)
+      const res = await loginWithLink?.(data.email)
+      console.log(res)
 
       router.push(paths.auth.verify + `?email=${data.email}`)
     } catch (error) {

@@ -1,6 +1,6 @@
 // sections
 
-import FinishLogiView from 'src/views/auth/finish-login-view'
+import FinishLogiView from '@/auth/views/finish-login-view'
 
 // ----------------------------------------------------------------------
 

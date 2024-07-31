@@ -23,6 +23,7 @@ import {
 } from 'firebase/firestore'
 // config
 import { FIREBASE_API } from 'src/config-global'
+
 //
 import { AuthContext } from './auth-context'
 
@@ -33,7 +34,6 @@ const firebaseApp = initializeApp(FIREBASE_API)
 const AUTH = getAuth(firebaseApp)
 
 const DB = getFirestore(firebaseApp)
-
 // ----------------------------------------------------------------------
 
 const initialState = {
@@ -129,6 +129,7 @@ export function AuthProvider({ children }) {
   }, [])
 
   const loginWithLink = useCallback(async email => {
+    console.log(email)
     try {
       await sendSignInLinkToEmail(AUTH, email, actionCodeSettings)
     } catch (error) {
@@ -139,34 +140,12 @@ export function AuthProvider({ children }) {
   const checkLoginLink = useCallback(async email => {
     try {
       const credentials = await signInWithEmailLink(AUTH, email)
-
+      console.log(credentials)
       return credentials
     } catch (error) {
       console.error('Error signing in:', error)
     }
   }, [])
-
-  // LOGIN WITH GOOGLE
-
-  const loginWithGoogle = useCallback(async () => {
-    const provider = new GoogleAuthProvider()
-    await signInWithPopup(AUTH, provider)
-
-    // Sign in with the 2FA token
-    const token = window.prompt('Please enter the code you received: ')
-    await signInWithCustomToken(AUTH, token)
-  }, [])
-
-  // // LOGIN
-  // const login = useCallback(async (email, password) => {
-  //   await signInWithEmailAndPassword(AUTH, email, password)
-  // }, [])
-
-  // const loginWithGoogle = useCallback(async () => {
-  //   const provider = new GoogleAuthProvider()
-
-  //   await signInWithPopup(AUTH, provider)
-  // }, [])
 
   // LOGOUT
   const logout = useCallback(async () => {
@@ -191,7 +170,6 @@ export function AuthProvider({ children }) {
       //
       login,
       logout,
-      loginWithGoogle,
       loginWithLink,
       checkLoginLink,
     }),
@@ -201,7 +179,6 @@ export function AuthProvider({ children }) {
       //
       login,
       logout,
-      loginWithGoogle,
       loginWithLink,
       checkLoginLink,
     ],

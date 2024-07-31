@@ -51,7 +51,7 @@ export default function FinishLogiView() {
     try {
       await checkLoginLink(data.email)
 
-      router.push(paths.dashboard.root)
+      router.push(paths.home)
     } catch (error) {
       console.error(error)
     }
@@ -73,7 +73,7 @@ export default function FinishLogiView() {
 
       <Link
         component={RouterLink}
-        href={paths.auth.firebase.login}
+        href={paths.auth.login}
         color="inherit"
         variant="subtitle2"
         sx={{
@@ -95,8 +95,7 @@ export default function FinishLogiView() {
         <Typography variant="h3">Type in your Email</Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          Please type in the email address associated with your account, and
-          make sure it is the same to which the login link was sent to.
+          Please type in the email address associated with your account
         </Typography>
       </Stack>
     </>

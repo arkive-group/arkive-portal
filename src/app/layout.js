@@ -35,6 +35,7 @@ import { SettingsProvider } from 'src/components/settings'
 
 // Auth
 import { AuthConsumer } from '@/auth/auth-consumer'
+import { AuthProvider } from '@/auth/auth-provider'
 
 // ----------------------------------------------------------------------
 
@@ -59,27 +60,29 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={primaryFont.className}>
       <body>
-        <LocalizationProvider>
-          <SettingsProvider
-            defaultSettings={{
-              themeMode: 'light', // 'light' | 'dark'
-              themeDirection: 'ltr', //  'rtl' | 'ltr'
-              themeContrast: 'default', // 'default' | 'bold'
-              themeLayout: 'vertical', // 'vertical' | 'horizontal' | 'mini'
-              themeColorPresets: 'default', // 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red'
-              themeStretch: false,
-            }}
-          >
-            <ThemeProvider>
-              <MotionLazy>
-                <SnackbarProvider>
-                  <ProgressBar />
-                  <AuthConsumer>{children}</AuthConsumer>
-                </SnackbarProvider>
-              </MotionLazy>
-            </ThemeProvider>
-          </SettingsProvider>
-        </LocalizationProvider>
+        <AuthProvider>
+          <LocalizationProvider>
+            <SettingsProvider
+              defaultSettings={{
+                themeMode: 'light', // 'light' | 'dark'
+                themeDirection: 'ltr', //  'rtl' | 'ltr'
+                themeContrast: 'default', // 'default' | 'bold'
+                themeLayout: 'vertical', // 'vertical' | 'horizontal' | 'mini'
+                themeColorPresets: 'default', // 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red'
+                themeStretch: false,
+              }}
+            >
+              <ThemeProvider>
+                <MotionLazy>
+                  <SnackbarProvider>
+                    <ProgressBar />
+                    <AuthConsumer>{children}</AuthConsumer>
+                  </SnackbarProvider>
+                </MotionLazy>
+              </ThemeProvider>
+            </SettingsProvider>
+          </LocalizationProvider>
+        </AuthProvider>
       </body>
     </html>
   )

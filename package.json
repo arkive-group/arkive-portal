@@ -45,7 +45,7 @@
     "date-fns": "^2.30.0",
     "encoding": "^0.1.13",
     "eslint-config-next": "^14.2.5",
-    "firebase": "^10.3.0",
+    "firebase": "^10.12.4",
     "framer-motion": "^10.16.2",
     "highlight.js": "^11.8.0",
     "jsdom": "^24.1.0",
