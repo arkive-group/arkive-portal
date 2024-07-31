@@ -20,6 +20,9 @@ import {
   doc,
   getDoc,
   setDoc,
+  query,
+  getDocs,
+  where,
 } from 'firebase/firestore'
 // config
 import { FIREBASE_API } from 'src/config-global'
@@ -55,32 +58,55 @@ const reducer = (state, action) => {
 
 export function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState)
+  const findUserByEmail = async email => {
+    try {
+      const usersCollection = collection(DB, 'users')
+      const q = query(usersCollection, where('email', '==', email))
+      const querySnapshot = await getDocs(q)
 
+      if (!querySnapshot.empty) {
+        const userDoc = querySnapshot.docs[0]
+        return { id: userDoc.id, ...userDoc.data() }
+      } else {
+        console.log('No user found with the given email.')
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
   const initialize = useCallback(() => {
     try {
       onAuthStateChanged(AUTH, async user => {
         if (user) {
-          if (user.emailVerified) {
-            const userProfile = doc(DB, 'users', user.uid)
-            const docSnap = await getDoc(userProfile)
-            const profile = docSnap.data()
-
+          const userData = await findUserByEmail(user.email)
+          const userRef = doc(DB, 'users', user.uid)
+          if (userData) {
+            const userDoc = await getDoc(userRef)
+            const profile = userDoc.data()
             dispatch({
               type: 'INITIAL',
               payload: {
                 user: {
-                  ...user,
                   ...profile,
-                  id: user.uid,
-                  // role: 'admin',
+                  emailVerified: true,
+
+                  // Add other user data you want to store in the context
                 },
               },
             })
+            return
           } else {
+            await setDoc(userRef, {
+              email: user.email,
+            })
             dispatch({
               type: 'INITIAL',
               payload: {
-                user: null,
+                user: {
+                  email: user.email,
+                  emailVerified: true,
+                  // Add other user data you want to store in the context
+                },
               },
             })
           }
@@ -95,12 +121,6 @@ export function AuthProvider({ children }) {
       })
     } catch (error) {
       console.error(error)
-      dispatch({
-        type: 'INITIAL',
-        payload: {
-          user: null,
-        },
-      })
     }
   }, [])
 
@@ -140,7 +160,6 @@ export function AuthProvider({ children }) {
   const checkLoginLink = useCallback(async email => {
     try {
       const credentials = await signInWithEmailLink(AUTH, email)
-      console.log(credentials)
       return credentials
     } catch (error) {
       console.error('Error signing in:', error)
@@ -157,6 +176,8 @@ export function AuthProvider({ children }) {
   const checkAuthenticated = state.user?.emailVerified
     ? 'authenticated'
     : 'unauthenticated'
+
+  console.log('checkAuthenticated', checkAuthenticated)
 
   const status = state.loading ? 'loading' : checkAuthenticated
 

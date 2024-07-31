@@ -1,6 +1,6 @@
 {
-  "name": "@minimal-kit/next-js",
-  "author": "Minimals",
+  "name": "arkive-portal",
+  "author": "Arkive",
   "version": "5.5.0",
   "description": "Next & JavaScript",
   "private": true,
@@ -17,6 +17,7 @@
     "re-build-test": "rm -rf node_modules .next out dist build && npm install && npm run build"
   },
   "dependencies": {
+    "@auth/firebase-adapter": "^2.4.2",
     "@auth0/auth0-react": "^2.2.1",
     "@aws-amplify/auth": "^5.6.4",
     "@emotion/cache": "^11.10.5",
@@ -46,6 +47,7 @@
     "encoding": "^0.1.13",
     "eslint-config-next": "^14.2.5",
     "firebase": "^10.12.4",
+    "firebase-admin": "^11.11.1",
     "framer-motion": "^10.16.2",
     "highlight.js": "^11.8.0",
     "jsdom": "^24.1.0",
@@ -53,6 +55,7 @@
     "mapbox-gl": "^2.15.0",
     "mui-one-time-password-input": "^2.0.0",
     "next": "^14.2.5",
+    "next-auth": "^4.24.7",
     "notistack": "^3.0.1",
     "nprogress": "^0.2.0",
     "numeral": "^2.0.6",

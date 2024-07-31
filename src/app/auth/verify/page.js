@@ -4,7 +4,7 @@ import VerifyView from '@/auth/views/verify-view'
 // ----------------------------------------------------------------------
 
 export const metadata = {
-  title: 'Firebase: Verify',
+  title: 'Arkive: Verify Email',
 }
 
 export default function VerifyPage() {

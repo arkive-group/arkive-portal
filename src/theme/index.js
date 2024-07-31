@@ -1,39 +1,46 @@
-'use client';
+'use client'
 
-import PropTypes from 'prop-types';
-import merge from 'lodash/merge';
-import { useMemo } from 'react';
+import PropTypes from 'prop-types'
+import merge from 'lodash/merge'
+import { useMemo } from 'react'
 // @mui
-import CssBaseline from '@mui/material/CssBaseline';
-import { createTheme, ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline'
+import {
+  createTheme,
+  ThemeProvider as MuiThemeProvider,
+} from '@mui/material/styles'
 // components
-import { useSettingsContext } from 'src/components/settings';
+import { useSettingsContext } from 'src/components/settings'
 // system
-import { palette } from './palette';
-import { shadows } from './shadows';
-import { typography } from './typography';
-import { customShadows } from './custom-shadows';
-import { componentsOverrides } from './overrides';
+import { palette } from './palette'
+import { shadows } from './shadows'
+import { typography } from './typography'
+import { customShadows } from './custom-shadows'
+import { componentsOverrides } from './overrides'
 // options
-import { presets } from './options/presets';
-import { darkMode } from './options/dark-mode';
-import { contrast } from './options/contrast';
-import RTL, { direction } from './options/right-to-left';
+import { presets } from './options/presets'
+import { darkMode } from './options/dark-mode'
+import { contrast } from './options/contrast'
+import RTL, { direction } from './options/right-to-left'
 //
-import NextAppDirEmotionCacheProvider from './next-emotion-cache';
+import NextAppDirEmotionCacheProvider from './next-emotion-cache'
 
 // ----------------------------------------------------------------------
 
 export default function ThemeProvider({ children }) {
-  const settings = useSettingsContext();
+  const settings = useSettingsContext()
 
-  const darkModeOption = darkMode(settings.themeMode);
+  // const darkModeOption = darkMode(settings.themeMode);
+  const darkModeOption = darkMode('light')
 
-  const presetsOption = presets(settings.themeColorPresets);
+  const presetsOption = presets(settings.themeColorPresets)
 
-  const contrastOption = contrast(settings.themeContrast === 'bold', settings.themeMode);
+  const contrastOption = contrast(
+    settings.themeContrast === 'bold',
+    settings.themeMode,
+  )
 
-  const directionOption = direction(settings.themeDirection);
+  const directionOption = direction(settings.themeDirection)
 
   const baseOption = useMemo(
     () => ({
@@ -43,8 +50,8 @@ export default function ThemeProvider({ children }) {
       typography,
       shape: { borderRadius: 8 },
     }),
-    []
-  );
+    [],
+  )
 
   const memoizedValue = useMemo(
     () =>
@@ -58,16 +65,25 @@ export default function ThemeProvider({ children }) {
         // Presets: remove if not in use
         presetsOption,
         // Contrast: remove if not in use
-        contrastOption.theme
+        contrastOption.theme,
       ),
-    [baseOption, directionOption, darkModeOption, presetsOption, contrastOption.theme]
-  );
+    [
+      baseOption,
+      directionOption,
+      darkModeOption,
+      presetsOption,
+      contrastOption.theme,
+    ],
+  )
 
-  const theme = createTheme(memoizedValue);
+  const theme = createTheme(memoizedValue)
 
-  theme.components = merge(componentsOverrides(theme), contrastOption.components);
+  theme.components = merge(
+    componentsOverrides(theme),
+    contrastOption.components,
+  )
 
-  const themeWithLocale = useMemo(() => createTheme(theme), [theme]);
+  const themeWithLocale = useMemo(() => createTheme(theme), [theme])
 
   return (
     <NextAppDirEmotionCacheProvider options={{ key: 'css' }}>
@@ -78,9 +94,9 @@ export default function ThemeProvider({ children }) {
         </RTL>
       </MuiThemeProvider>
     </NextAppDirEmotionCacheProvider>
-  );
+  )
 }
 
 ThemeProvider.propTypes = {
   children: PropTypes.node,
-};
+}

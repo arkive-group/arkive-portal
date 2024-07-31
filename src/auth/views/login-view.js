@@ -62,9 +62,7 @@ export default function LoginView() {
 
   const onSubmit = handleSubmit(async data => {
     try {
-      // await login?.(data.email, data.password)
       const res = await loginWithLink?.(data.email)
-      console.log(res)
 
       router.push(paths.auth.verify + `?email=${data.email}`)
     } catch (error) {
@@ -77,7 +75,7 @@ export default function LoginView() {
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5 }}>
       <Typography variant="h4">Welcome to the Arkive Portal</Typography>
-      <Stack direction="row" spacing={0.5}>
+      {/* <Stack direction="row" spacing={0.5}>
         <Typography variant="body2">New user?</Typography>
 
         <Link
@@ -88,7 +86,7 @@ export default function LoginView() {
         >
           Sign Up
         </Link>
-      </Stack>
+      </Stack> */}
     </Stack>
   )
 
@@ -117,7 +115,7 @@ export default function LoginView() {
         }}
       /> */}
 
-      <Link
+      {/* <Link
         component={RouterLink}
         href="#"
         // href={paths.auth.resetPassword}
@@ -127,7 +125,7 @@ export default function LoginView() {
         sx={{ alignSelf: 'flex-end' }}
       >
         Forgot password?
-      </Link>
+      </Link> */}
 
       <LoadingButton
         fullWidth

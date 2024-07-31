@@ -16,10 +16,10 @@ import SvgColor from 'src/components/svg-color'
 import { useSettingsContext } from 'src/components/settings'
 //
 import { HEADER, NAV } from '../config-layout'
-import { Searchbar } from '../_common'
-import BaseOptions from '@/components/settings/drawer/base-option'
-import LightSwitch from './mode-switch'
-import ModeSwitch from './mode-switch'
+import { Searchbar, NotificationsPopover, AccountPopover } from '../_common'
+// import BaseOptions from '@/components/settings/drawer/base-option'
+// import LightSwitch from './mode-switch'
+// import ModeSwitch from './mode-switch'
 
 // ----------------------------------------------------------------------
 
@@ -57,6 +57,9 @@ export default function Header({ onOpenNav }) {
         justifyContent="flex-end"
         spacing={{ xs: 0.5, sm: 1 }}
       >
+        <NotificationsPopover />
+        <AccountPopover />
+
         {/* <ModeSwitch theme={theme} /> */}
       </Stack>
     </>

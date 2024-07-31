@@ -10,5 +10,5 @@ export const paths = {
     resetPassword: '/auth/reset-password',
     finishLogin: '/auth/finish-login',
   },
-  other: '/other',
+  other: '#',
 }

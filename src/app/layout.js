@@ -40,18 +40,11 @@ import { AuthProvider } from '@/auth/auth-provider'
 // ----------------------------------------------------------------------
 
 export const metadata = {
-  title: 'F1 Dashboard',
-  description:
-    'The formula 1 dashboard is a web application that provides information about the formula 1',
+  title: 'Arkive Portal',
   icons: [
     {
       rel: 'icon',
-      url: '/logo/f1-logo.png',
-    },
-    {
-      rel: 'icon',
-      type: 'image/png',
-      url: '/logo/f1-logo.png',
+      url: '/assets/images/temporary-logo.png',
     },
   ],
 }
