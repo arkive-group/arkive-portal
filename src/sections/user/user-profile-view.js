@@ -26,9 +26,9 @@ export default function UserProfileView() {
         }}
       >
         <ProfileCover
-          role={'Anti-Waste Trooper'}
-          name={user?.email}
-          avatarUrl={user?.photoURL}
+          role={user?.role || 'Anti-Waste Trooper'}
+          name={user?.first_name + ' ' + user?.last_name}
+          avatarUrl={user?.image}
           coverUrl={user?.coverUrl}
         />
       </Card>

@@ -83,36 +83,14 @@ export function AuthProvider({ children }) {
       onAuthStateChanged(AUTH, async user => {
         if (user) {
           const userData = await findUserByEmail(user.email)
-          const userRef = doc(DB, 'users', user.uid)
           if (userData) {
-            const userDoc = await getDoc(userRef)
-            const profile = userDoc.data()
             dispatch({
               type: 'INITIAL',
               payload: {
-                user: {
-                  ...profile,
-                  emailVerified: true,
-
-                  // Add other user data you want to store in the context
-                },
+                user: userData,
               },
             })
             return
-          } else {
-            await setDoc(userRef, {
-              email: user.email,
-            })
-            dispatch({
-              type: 'INITIAL',
-              payload: {
-                user: {
-                  email: user.email,
-                  emailVerified: true,
-                  // Add other user data you want to store in the context
-                },
-              },
-            })
           }
         } else {
           dispatch({
@@ -155,7 +133,7 @@ export function AuthProvider({ children }) {
   const signup = useCallback(async data => {
     const usersCollection = collection(DB, 'users')
     try {
-      const user = await setDoc(doc(usersCollection, data.email), {
+      const user = await setDoc(doc(usersCollection), {
         email: data.email,
         first_name: data.first_name,
         last_name: data.last_name,
@@ -163,7 +141,7 @@ export function AuthProvider({ children }) {
         company: data.company,
         phoneNumber: data.phoneNumber,
       })
-      console.log('User created:', user)
+      state.user = user
       return user
     } catch (error) {
       console.error('Error creating user:', error)
@@ -173,13 +151,11 @@ export function AuthProvider({ children }) {
 
   const loginWithLink = useCallback(async email => {
     try {
-      console.log(email)
       const userData = await findUserByEmail(email)
-      console.log('userData', userData)
       if (userData) {
-        await sendSignInLinkToEmail(AUTH, email, actionCodeSettings)
         router.push(paths.auth.verify + `?email=${email}`)
       } else {
+        await sendSignInLinkToEmail(AUTH, email, actionCodeSettings)
         router.push(paths.auth.register + `?email=${email}`)
       }
     } catch (error) {
@@ -190,23 +166,28 @@ export function AuthProvider({ children }) {
   const checkLoginLink = useCallback(async email => {
     try {
       const credentials = await signInWithEmailLink(AUTH, email)
+      if (credentials.user.emailVerified) {
+        const userData = await findUserByEmail(email)
+        state.user = userData
+        router.push(paths.home)
+      }
       return credentials
     } catch (error) {
       console.error('Error signing in:', error)
+      return null
     }
   }, [])
 
   // LOGOUT
   const logout = useCallback(async () => {
     await signOut(AUTH)
-    router.push(paths.auth.login)
+    console.log('User signed out')
+    state.user = null
   }, [])
 
   // ----------------------------------------------------------------------
 
-  const checkAuthenticated = state.user?.emailVerified
-    ? 'authenticated'
-    : 'unauthenticated'
+  const checkAuthenticated = state.user ? 'authenticated' : 'unauthenticated'
 
   const status = state.loading ? 'loading' : checkAuthenticated
 

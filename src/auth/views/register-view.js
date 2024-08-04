@@ -32,6 +32,7 @@ import FormProvider, {
   // RHFAutocomplete,
 } from 'src/components/hook-form'
 import { useAuthContext } from '@/auth/hooks/use-auth-context'
+import { CardHeader } from '@mui/material'
 
 // ----------------------------------------------------------------------
 
@@ -53,7 +54,7 @@ export default function RegisterView() {
     phoneNumber: Yup.string().required('Phone number is required'),
     company: Yup.string().required('Company is required'),
     role: Yup.string().required('Role is required'),
-    avatarUrl: Yup.mixed().nullable().required('Avatar is required'),
+    // avatarUrl: Yup.mixed().nullable().required('Avatar is required'),
   })
 
   const defaultValues = useMemo(
@@ -63,7 +64,7 @@ export default function RegisterView() {
       role: '',
       email: email || '',
       company: '',
-      avatarUrl: null,
+      // avatarUrl: null,
       phoneNumber: '',
     }),
     [],
@@ -88,7 +89,6 @@ export default function RegisterView() {
   const onSubmit = handleSubmit(async data => {
     try {
       const currentUser = await signup(data)
-      // await new Promise(resolve => setTimeout(resolve, 500))
       reset()
       enqueueSnackbar(currentUser ? 'Update success!' : 'Create success!')
       router.push(paths.home)
@@ -116,7 +116,12 @@ export default function RegisterView() {
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Card sx={{ p: 3 }}>
-        <Box sx={{ mb: 5 }}>
+        <CardHeader
+          title="Join The Arkive Portal"
+          subheader="Take part in our anti-waste mission"
+          sx={{ mb: 3, p: 0 }}
+        />
+        {/* <Box sx={{ mb: 5 }}>
           <RHFUploadAvatar
             name="avatarUrl"
             maxSize={3145728}
@@ -137,7 +142,7 @@ export default function RegisterView() {
               </Typography>
             }
           />
-        </Box>
+        </Box> */}
         <Box
           rowGap={3}
           columnGap={2}
