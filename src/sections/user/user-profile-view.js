@@ -28,8 +28,8 @@ export default function UserProfileView() {
         <ProfileCover
           role={user?.role || 'Anti-Waste Trooper'}
           name={user?.first_name + ' ' + user?.last_name}
-          avatarUrl={user?.image}
-          coverUrl={user?.coverUrl}
+          avatarUrl={user?.avatar}
+          // coverUrl={'/assets/images/temporary-logo.png'}
         />
       </Card>
     </Container>
