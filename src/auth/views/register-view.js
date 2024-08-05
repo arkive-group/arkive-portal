@@ -19,20 +19,17 @@ import { fData } from 'src/utils/format-number'
 // routes
 import { paths } from 'src/routes/paths'
 import { useRouter, useSearchParams } from 'src/routes/hooks'
-// assets
-// import { countries } from 'src/assets/data'
-// components
-// import Label from 'src/components/label'
-// import Iconify from 'src/components/iconify'
+
 import { useSnackbar } from 'src/components/snackbar'
 import FormProvider, {
-  // RHFSwitch,
   RHFTextField,
   RHFUploadAvatar,
-  // RHFAutocomplete,
 } from 'src/components/hook-form'
-import { useAuthContext } from '@/auth/hooks/use-auth-context'
 import { CardHeader } from '@mui/material'
+
+// Firebase
+import { useAuthContext } from '@/auth/hooks/use-auth-context'
+import { avatar } from '@/theme/overrides/components/avatar'
 
 // ----------------------------------------------------------------------
 
@@ -54,7 +51,7 @@ export default function RegisterView() {
     phoneNumber: Yup.string().required('Phone number is required'),
     company: Yup.string().required('Company is required'),
     role: Yup.string().required('Role is required'),
-    // avatarUrl: Yup.mixed().nullable().required('Avatar is required'),
+    avatar: Yup.mixed().nullable().required('Avatar is required'),
   })
 
   const defaultValues = useMemo(
@@ -64,7 +61,7 @@ export default function RegisterView() {
       role: '',
       email: email || '',
       company: '',
-      // avatarUrl: null,
+      avatar: null,
       phoneNumber: '',
     }),
     [],
@@ -88,11 +85,11 @@ export default function RegisterView() {
 
   const onSubmit = handleSubmit(async data => {
     try {
-      const currentUser = await signup(data)
+      const user = await signup(data)
       reset()
-      enqueueSnackbar(currentUser ? 'Update success!' : 'Create success!')
-      router.push(paths.home)
-      console.log('DATA', data)
+      enqueueSnackbar(
+        user ? 'Signup successful! - Please verify email' : 'Signup Error...!',
+      )
     } catch (error) {
       console.error(error)
     }
@@ -107,7 +104,7 @@ export default function RegisterView() {
       })
 
       if (file) {
-        setValue('avatarUrl', newFile, { shouldValidate: true })
+        setValue('avatar', newFile, { shouldValidate: true })
       }
     },
     [setValue],
@@ -121,16 +118,16 @@ export default function RegisterView() {
           subheader="Take part in our anti-waste mission"
           sx={{ mb: 3, p: 0 }}
         />
-        {/* <Box sx={{ mb: 5 }}>
+        <Box sx={{ mb: 5 }}>
           <RHFUploadAvatar
-            name="avatarUrl"
+            name="avatar"
             maxSize={3145728}
             onDrop={handleDrop}
             helperText={
               <Typography
                 variant="caption"
                 sx={{
-                  mt: 3,
+                  // mt: 3,
                   mx: 'auto',
                   display: 'block',
                   textAlign: 'center',
@@ -142,7 +139,7 @@ export default function RegisterView() {
               </Typography>
             }
           />
-        </Box> */}
+        </Box>
         <Box
           rowGap={3}
           columnGap={2}

@@ -1,44 +1,33 @@
 'use client'
 
 import PropTypes from 'prop-types'
-import { useEffect, useReducer, useCallback, useMemo } from 'react'
-import { initializeApp } from 'firebase/app'
+import { useEffect, useReducer, useCallback, useMemo, useState } from 'react'
 import {
-  getAuth,
   signOut,
-  // signInWithPopup,
   onAuthStateChanged,
-  // GoogleAuthProvider,
   signInWithEmailAndPassword,
-  // signInWithCustomToken,
   sendSignInLinkToEmail,
   signInWithEmailLink,
 } from 'firebase/auth'
 import {
-  getFirestore,
   collection,
   doc,
-  getDoc,
   setDoc,
   query,
   getDocs,
   where,
 } from 'firebase/firestore'
-// config
-import { FIREBASE_API } from 'src/config-global'
 
-//
+// config
+import { AUTH, DB, STORAGE } from '@/auth/utils/firebase-config'
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+
 import { AuthContext } from './auth-context'
+
+// routes
 import { useRouter } from 'src/routes/hooks'
 import { paths } from '@/routes/paths'
 
-// ----------------------------------------------------------------------
-
-const firebaseApp = initializeApp(FIREBASE_API)
-
-const AUTH = getAuth(firebaseApp)
-
-const DB = getFirestore(firebaseApp)
 // ----------------------------------------------------------------------
 
 const initialState = {
@@ -61,6 +50,7 @@ const reducer = (state, action) => {
 export function AuthProvider({ children }) {
   const router = useRouter()
   const [state, dispatch] = useReducer(reducer, initialState)
+  const [foundUser, setFoundUser] = useState(null)
   const findUserByEmail = async email => {
     try {
       const usersCollection = collection(DB, 'users')
@@ -71,7 +61,6 @@ export function AuthProvider({ children }) {
         const userDoc = querySnapshot.docs[0]
         return { id: userDoc.id, ...userDoc.data() }
       } else {
-        console.log('No user found with the given email.')
         return null
       }
     } catch (error) {
@@ -82,7 +71,7 @@ export function AuthProvider({ children }) {
     try {
       onAuthStateChanged(AUTH, async user => {
         if (user) {
-          const userData = await findUserByEmail(user.email)
+          const userData = foundUser || (await findUserByEmail(user.email))
           if (userData) {
             dispatch({
               type: 'INITIAL',
@@ -133,15 +122,25 @@ export function AuthProvider({ children }) {
   const signup = useCallback(async data => {
     const usersCollection = collection(DB, 'users')
     try {
-      const user = await setDoc(doc(usersCollection), {
+      const avatarRef = ref(
+        STORAGE,
+        `avatars/${data.avatar.name}_${data.email}`,
+      )
+      await uploadBytes(avatarRef, data.avatar)
+      const avatarUrl = await getDownloadURL(avatarRef)
+      const user = {
         email: data.email,
         first_name: data.first_name,
         last_name: data.last_name,
         role: data.role,
         company: data.company,
         phoneNumber: data.phoneNumber,
-      })
-      state.user = user
+        avatar: avatarUrl,
+      }
+      await setDoc(doc(usersCollection), user)
+
+      await sendSignInLinkToEmail(AUTH, user.email, actionCodeSettings)
+      router.push(paths.auth.verify + `?email=${user.email}`)
       return user
     } catch (error) {
       console.error('Error creating user:', error)
@@ -153,9 +152,10 @@ export function AuthProvider({ children }) {
     try {
       const userData = await findUserByEmail(email)
       if (userData) {
+        setFoundUser(userData)
+        await sendSignInLinkToEmail(AUTH, email, actionCodeSettings)
         router.push(paths.auth.verify + `?email=${email}`)
       } else {
-        await sendSignInLinkToEmail(AUTH, email, actionCodeSettings)
         router.push(paths.auth.register + `?email=${email}`)
       }
     } catch (error) {
@@ -167,9 +167,9 @@ export function AuthProvider({ children }) {
     try {
       const credentials = await signInWithEmailLink(AUTH, email)
       if (credentials.user.emailVerified) {
-        const userData = await findUserByEmail(email)
-        state.user = userData
+        state.user = foundUser
         router.push(paths.home)
+        setFoundUser(null)
       }
       return credentials
     } catch (error) {
