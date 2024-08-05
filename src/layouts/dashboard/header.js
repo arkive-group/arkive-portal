@@ -17,9 +17,6 @@ import { useSettingsContext } from 'src/components/settings'
 //
 import { HEADER, NAV } from '../config-layout'
 import { Searchbar, NotificationsPopover, AccountPopover } from '../_common'
-// import BaseOptions from '@/components/settings/drawer/base-option'
-// import LightSwitch from './mode-switch'
-// import ModeSwitch from './mode-switch'
 
 // ----------------------------------------------------------------------
 
@@ -59,8 +56,6 @@ export default function Header({ onOpenNav }) {
       >
         <NotificationsPopover />
         <AccountPopover />
-
-        {/* <ModeSwitch theme={theme} /> */}
       </Stack>
     </>
   )
