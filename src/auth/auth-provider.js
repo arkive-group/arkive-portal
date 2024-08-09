@@ -107,7 +107,7 @@ export function AuthProvider({ children }) {
     url: `${
       process.env.NODE_ENV === 'development'
         ? 'http://localhost:3000'
-        : `https://${process.env.VERCEL_URL}`
+        : `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
     }/auth/finish-login`,
     handleCodeInApp: true,
   }
@@ -152,7 +152,7 @@ export function AuthProvider({ children }) {
 
   const loginWithLink = useCallback(async email => {
     console.log(actionCodeSettings)
-    console.log(process.env.VERCEL_URL)
+    console.log(process.env.NEXT_PUBLIC_VERCEL_URL)
 
     try {
       const userData = await findUserByEmail(email)
