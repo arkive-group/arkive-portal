@@ -18,20 +18,18 @@ export default function UserProfileView() {
   const { user } = useAuthContext()
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <Card
-        sx={{
-          mb: 3,
-          height: 200,
-        }}
-      >
-        <ProfileCover
-          role={user?.role || 'Anti-Waste Trooper'}
-          name={user?.first_name + ' ' + user?.last_name}
-          avatarUrl={user?.avatar}
-          // coverUrl={'/assets/images/temporary-logo.png'}
-        />
-      </Card>
-    </Container>
+    <Card
+      sx={{
+        mb: 3,
+        height: 200,
+      }}
+    >
+      <ProfileCover
+        role={user?.role || 'Anti-Waste Trooper'}
+        name={user?.first_name + ' ' + user?.last_name}
+        avatarUrl={user?.avatar}
+        // coverUrl={'/assets/images/temporary-logo.png'}
+      />
+    </Card>
   )
 }

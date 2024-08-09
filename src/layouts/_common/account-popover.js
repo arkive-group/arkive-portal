@@ -18,6 +18,7 @@ import { useAuthContext } from 'src/auth/hooks'
 import { varHover } from 'src/components/animate'
 import { useSnackbar } from 'src/components/snackbar'
 import CustomPopover, { usePopover } from 'src/components/custom-popover'
+import { ARKIVE_STORE } from '@/config-global'
 
 // ----------------------------------------------------------------------
 
@@ -115,6 +116,13 @@ export default function AccountPopover() {
         </Stack>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
+
+        <MenuItem
+          onClick={() => router.push(ARKIVE_STORE)}
+          sx={{ m: 1, fontWeight: 'fontWeightBold', color: 'error.main' }}
+        >
+          Exit Portal
+        </MenuItem>
 
         <MenuItem
           onClick={handleLogout}

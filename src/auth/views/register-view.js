@@ -8,16 +8,12 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import LoadingButton from '@mui/lab/LoadingButton'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
-// import Stack from '@mui/material/Stack'
-// import Button from '@mui/material/Button'
-// import Switch from '@mui/material/Switch'
-// import Grid from '@mui/material/Unstable_Grid2'
 import Typography from '@mui/material/Typography'
-import FormControlLabel from '@mui/material/FormControlLabel'
+
 // utils
 import { fData } from 'src/utils/format-number'
 // routes
-import { paths } from 'src/routes/paths'
+
 import { useRouter, useSearchParams } from 'src/routes/hooks'
 
 import { useSnackbar } from 'src/components/snackbar'
@@ -29,7 +25,6 @@ import { CardHeader } from '@mui/material'
 
 // Firebase
 import { useAuthContext } from '@/auth/hooks/use-auth-context'
-import { avatar } from '@/theme/overrides/components/avatar'
 
 // ----------------------------------------------------------------------
 

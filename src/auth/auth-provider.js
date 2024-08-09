@@ -26,6 +26,7 @@ import { AuthContext } from './auth-context'
 
 // routes
 import { useRouter } from 'src/routes/hooks'
+import { useSnackbar } from 'src/components/snackbar'
 import { paths } from '@/routes/paths'
 
 // ----------------------------------------------------------------------
@@ -49,6 +50,8 @@ const reducer = (state, action) => {
 
 export function AuthProvider({ children }) {
   const router = useRouter()
+  const { enqueueSnackbar } = useSnackbar()
+
   const [state, dispatch] = useReducer(reducer, initialState)
   const [foundUser, setFoundUser] = useState(null)
   const findUserByEmail = async email => {
@@ -96,8 +99,6 @@ export function AuthProvider({ children }) {
   }, [])
 
   useEffect(() => {
-    console.log(process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL)
-
     initialize()
   }, [initialize])
 
@@ -122,6 +123,13 @@ export function AuthProvider({ children }) {
   }, [])
 
   const signup = useCallback(async data => {
+    const existingUser = await findUserByEmail(data.email)
+    if (existingUser) {
+      enqueueSnackbar(
+        'User with this email already exists. Please login or use a different email.',
+      )
+      return null
+    }
     const usersCollection = collection(DB, 'users')
     try {
       const avatarRef = ref(
@@ -151,8 +159,6 @@ export function AuthProvider({ children }) {
   }, [])
 
   const loginWithLink = useCallback(async email => {
-    console.log(actionCodeSettings)
-
     try {
       const userData = await findUserByEmail(email)
       if (userData) {
@@ -185,8 +191,8 @@ export function AuthProvider({ children }) {
   // LOGOUT
   const logout = useCallback(async () => {
     await signOut(AUTH)
-    console.log('User signed out')
     state.user = null
+    router.push(paths.auth.login)
   }, [])
 
   // ----------------------------------------------------------------------
