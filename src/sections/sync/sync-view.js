@@ -7,6 +7,7 @@ import UserProfileView from '@/sections/user/user-profile-view'
 import { UploadBox } from '@/components/upload'
 import { useCallback, useState } from 'react'
 import Iconify from '@/components/iconify'
+import ProductUnavailable from '../error/product-unavailable'
 
 // ----------------------------------------------------------------------
 
@@ -42,7 +43,8 @@ export default function SyncView() {
   return (
     <Container maxWidth="xl">
       <UserProfileView />
-      <Grid container spacing={3}>
+      <ProductUnavailable />
+      <Grid container spacing={3} sx={{ mt: 3 }}>
         {uploadOptions.map(option => (
           <Grid xs={12} md={6} lg={4} key={option.value}>
             <UploadBox

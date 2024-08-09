@@ -1,7 +1,8 @@
 // @mui
 import { Container } from '@mui/material'
-import Grid from '@mui/material/Unstable_Grid2'
 import UserProfileView from '@/sections/user/user-profile-view'
+
+import ProductUnavailable from '../error/product-unavailable'
 
 // ----------------------------------------------------------------------
 
@@ -9,7 +10,7 @@ export default function HomeView() {
   return (
     <Container maxWidth="xl">
       <UserProfileView />
-      <Grid container spacing={3}></Grid>
+      <ProductUnavailable />
     </Container>
   )
 }
