@@ -96,6 +96,8 @@ export function AuthProvider({ children }) {
   }, [])
 
   useEffect(() => {
+    console.log(process.env.VERCEL_URL)
+
     initialize()
   }, [initialize])
 
@@ -149,6 +151,9 @@ export function AuthProvider({ children }) {
   }, [])
 
   const loginWithLink = useCallback(async email => {
+    console.log(actionCodeSettings)
+    console.log(process.env.VERCEL_URL)
+
     try {
       const userData = await findUserByEmail(email)
       if (userData) {
