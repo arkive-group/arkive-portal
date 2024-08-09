@@ -96,6 +96,8 @@ export function AuthProvider({ children }) {
   }, [])
 
   useEffect(() => {
+    console.log(process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL)
+
     initialize()
   }, [initialize])
 
@@ -105,7 +107,7 @@ export function AuthProvider({ children }) {
     url: `${
       process.env.NODE_ENV === 'development'
         ? 'http://localhost:3000'
-        : `https://${process.env.NEXT_PUBLIC_VERCEL_ENV}`
+        : `https://${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}`
     }/auth/finish-login`,
     handleCodeInApp: true,
   }
