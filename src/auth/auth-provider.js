@@ -96,8 +96,6 @@ export function AuthProvider({ children }) {
   }, [])
 
   useEffect(() => {
-    console.log(process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL)
-
     initialize()
   }, [initialize])
 
@@ -151,8 +149,6 @@ export function AuthProvider({ children }) {
   }, [])
 
   const loginWithLink = useCallback(async email => {
-    console.log(actionCodeSettings)
-
     try {
       const userData = await findUserByEmail(email)
       if (userData) {
@@ -185,8 +181,8 @@ export function AuthProvider({ children }) {
   // LOGOUT
   const logout = useCallback(async () => {
     await signOut(AUTH)
-    console.log('User signed out')
     state.user = null
+    router.push(paths.auth.login)
   }, [])
 
   // ----------------------------------------------------------------------
