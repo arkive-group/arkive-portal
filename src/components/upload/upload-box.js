@@ -1,20 +1,28 @@
-import PropTypes from 'prop-types';
-import { useDropzone } from 'react-dropzone';
+import PropTypes from 'prop-types'
+import { useDropzone } from 'react-dropzone'
 // @mui
-import { alpha } from '@mui/material/styles';
-import Box from '@mui/material/Box';
+import { alpha } from '@mui/material/styles'
+import Box from '@mui/material/Box'
 //
-import Iconify from '../iconify';
+import Iconify from '../iconify'
 
 // ----------------------------------------------------------------------
 
-export default function UploadBox({ placeholder, error, disabled, sx, ...other }) {
-  const { getRootProps, getInputProps, isDragActive, isDragReject } = useDropzone({
-    disabled,
-    ...other,
-  });
+export default function UploadBox({
+  placeholder,
+  error,
+  disabled,
+  sx,
+  ...other
+}) {
+  const { getRootProps, getInputProps, isDragActive, isDragReject } =
+    useDropzone({
+      multiple: false,
+      disabled,
+      ...other,
+    })
 
-  const hasError = isDragReject || error;
+  const hasError = isDragReject || error
 
   return (
     <Box
@@ -30,8 +38,8 @@ export default function UploadBox({ placeholder, error, disabled, sx, ...other }
         alignItems: 'center',
         color: 'text.disabled',
         justifyContent: 'center',
-        bgcolor: (theme) => alpha(theme.palette.grey[500], 0.08),
-        border: (theme) => `dashed 1px ${alpha(theme.palette.grey[500], 0.16)}`,
+        bgcolor: theme => alpha(theme.palette.grey[500], 0.08),
+        border: theme => `dashed 1px ${alpha(theme.palette.grey[500], 0.16)}`,
         ...(isDragActive && {
           opacity: 0.72,
         }),
@@ -42,7 +50,7 @@ export default function UploadBox({ placeholder, error, disabled, sx, ...other }
         ...(hasError && {
           color: 'error.main',
           borderColor: 'error.main',
-          bgcolor: (theme) => alpha(theme.palette.error.main, 0.08),
+          bgcolor: theme => alpha(theme.palette.error.main, 0.08),
         }),
         '&:hover': {
           opacity: 0.72,
@@ -54,7 +62,7 @@ export default function UploadBox({ placeholder, error, disabled, sx, ...other }
 
       {placeholder || <Iconify icon="eva:cloud-upload-fill" width={28} />}
     </Box>
-  );
+  )
 }
 
 UploadBox.propTypes = {
@@ -62,4 +70,4 @@ UploadBox.propTypes = {
   error: PropTypes.bool,
   placeholder: PropTypes.object,
   sx: PropTypes.object,
-};
+}

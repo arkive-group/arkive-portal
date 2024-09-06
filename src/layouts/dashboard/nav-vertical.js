@@ -17,8 +17,8 @@ import { NavSectionVertical } from 'src/components/nav-section'
 import { NAV } from '../config-layout'
 import { useNavData } from './config-navigation'
 import { NavToggleButton } from '../_common'
-import { Button } from '@mui/material'
-import { ARKIVE_STORE } from '@/config-global'
+// import { Button } from '@mui/material'
+// import { ARKIVE_STORE } from '@/config-global'
 
 // ----------------------------------------------------------------------
 
@@ -53,7 +53,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
 
       <Box sx={{ flexGrow: 1 }} />
 
-      <Stack
+      {/* <Stack
         sx={{
           px: 2,
           py: 5,
@@ -72,7 +72,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
             Exit Arkive Portal
           </Button>
         </Stack>
-      </Stack>
+      </Stack> */}
     </Scrollbar>
   )
 

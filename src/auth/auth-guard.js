@@ -4,8 +4,8 @@ import PropTypes from 'prop-types'
 import { useEffect, useCallback, useState } from 'react'
 
 // routes
-import { paths } from 'src/routes/paths'
-import { useRouter } from 'src/routes/hooks'
+import { paths } from '@/routes/paths'
+import { useRouter } from '@/routes/hooks'
 
 // Auth
 import { useAuthContext } from '@/auth/hooks'

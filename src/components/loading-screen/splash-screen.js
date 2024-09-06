@@ -1,23 +1,23 @@
-import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
-import { m } from 'framer-motion';
+import PropTypes from 'prop-types'
+import { useState, useEffect } from 'react'
+import { m } from 'framer-motion'
 // @mui
-import { alpha } from '@mui/material/styles';
-import Box from '@mui/material/Box';
+import { alpha } from '@mui/material/styles'
+import Box from '@mui/material/Box'
 //
-import Logo from '../logo';
+import Logo from '../logo'
 
 // ----------------------------------------------------------------------
 
 export default function SplashScreen({ sx, ...other }) {
-  const [mounted, setMounted] = useState(false);
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    setMounted(true)
+  }, [])
 
   if (!mounted) {
-    return null;
+    return null
   }
 
   return (
@@ -50,7 +50,7 @@ export default function SplashScreen({ sx, ...other }) {
             repeat: Infinity,
           }}
         >
-          <Logo disabledLink sx={{ width: 64, height: 64 }} />
+          <Logo disabledLink sx={{ width: 100, height: 30 }} />
         </m.div>
 
         <Box
@@ -66,7 +66,8 @@ export default function SplashScreen({ sx, ...other }) {
             width: 100,
             height: 100,
             position: 'absolute',
-            border: (theme) => `solid 3px ${alpha(theme.palette.primary.dark, 0.24)}`,
+            border: theme =>
+              `solid 3px ${alpha(theme.palette.primary.dark, 0.24)}`,
           }}
         />
 
@@ -87,14 +88,15 @@ export default function SplashScreen({ sx, ...other }) {
             width: 120,
             height: 120,
             position: 'absolute',
-            border: (theme) => `solid 8px ${alpha(theme.palette.primary.dark, 0.24)}`,
+            border: theme =>
+              `solid 8px ${alpha(theme.palette.primary.dark, 0.24)}`,
           }}
         />
       </>
     </Box>
-  );
+  )
 }
 
 SplashScreen.propTypes = {
   sx: PropTypes.object,
-};
+}

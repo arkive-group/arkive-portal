@@ -26,8 +26,9 @@
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "**/*.ts",
-    "**/*.tsx",
-    "src/sections/home/home-view.tsx"
-, "src/app/auth/layout.js", "src/app/page.js", "src/layouts/dashboard/layout.tjs", "src/app/sync/page.js", "src/sections/sync/sync-view.js"  ],
-  "exclude": ["node_modules"]
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

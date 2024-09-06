@@ -1,23 +1,17 @@
 // @mui
-import { alpha, styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
+import { alpha, styled } from '@mui/material/styles'
+import Box from '@mui/material/Box'
 
 // ----------------------------------------------------------------------
 
-type StyledLabelProps = {
-  theme: any;
-  color?: string;
-  variant?: string;
-};
+export const StyledLabel = styled(Box)(({ theme, color, variant }) => {
+  const isLight = theme.palette.mode === 'light'
 
-export const StyledLabel = styled(Box)<StyledLabelProps>(({ theme, color, variant }) => {
-  const isLight = theme.palette.mode === 'light';
+  const filledVariant = variant === 'filled'
 
-  const filledVariant = variant === 'filled';
+  const outlinedVariant = variant === 'outlined'
 
-  const outlinedVariant = variant === 'outlined';
-
-  const softVariant = variant === 'soft';
+  const softVariant = variant === 'soft'
 
   const defaultStyle = {
     ...(color === 'default' && {
@@ -38,7 +32,7 @@ export const StyledLabel = styled(Box)<StyledLabelProps>(({ theme, color, varian
         backgroundColor: alpha(theme.palette.grey[500], 0.16),
       }),
     }),
-  };
+  }
 
   const colorStyle = {
     ...(color !== 'default' && {
@@ -59,7 +53,7 @@ export const StyledLabel = styled(Box)<StyledLabelProps>(({ theme, color, varian
         backgroundColor: alpha(theme.palette[color].main, 0.16),
       }),
     }),
-  };
+  }
 
   return {
     height: 24,
@@ -80,5 +74,5 @@ export const StyledLabel = styled(Box)<StyledLabelProps>(({ theme, color, varian
     }),
     ...defaultStyle,
     ...colorStyle,
-  };
-});
+  }
+})

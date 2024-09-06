@@ -50,7 +50,7 @@ export default function AuthLayout({ children, image, title }) {
   const renderSection = (
     <Image
       alt="auth"
-      src="/assets/images/auth-illustration.png"
+      src="/assets/images/auth_img_2.jpeg"
       sx={{
         objectFit: 'cover',
         width: '50%',

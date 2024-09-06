@@ -25,8 +25,8 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { AuthContext } from './auth-context'
 
 // routes
-import { useRouter } from 'src/routes/hooks'
-import { useSnackbar } from 'src/components/snackbar'
+import { useRouter } from '@/routes/hooks'
+import { useSnackbar } from '@/components/snackbar'
 import { paths } from '@/routes/paths'
 
 // ----------------------------------------------------------------------
