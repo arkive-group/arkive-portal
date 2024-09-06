@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography'
 import { fData } from 'src/utils/format-number'
 // routes
 
-import { useRouter, useSearchParams } from 'src/routes/hooks'
+import { useSearchParams } from 'src/routes/hooks'
 
 import { useSnackbar } from 'src/components/snackbar'
 import FormProvider, {
@@ -31,7 +31,6 @@ import { useAuthContext } from '@/auth/hooks/use-auth-context'
 export default function RegisterView() {
   const { signup } = useAuthContext()
 
-  const router = useRouter()
   const searchParams = useSearchParams()
   const email = searchParams.get('email') || ''
 
@@ -109,8 +108,8 @@ export default function RegisterView() {
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Card sx={{ p: 3 }}>
         <CardHeader
-          title="Join The Arkive Portal"
-          subheader="Take part in our anti-waste mission"
+          title="Beauty mastered, now sustainability!"
+          subheader="Sign up—join the eco-hero squad."
           sx={{ mb: 3, p: 0 }}
         />
         <Box sx={{ mb: 5 }}>
@@ -158,7 +157,7 @@ export default function RegisterView() {
           loading={isSubmitting}
           sx={{ width: '100%', mt: 3 }}
         >
-          Sign Up
+          SIGN UP
         </LoadingButton>
       </Card>
     </FormProvider>

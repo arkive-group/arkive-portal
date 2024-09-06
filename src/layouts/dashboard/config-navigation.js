@@ -57,22 +57,22 @@ export function useNavData() {
           {
             title: 'Sync + Upload',
             path: paths.sync,
-            icon: ICONS.user,
+            icon: ICONS.file,
           },
           {
             title: 'Unwaste Ecosystem',
-            path: paths.other,
+            path: paths.unwaste,
             icon: ICONS.banking,
           },
           {
             title: 'Orders',
-            path: paths.other,
-            icon: ICONS.external,
+            path: paths.orders,
+            icon: ICONS.order,
           },
           {
             title: 'Insights',
-            path: paths.other,
-            icon: ICONS.external,
+            path: paths.insights,
+            icon: ICONS.analytics,
           },
         ],
       },

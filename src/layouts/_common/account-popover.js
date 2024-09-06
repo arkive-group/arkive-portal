@@ -124,12 +124,12 @@ export default function AccountPopover() {
           Exit Portal
         </MenuItem>
 
-        <MenuItem
+        {/* <MenuItem
           onClick={handleLogout}
           sx={{ m: 1, fontWeight: 'fontWeightBold', color: 'error.main' }}
         >
           Logout
-        </MenuItem>
+        </MenuItem> */}
       </CustomPopover>
     </>
   )

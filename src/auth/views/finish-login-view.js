@@ -66,15 +66,16 @@ export default function FinishLogiView() {
         size="large"
         type="submit"
         variant="contained"
+        color="primary"
         loading={isSubmitting}
       >
-        Enter Arkive Portal
+        LOG IN
       </LoadingButton>
 
       <Link
         component={RouterLink}
         href={paths.auth.login}
-        color="inherit"
+        color="primary"
         variant="subtitle2"
         sx={{
           alignItems: 'center',
@@ -88,17 +89,23 @@ export default function FinishLogiView() {
   )
 
   const renderHead = (
-    <>
-      <PasswordIcon sx={{ height: 96 }} />
+    <Stack direction="column" alignItems="center" mt={3}>
+      <PasswordIcon sx={{ height: 80 }} />
 
-      <Stack spacing={1} sx={{ my: 5 }}>
-        <Typography variant="h3">Type in your Email</Typography>
+      <Stack
+        spacing={1}
+        sx={{ my: 5, textAlign: 'center' }}
+        direction="column"
+        alignItems="center"
+      >
+        <Typography variant="h4">There you are! Let’s get started</Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          Please type in the email address associated with your account
+          Type in your email to access your account and drive sustainability
+          forward!
         </Typography>
       </Stack>
-    </>
+    </Stack>
   )
 
   return (

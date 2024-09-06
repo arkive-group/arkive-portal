@@ -1,31 +1,10 @@
-import { forwardRef } from 'react';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { forwardRef } from 'react'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 // @mui
-import { alpha, useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
+import { alpha, useTheme } from '@mui/material/styles'
+import Box from '@mui/material/Box'
 //
-import { getRatio } from './utils';
-
-type ImageProps = {
-  ratio?: string;
-  overlay?: string;
-  disabledEffect?: boolean;
-  alt: string;
-  src: string;
-  afterLoad?: () => void;
-  delayTime?: number;
-  threshold?: number;
-  beforeLoad?: () => void;
-  delayMethod?: 'debounce' | 'throttle';
-  placeholder?: string;
-  wrapperProps?: any;
-  scrollPosition?: any;
-  effect?: 'blur' | 'opacity' | 'black-and-white' | 'color';
-  visibleByDefault?: boolean;
-  wrapperClassName?: string;
-  useIntersectionObserver?: boolean;
-  sx?: any;
-};
+import { getRatio } from './utils'
 
 // ----------------------------------------------------------------------
 
@@ -52,10 +31,10 @@ const Image = forwardRef(
       useIntersectionObserver,
       sx,
       ...other
-    }: ImageProps,
-    ref
+    },
+    ref,
   ) => {
-    const theme = useTheme();
+    const theme = useTheme()
 
     const overlayStyles = !!overlay && {
       '&:before': {
@@ -68,7 +47,7 @@ const Image = forwardRef(
         position: 'absolute',
         background: overlay || alpha(theme.palette.grey[900], 0.48),
       },
-    };
+    }
 
     const content = (
       <Box
@@ -88,7 +67,9 @@ const Image = forwardRef(
         effect={disabledEffect ? undefined : effect}
         useIntersectionObserver={useIntersectionObserver}
         wrapperClassName={wrapperClassName || 'component-image-wrapper'}
-        placeholderSrc={disabledEffect ? '/assets/transparent.png' : '/assets/placeholder.svg'}
+        placeholderSrc={
+          disabledEffect ? '/assets/transparent.png' : '/assets/placeholder.svg'
+        }
         //
         sx={{
           width: 1,
@@ -102,7 +83,7 @@ const Image = forwardRef(
           }),
         }}
       />
-    );
+    )
 
     return (
       <Box
@@ -133,8 +114,8 @@ const Image = forwardRef(
       >
         {content}
       </Box>
-    );
-  }
-);
+    )
+  },
+)
 
-export default Image;
+export default Image

@@ -15,15 +15,15 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
       ref={ref}
       component="div"
       sx={{
-        width: 100,
-        height: 30,
+        width: 70,
+        height: 35,
         display: 'inline-flex',
         ...sx,
       }}
       {...other}
     >
       <Image
-        src="/assets/images/temporary-logo.png"
+        src="/logo/arkive_logo.png"
         alt="logo"
         sx={{ width: '100%', height: '100%' }}
       />

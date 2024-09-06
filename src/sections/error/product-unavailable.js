@@ -11,13 +11,22 @@ export default function ProductUnavailable() {
 
   return (
     <Card sx={{ p: 3 }}>
-      <Stack sx={{ alignItems: 'center' }}>
+      <Stack
+        sx={{
+          alignItems: 'center',
+          textAlign: 'center',
+          maxWidth: '70%',
+          mx: 'auto',
+        }}
+      >
         <Typography variant="h4" sx={{ mb: 1 }}>
-          Product will be available soon !
+          Coming Soon!
         </Typography>
 
         <Typography sx={{ color: 'text.secondary', mb: 2 }}>
-          We are currently working hard on creating the best experience for you.
+          We're working hard to create the best experience for you. In the
+          meantime, explore our shop and rescue beauty from others. Other men's
+          trash is your beauty treasure.
         </Typography>
 
         <Stack
@@ -44,7 +53,7 @@ export default function ProductUnavailable() {
             fontSize: 16,
           }}
         >
-          Back To Arkive Store
+          Visit Arkive Store
         </Button>
       </Stack>
     </Card>

@@ -44,7 +44,7 @@ export const metadata = {
   icons: [
     {
       rel: 'icon',
-      url: '/assets/images/temporary-logo.png',
+      url: '/logo/arkive_logo.png',
     },
   ],
 }

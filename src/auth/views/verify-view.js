@@ -23,15 +23,20 @@ export default function VerifyView() {
 
   const renderHead = (
     <Stack direction="column" alignItems="center">
-      <EmailInboxIcon sx={{ mb: 5, height: 96 }} />
+      <EmailInboxIcon sx={{ my: 5, height: 80 }} />
 
       <Typography variant="h3" sx={{ mb: 1 }}>
-        Please check your email!
+        You’ve got mail!
+      </Typography>
+      <Typography variant="subtitle1" sx={{ mb: 1, textAlign: 'center' }}>
+        You’re officially on the path to becoming an anti-waste HERO!
       </Typography>
 
       <Stack
         spacing={1}
         sx={{ color: 'text.secondary', typography: 'body2', mb: 5 }}
+        direction="column"
+        alignItems="center"
       >
         <Box component="span"> We have sent a confirmation link to</Box>
         <Box component="strong" sx={{ color: 'text.primary' }}>
@@ -47,14 +52,15 @@ export default function VerifyView() {
 
       <Button
         component={RouterLink}
-        href={paths.auth.login}
+        // href={paths.auth.login}
+        href="mailto:"
         size="large"
         color="primary"
         variant="contained"
-        startIcon={<Iconify icon="eva:arrow-ios-back-fill" />}
+        // startIcon={<Iconify icon="eva:arrow-ios-back-fill" />}
         sx={{ alignSelf: 'center' }}
       >
-        Return to sign in
+        Open Mail App
       </Button>
     </>
   )

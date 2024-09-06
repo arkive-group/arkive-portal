@@ -1,27 +1,25 @@
-'use client';
+'use client'
 
-import { useState, useCallback } from 'react';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { useState, useCallback } from 'react'
+import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 
-type StatsGridProps = {
-  data: any[];
-  columns: any[];
-};
 // ----------------------------------------------------------------------
 
-export default function StatsGrid({ data, columns }: StatsGridProps) {
+export default function StatsGrid({ data, columns }) {
   const [columnVisibilityModel, setColumnVisibilityModel] = useState({
     id: false,
-  });
+  })
 
-  const handleChangeColumnVisibilityModel = useCallback((newModel: any) => {
-    setColumnVisibilityModel(newModel);
-  }, []);
+  const handleChangeColumnVisibilityModel = useCallback(newModel => {
+    setColumnVisibilityModel(newModel)
+  }, [])
 
-  const hiddenFields = ['id'];
+  const hiddenFields = ['id']
 
   const getTogglableColumns = () =>
-    columns.filter((column) => !hiddenFields.includes(column.field)).map((column) => column.field);
+    columns
+      .filter(column => !hiddenFields.includes(column.field))
+      .map(column => column.field)
 
   return (
     <DataGrid
@@ -49,5 +47,5 @@ export default function StatsGrid({ data, columns }: StatsGridProps) {
       //     },
       //   }}
     />
-  );
+  )
 }

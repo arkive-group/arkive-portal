@@ -15,3 +15,7 @@ export const FIREBASE_API = {
   // measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
   databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
 }
+
+export const ARKIVE_API = {
+  BASE_URL: process.env.NEXT_PUBLIC_ARIVE_API_URL,
+}
