@@ -1,4 +1,11 @@
-import { Button, Container, Section, Text, Img } from '@react-email/components'
+import {
+  Button,
+  Container,
+  Section,
+  Text,
+  Img,
+  Link,
+} from '@react-email/components'
 
 export default function WelcomeEmail({ name }) {
   const main = {
@@ -62,9 +69,12 @@ export default function WelcomeEmail({ name }) {
           Plan).
         </Text>
         <Text style={paragraph}>
-          Follow our growth journey through our newsletters or on LinkedIn. And
-          if you care about a circular economy, help us grow faster by donating
-          via: <strong>Arkive B.V. / NL71INGB0006355736.</strong>
+          Follow our growth journey through our newsletters or on{' '}
+          <Link href="https://www.linkedin.com/company/shoparkive/?viewAsMember=true">
+            LinkedIn
+          </Link>
+          . And if you care about a circular economy, help us grow faster by
+          donating via: <strong>Arkive B.V. / NL71INGB0006355736.</strong>
         </Text>
         <Section style={btnContainer}>
           <Button style={button} href="https://arkivegroup.com">

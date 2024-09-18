@@ -21,7 +21,7 @@ export default function ProductUnavailable() {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ name: 'Thomas', email: 'thomas@arkive.nl' }),
+            body: JSON.stringify({ name: 'Jerome', email: 'jerome@arkive.nl' }),
           })
         }}
       >
