@@ -149,6 +149,14 @@ export function AuthProvider({ children }) {
       }
       await setDoc(doc(usersCollection), user)
 
+      await fetch('/api/email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: data.first_name, email: data.email }),
+      })
+
       await sendSignInLinkToEmail(AUTH, user.email, actionCodeSettings)
       router.push(paths.auth.verify + `?email=${user.email}`)
       return user

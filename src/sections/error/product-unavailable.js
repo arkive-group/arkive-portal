@@ -3,6 +3,7 @@
 import { Box, Button, Card, Stack, Typography } from '@mui/material'
 import { ARKIVE_STORE } from '@/config-global'
 import { useCountdownDate } from 'src/hooks/use-countdown'
+import WelcomeEmail from '@/components/emails/welcome-email'
 
 export default function ProductUnavailable() {
   const { days, hours, minutes, seconds } = useCountdownDate(
@@ -11,6 +12,19 @@ export default function ProductUnavailable() {
 
   return (
     <Card sx={{ p: 3 }}>
+      {/* <button
+        onClick={async () => {
+          await fetch('/api/email', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name: 'Jerome', email: 'jerome@arkive.nl' }),
+          })
+        }}
+      >
+        test email
+      </button> */}
       <Stack
         sx={{
           alignItems: 'center',
