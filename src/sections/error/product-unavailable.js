@@ -10,6 +10,8 @@ export default function ProductUnavailable() {
     new Date('2024-10-01'),
   )
 
+  // return <WelcomeEmail name="Jerome" />
+
   return (
     <Card sx={{ p: 3 }}>
       {/* <button
@@ -19,7 +21,7 @@ export default function ProductUnavailable() {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ name: 'Jerome', email: 'jerome@arkive.nl' }),
+            body: JSON.stringify({ name: 'Thomas', email: 'thomas@arkive.nl' }),
           })
         }}
       >

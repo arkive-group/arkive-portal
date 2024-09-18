@@ -1,8 +1,4 @@
-import { Button, Container, Section, Text } from '@react-email/components'
-
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : ''
+import { Button, Container, Section, Text, Img } from '@react-email/components'
 
 export default function WelcomeEmail({ name }) {
   const main = {
@@ -49,8 +45,8 @@ export default function WelcomeEmail({ name }) {
             textAlign: 'center',
           }}
         >
-          <img
-            src={`${baseUrl}/logo/arkive_logo.png`}
+          <Img
+            src="https://firebasestorage.googleapis.com/v0/b/arkive-portal.appspot.com/o/images%2Farkive_logo.png?alt=media&token=243bc786-f8f0-4010-84f2-5df3d273b0bb"
             width="200"
             height="70"
             alt="arkive logo"
