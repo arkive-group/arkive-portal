@@ -82,10 +82,7 @@ export default function WelcomeEmail( name ) {
         </Text>
           <br/>
         <Text style={paragraph}>
-           With circular kisses,
-        </Text>
-        <Text style={paragraph}>
-           Team Arkive
+          {"With circular kisses,\nTeam Arkive"}
         </Text>
          
       </Container>
