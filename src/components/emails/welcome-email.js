@@ -61,26 +61,21 @@ export default function WelcomeEmail({ name }) {
           />
         </div>
         <Text style={paragraph}>Hi {name},</Text>
-        <Text style={paragraph}>Welcome to Our Circular Beauty Family!</Text>
+        <Text style={paragraph}>Welcome to our circular beauty family! You now belong to our community of impact pioneers who care about their looks and our planet. Together, we’re building a circular beauty industry.</Text>
         <Text style={paragraph}>
-          Our platform goes live at the end of September, brought to you by
-          Jérôme & Thomas. As one of the first 50 members, you get 6 months of
-          our EcoBoost Plan free (we also offer EcoStart Plan and EcoMaster
-          Plan).
+          Early members can get 3 months of our EcoBoost Plan free, 
+          and another 3 months if you recommend a new beauty business that assigns to a paid plan [<Link href="https://www.canva.com/design/DAGO9Xhnr_E/o1wuyTbwHAtT-nBaJt7BGg/edit?utm_content=DAGO9Xhnr_E&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton">read more + pricing plans</Link>].
         </Text>
         <Text style={paragraph}>
-          Follow our growth journey through our newsletters or on{' '}
-          <Link href="https://www.linkedin.com/company/shoparkive/?viewAsMember=true">
-            LinkedIn
-          </Link>
-          . And if you care about a circular economy, help us grow faster by
-          donating via: <strong>Arkive B.V. / NL71INGB0006355736.</strong>
+          Would you like to support us? Follow our growth journey through our <Link href="https://www.instagram.com/arkiveshop/">Instagram</Link> or on <Link href="https://www.linkedin.com/company/shoparkive/?viewAsMember=true">LinkedIn</Link>. 
+          Want to help us accelerate our journey? 
+          Donate 50,- to accelerate circularity in the beauty industry where we will invest the budget in PR + marketing [<Link href="https://www.ing.nl/de-ing/payreq?trxid=5ZELTTcabJMfxy4qtgVAoXntpsEiRbPL&flow-step=payment-request"]donate here</Link>]. 
         </Text>
-        <Section style={btnContainer}>
+        {/*<Section style={btnContainer}>
           <Button style={button} href="https://arkivegroup.com">
             Get started
           </Button>
-        </Section>
+        </Section> */}
         <Text style={paragraph}>
           Talk soon!
           <br />
