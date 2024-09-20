@@ -79,9 +79,8 @@ export default function WelcomeEmail({ name }) {
         <Text style={paragraph}>
           Talk soon!
           <br />
+          <br />
           With circular kisses,
-          <br />
-          <br />
           Team Arkive
         </Text>
       </Container>
