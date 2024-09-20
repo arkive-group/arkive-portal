@@ -7,7 +7,7 @@ import {
   Link,
 } from '@react-email/components'
 
-export default function WelcomeEmail({ name }) {
+export default function WelcomeEmail( name ) {
   const main = {
     backgroundColor: '#ffffff',
     fontFamily:
