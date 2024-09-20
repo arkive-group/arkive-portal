@@ -69,7 +69,7 @@ export default function WelcomeEmail({ name }) {
         <Text style={paragraph}>
           Would you like to support us? Follow our growth journey through our <Link href="https://www.instagram.com/arkiveshop/">Instagram</Link> or on <Link href="https://www.linkedin.com/company/shoparkive/?viewAsMember=true">LinkedIn</Link>. 
           Want to help us accelerate our journey? 
-          Donate 50,- to accelerate circularity in the beauty industry where we will invest the budget in PR + marketing [<Link href="https://www.ing.nl/de-ing/payreq?trxid=5ZELTTcabJMfxy4qtgVAoXntpsEiRbPL&flow-step=payment-request"]donate here</Link>]. 
+          Donate 50,- to accelerate circularity in the beauty industry where we will invest the budget in PR + marketing [<Link href="https://www.ing.nl/de-ing/payreq?trxid=5ZELTTcabJMfxy4qtgVAoXntpsEiRbPL&flow-step=payment-request">donate here</Link>]. 
         </Text>
         {/*<Section style={btnContainer}>
           <Button style={button} href="https://arkivegroup.com">
