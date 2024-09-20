@@ -104,11 +104,11 @@ export function AuthProvider({ children }) {
 
   // LOGIN WITH EMAIL AND PASSWORD
 
-  const actionCodeSettings = {
+const actionCodeSettings = {
     url: `${
       process.env.NODE_ENV === 'development'
         ? 'http://localhost:3000'
-        : `https://portal.arkivegroup.com`
+        : `https://${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}`
     }/auth/finish-login`,
     handleCodeInApp: true,
   }
