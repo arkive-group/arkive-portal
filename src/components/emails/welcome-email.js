@@ -76,13 +76,11 @@ export default function WelcomeEmail( name ) {
             Get started
           </Button>
         </Section> */}
-        <br/>
         <Text style={paragraph}>
           Talk soon!
         </Text>
-          <br/>
         <Text style={paragraph}>
-          {"With circular kisses,\nTeam Arkive"}
+          With circular kisses, <br />Team Arkive
         </Text>
          
       </Container>
