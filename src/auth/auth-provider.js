@@ -108,7 +108,7 @@ export function AuthProvider({ children }) {
     url: `${
       process.env.NODE_ENV === 'development'
         ? 'http://localhost:3000'
-        : `https://${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}`
+        : `https://portal.arkivegroup.com`
     }/auth/finish-login`,
     handleCodeInApp: true,
   }
