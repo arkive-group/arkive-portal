@@ -7,7 +7,7 @@ import WelcomeEmail from '@/components/emails/welcome-email'
 
 export default function ProductUnavailable() {
   const { days, hours, minutes, seconds } = useCountdownDate(
-    new Date('2024-10-01'),
+    new Date('2024-11-01'),
   )
 
   // return <WelcomeEmail name="Jerome" />
