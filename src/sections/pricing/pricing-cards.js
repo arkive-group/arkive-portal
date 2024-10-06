@@ -1,23 +1,14 @@
+"use client";
 import React from "react";
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  Chip,
-  Divider,
-  List,
-  ListItem,
-  Typography,
-  Checkbox,
-  Grid,
-} from "@mui/material";
+import { Box, Typography, Grid } from "@mui/material";
+
+import { PricingCard } from "@/components/pricing-card";
 
 const pricingPlans = [
   {
-    title: "E C O  S T A R T P L A N",
+    title: "ECO START PLAN",
     description: "Begin your path to a greener future",
-    price: "€0 -",
+    price: "€0",
     features: [
       "Sales channels on 30% commission",
       "Standard dashboard",
@@ -28,11 +19,12 @@ const pricingPlans = [
     ],
     chipLabel: "BASIC",
     variant: "outlined",
+    isFree: true,
   },
   {
-    title: "E C O M A S T E R P L A N",
+    title: "ECO MASTER PLAN",
     description: "Master sustainable practices with personalized solutions",
-    price: "€199 -",
+    price: "€199",
     features: [
       "Sales channels on 25% commission",
       "Co-create insights",
@@ -43,121 +35,41 @@ const pricingPlans = [
     ],
     chipLabel: "MOST POPULAR",
     variant: "contained",
+    isFree: false,
   },
 ];
-
-const PricingCard = ({ plan }) => {
-  const { title, description, price, features, chipLabel, variant } = plan;
-
-  return (
-    <Card
-      variant={variant}
-      sx={{
-        padding: 3,
-        paddingTop: 4,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        bgcolor: variant === "contained" ? "primary.main" : "white",
-        color: variant === "contained" ? "white" : "black",
-        boxShadow: 3,
-      }}
-    >
-      <Typography variant="h4" align="center" sx={{ mb: 0.5 }}>
-        {title}
-      </Typography>
-      <Typography variant="body2" align="center" sx={{ mb: 1 }}>
-        {description}
-      </Typography>
-      <Typography variant="h1" align="center" sx={{ mb: 2 }}>
-        {price}
-      </Typography>
-      <Divider />
-      <List sx={{ padding: 0 }}>
-        {features.map((feature, index) => (
-          <ListItem
-            key={index}
-            sx={{ py: "0px", display: "flex", alignItems: "center" }}
-          >
-            <Checkbox
-              size="small"
-              sx={{
-                color: variant === "contained" ? "white" : "primary.main",
-                "&.Mui-checked": {
-                  color: variant === "contained" ? "white" : "primary.main",
-                },
-                "& .MuiSvgIcon-root": {
-                  borderRadius: "50%",
-                  backgroundColor:
-                    variant === "contained" ? "primary.main" : "transparent",
-                },
-                "&:hover": {
-                  backgroundColor:
-                    variant === "contained"
-                      ? "rgba(255, 255, 255, 0.1)"
-                      : "rgba(3, 46, 238, 0.08)",
-                },
-              }}
-              checked
-            />
-            <Typography sx={{ ml: 0.5 }}>{feature}</Typography>{" "}
-            {/* Add left margin for spacing */}
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <CardActions sx={{ justifyContent: "space-between", mt: 2 }}>
-        <Button
-          fullWidth
-          variant={variant === "contained" ? "contained" : "outlined"}
-          sx={{
-            bgcolor:
-              variant === "contained" ? "white" : "rgba(3, 46, 238, 0.08)",
-            color: "primary.main",
-            borderRadius: "20px",
-            minHeight: "48px",
-            "&:hover": {
-              bgcolor:
-                variant === "contained"
-                  ? "rgba(255, 255, 255, 0.9)"
-                  : "rgba(3, 46, 238, 0.2)",
-              boxShadow: 3,
-            },
-          }}
-        >
-          Buy now
-        </Button>
-      </CardActions>
-    </Card>
-  );
-};
 
 export default function PricingCards() {
   return (
     <Box>
       <Box
         sx={{
-          backgroundColor: "rgba(3, 46, 238, 0.08)",
-          color: "primary.main",
-          height: "60px",
-          borderRadius: "6px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
           textAlign: "center",
-          mb: 4,
+          my: 5,
         }}
       >
-        <Typography variant="h4">PRICING</Typography>
+        <Typography variant="h3">Get The Right Plan For You</Typography>
+        <Typography variant="p">
+          Choose one of our tailored solutions. For you and your team
+        </Typography>
       </Box>
 
-      <Grid container spacing={3} justifyContent="center">
-        {pricingPlans.map((plan, index) => (
-          <Grid item md={4} sm={6} xs={12}>
-            <PricingCard key={index} plan={plan} />
+      <Grid container spacing={10} justifyContent="center">
+        {pricingPlans?.map((plan) => (
+          <Grid key={plan?.chipLabel} item lg={6} xs={12}>
+            <PricingCard plan={plan} />
           </Grid>
         ))}
       </Grid>
+      <Box mt={3}>
+        <Typography variant="p">
+          The Customer Success Manager is a sustainability and tech expert
+          dedicated to continually supporting your account. They ensure ESG
+          compliance by providing valuable insights, demonstrating product ease
+          of use, and verifying compliance with evolving regulations across all
+          markets and channels based on your data.
+        </Typography>
+      </Box>
     </Box>
   );
 }

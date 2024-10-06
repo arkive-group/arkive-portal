@@ -1,8 +1,6 @@
 // @mui
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container } from "@mui/material";
 
-import UserProfileView from "@/sections/user/user-profile-view";
-import ProductUnavailable from "../error/product-unavailable";
 import PricingCards from "./pricing-cards";
 
 // ----------------------------------------------------------------------
