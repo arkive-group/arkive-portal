@@ -29,11 +29,11 @@ const OPTIONS = [
   },
   {
     label: "Accounts",
-    linkTo: "/account-billing/account",
+    linkTo: "/settings/account",
   },
   {
-    label: "Billings",
-    linkTo: "/account-billing/billing",
+    label: "Plan & Billings",
+    linkTo: "/settings/billing",
   },
 ];
 

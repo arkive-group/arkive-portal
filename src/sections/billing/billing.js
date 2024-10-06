@@ -1,11 +1,13 @@
-import { Box, Typography } from "@mui/material";
-import PricingView from "../pricing/pricing-view";
+import { Container } from "@mui/material";
+import PricingView from "@/sections/pricing/pricing-view";
+import UserProfileView from "@/sections/user/user-profile-view";
 
 const Billing = () => {
   return (
-    <Box>
+    <Container maxWidth="xl">
+      <UserProfileView />
       <PricingView />
-    </Box>
+    </Container>
   );
 };
 

@@ -74,11 +74,6 @@ export function useNavData() {
             path: paths.insights,
             icon: ICONS.analytics,
           },
-          {
-            title: "Pricing",
-            path: paths.pricing,
-            icon: ICONS.analytics,
-          },
         ],
       },
 
