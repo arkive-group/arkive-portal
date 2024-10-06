@@ -1,4 +1,4 @@
-import Billing from "@/sections/billing/billing";
+import Billing from "@/sections/billing/billing-view";
 import DashboardLayout from "@/layouts/dashboard/dashboard-layout";
 import AuthGuard from "@/auth/auth-guard";
 
