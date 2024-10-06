@@ -108,7 +108,6 @@ const PricingCard = ({ plan }) => {
               checked
             />
             <Typography sx={{ ml: 0.5 }}>{feature}</Typography>{" "}
-            {/* Add left margin for spacing */}
           </ListItem>
         ))}
       </List>
