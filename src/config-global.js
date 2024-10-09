@@ -25,7 +25,4 @@ export const SHOPIFY_API = {
   apiSecretKey: process.env.NEXT_PUBLIC_SHOPIFY_API_SECRET_KEY,
   accessToken: process.env.NEXT_PUBLIC_SHOPIFY_ACCESS_TOKEN,
   shop: process.env.NEXT_PUBLIC_SHOPIFY_SHOP,
-  hostName: process.env.NEXT_PUBLIC_SHOPIFY_HOSTNAME,
-  hostScheme: process.env.NEXT_PUBLIC_SHOPIFY_HOSTSCHEME,
-  
 }
