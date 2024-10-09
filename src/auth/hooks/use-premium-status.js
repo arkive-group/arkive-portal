@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { getPremiumStatus } from "@/auth/utils/stripe";
-import { firebaseApp } from "@/auth/utils/firebase-config";
+import { firebaseApp } from "@/utils/firebase-config";
 
 const usePremiumStatus = (user) => {
   const [isPremium, setIsPremium] = useState(false);

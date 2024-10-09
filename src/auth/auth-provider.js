@@ -19,7 +19,7 @@ import {
 } from 'firebase/firestore'
 
 // config
-import { AUTH, DB, STORAGE } from '@/auth/utils/firebase-config'
+import { AUTH, DB, STORAGE } from '@/utils/firebase-config'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 import { AuthContext } from './auth-context'

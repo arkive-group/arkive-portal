@@ -8,7 +8,7 @@ import {
   where,
 } from "firebase/firestore";
 import { getFunctions, httpsCallable } from "firebase/functions";
-import { firebaseApp } from "./firebase-config";
+import { firebaseApp } from "@/utils/firebase-config";
 
 export const getCheckoutUrl = async () => {
   const auth = getAuth(firebaseApp);
