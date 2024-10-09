@@ -1,6 +1,7 @@
-import { SHOPIFY_API } from "@/config-global";
+"use server";
 
-export async function GET(request) {
+import { SHOPIFY_API } from "@/config-global";
+const getOrders = async () => {
   try {
     const params = {
       apiKey: SHOPIFY_API.apiKey,
@@ -37,12 +38,11 @@ export async function GET(request) {
       }),
     });
     const data = await response.json();
-    return new Response(JSON.stringify(data));
+    return data;
   } catch (error) {
     console.error(`---> An error occured`, error);
-    return new Response(
-      JSON.stringify({ text: `[Shopify][Fetch Orders]Bad request ${error}` }),
-      { status: 400 }
-    );
+    return { text: `[Shopify][Fetch Orders]Bad request ${error}` };
   }
-}
+};
+
+export { getOrders };
