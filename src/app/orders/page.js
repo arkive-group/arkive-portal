@@ -5,18 +5,6 @@ import AuthGuard from "@/auth/auth-guard";
 import DefaultView from "../../sections/default/default-view";
 import { Table } from "@mui/material";
 import { getOrders } from "@/lib/shopify";
-// ----------------------------------------------------------------------
-// async function getOrders() {
-//   const response = await fetch("http://localhost:3000/api/shopify", {
-//     method: "GET",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//   });
-//   const data = await response.json();
-//   console.log("Data", data);
-//   return data;
-// }
 
 export default async function Page() {
   const orders = await getOrders();
