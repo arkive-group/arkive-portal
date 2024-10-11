@@ -1,146 +1,212 @@
-import { Grid, Box, Typography, Select, MenuItem, Button } from "@mui/material";
+"use client";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Divider,
+  Grid,
+  Link,
+  Switch,
+  TextField,
+  Typography,
+} from "@mui/material";
 
-const AccountDetails = () => {
+const AccountGeneralSettings = () => {
   return (
-    <Box sx={{ padding: 4 }}>
-      <Grid container spacing={1}>
-        {/* User Info Section */}
-
-        {/* Main Content Section */}
-        <Grid item xs={12} md={9}>
-          <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-            Welcome back, you beautiful anti-waste trooper !!
-          </Typography>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Box
-            mt={3}
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            <Typography variant="h6">ANEC COSMETICS</Typography>
-
-            <Box>
-              <Typography
-                variant="h6"
+    <Grid container spacing={3} mt={1}>
+      <Grid item lg={4} md={6} xl={3} xs={12}>
+        <Card>
+          <CardContent>
+            <Box
+              sx={{
+                alignItems: "center",
+                display: "flex",
+                flexDirection: "column",
+                textAlign: "center",
+              }}
+            >
+              <Box
                 sx={{
-                  display: "inline-block", // To limit the border to the text's width
-                  padding: "8px", // Optional padding to space the content within the border
-                  border: "2px solid",
-                  borderColor: "primary.main",
-                  boxShadow: "0px 4px 6px rgba(0, 0, 255, 0.2)", // Customize shadow to use primary.main color (approximation)
-                  "&:hover": {
-                    boxShadow: "0px 6px 8px rgba(0, 0, 255, 0.3)", // Optional hover effect for shadow enhancement
-                  },
+                  p: 1,
+                  border: (theme) => `1px dashed ${theme.palette.divider}`,
+                  borderRadius: "50%",
                 }}
               >
-                Eco Master Plan
+                <Avatar sx={{ height: 100, width: 100 }} />
+              </Box>
+              <Typography
+                color="textPrimary"
+                sx={{ mt: 1 }}
+                variant="subtitle2"
+              >
+                User Name
+              </Typography>
+              <Typography color="textSecondary" variant="body2">
+                Your plan:
+                <Link color="primary" to="/dashboard/account">
+                  Plan Name
+                </Link>
               </Typography>
             </Box>
-          </Box>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Box>
-            <Typography variant="body1" color="text.secondary">
-              Subscription
-            </Typography>
-
-            <Box display="flex" alignItems="center">
-              <Typography variant="h6">ECOMASTER PLAN</Typography>
-            </Box>
-          </Box>
-          <Box display="flex" alignItems="center">
-            <Typography variant="body2">
-              1 licence x €0 €189,- per licence
-            </Typography>
-            <Button variant="text" sx={{ marginLeft: 1 }}>
-              Manage Users
+          </CardContent>
+          <CardActions>
+            <Button color="primary" fullWidth variant="text">
+              Remove Picture
             </Button>
-          </Box>
-
-          <Box mt={2}>
-            <Typography
-              variant="body2"
-              color="primary"
-              sx={{ fontWeight: "bold" }}
-            >
-              PROEFABONNEMENT
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              You can still use your trial subscription for 30 days.
-            </Typography>
-          </Box>
-        </Grid>
+          </CardActions>
+        </Card>
       </Grid>
-    </Box>
+      <Grid item lg={8} md={6} xl={9} xs={12}>
+        <form>
+          <Card>
+            <CardHeader title="Basic Details" />
+            <CardContent>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Name"
+                    variant="outlined"
+                    size="small"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Email Address"
+                    type="email"
+                    variant="outlined"
+                    size="small"
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Phone Number"
+                    variant="outlined"
+                    size="small"
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Country"
+                    variant="outlined"
+                    size="small"
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    fullWidth
+                    label="State/Region"
+                    variant="outlined"
+                    size="small"
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    fullWidth
+                    label="City"
+                    variant="outlined"
+                    size="small"
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Biography (optional)"
+                    type="text"
+                    variant="outlined"
+                    size="small"
+                    multiline
+                    minRows={3}
+                  />
+                </Grid>
+                <CardHeader title="Billing Details" />
+                <CardContent>
+                  <Grid container spacing={3}>
+                    <Grid item md={6} xs={12}>
+                      <TextField
+                        fullWidth
+                        label="Address"
+                        variant="outlined"
+                        size="small"
+                      />
+                    </Grid>
+                    <Grid item md={6} xs={12}>
+                      <TextField
+                        fullWidth
+                        label="City"
+                        variant="outlined"
+                        size="small"
+                      />
+                    </Grid>
+                    <Grid item md={6} xs={12}>
+                      <TextField
+                        fullWidth
+                        label="State/Region"
+                        variant="outlined"
+                        size="small"
+                      />
+                    </Grid>
+                    <Grid item md={6} xs={12}>
+                      <TextField
+                        fullWidth
+                        label="Zip Code"
+                        variant="outlined"
+                        size="small"
+                      />
+                    </Grid>
+                    <Grid item md={6} xs={12}>
+                      <TextField
+                        fullWidth
+                        label="Tax ID"
+                        variant="outlined"
+                        size="small"
+                      />
+                    </Grid>
+                    <Grid item md={6} xs={12}>
+                      <TextField
+                        fullWidth
+                        label="Currency"
+                        variant="outlined"
+                        size="small"
+                      />
+                    </Grid>
+                  </Grid>
+                </CardContent>
+                <Grid item xs={12}>
+                  <Typography
+                    color="textPrimary"
+                    gutterBottom
+                    variant="subtitle2"
+                  >
+                    Public Profile
+                  </Typography>
+                  <Typography color="textSecondary" variant="body2">
+                    Means that anyone viewing your profile will be able to see
+                    your contact details
+                  </Typography>
+                  <Switch color="primary" />
+                </Grid>
+              </Grid>
+            </CardContent>
+            <Divider />
+            <Box sx={{ display: "flex", justifyContent: "flex-end", p: 2 }}>
+              <Button color="primary" type="submit" variant="contained">
+                Save Changes
+              </Button>
+            </Box>
+          </Card>
+        </form>
+      </Grid>
+    </Grid>
   );
 };
 
-export default AccountDetails;
-
-{
-  /* <Grid item xs={12} md={9}>
-<Box mt={3}>
-  <Typography variant="h6">ANEC COSMETICS</Typography>
-  <Typography variant="body1" color="text.secondary">
-    SUBSCRIPTION
-  </Typography>
-
-
-  <Box mt={2} display="flex" alignItems="center">
-    <Typography variant="body1" sx={{ marginRight: 2 }}>
-      ECOMASTER PLAN
-    </Typography>
-    <Select defaultValue="ecomaster plan" sx={{ width: 200 }}>
-      <MenuItem value="ecomaster plan">Ecomaster Plan</MenuItem>
-      <MenuItem value="ecostart plan">Ecostart Plan</MenuItem>
-    </Select>
-  </Box>
-
-  <Box mt={1}>
-    <Typography variant="body2">
-      1 licence x €0 €189,- per licence
-    </Typography>
-    <Button variant="text" sx={{ marginLeft: 1 }}>
-      Manage Users
-    </Button>
-  </Box>
-
-  <Box mt={2}>
-    <Typography
-      variant="body2"
-      color="primary"
-      sx={{ fontWeight: "bold" }}
-    >
-      PROEFABONNEMENT
-    </Typography>
-    <Typography variant="body2" color="text.secondary">
-      You can still use your trial subscription for 30 days.
-    </Typography>
-  </Box>
-
-  <Box mt={2}>
-    <Typography variant="body1">CHANNEL TYPE</Typography>
-    <Button variant="text">Select Channels</Button>
-  </Box>
-
-  <Box mt={2}>
-    <Typography variant="h6">ADD-ON(S)</Typography>
-    <Typography variant="body2">
-      REPURPOSING: 70K x €0.20 per product (€14,000)
-    </Typography>
-    <Typography variant="body2">
-      SALES CHANNELS: 30% per sold product
-    </Typography>
-  </Box>
-
-  <Box mt={2}>
-    <Typography variant="body1">MARKETS</Typography>
-    <Button variant="text">Select Markets</Button>
-  </Box>
-</Box>
-</Grid> */
-}
+export default AccountGeneralSettings;

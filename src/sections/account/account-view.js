@@ -10,7 +10,7 @@ import {
   InputLabel,
 } from "@mui/material";
 import UserProfileView from "@/sections/user/user-profile-view";
-import AccountDetails from "./account-details";
+import AccountGeneralSettings from "./account-details";
 
 const Account = () => {
   return (
@@ -25,6 +25,8 @@ const Account = () => {
         </Typography>
       </Box>
 
+      <AccountGeneralSettings />
+      {/* 
       <Grid container xs={6} mt={2}>
         <Card
           sx={{
@@ -254,7 +256,7 @@ const Account = () => {
             </Box>
           </Typography>
         </Card>
-      </Grid>
+      </Grid> */}
     </Container>
   );
 };
