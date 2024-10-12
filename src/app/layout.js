@@ -1,53 +1,53 @@
 // scrollbar
-import 'simplebar-react/dist/simplebar.min.css'
+import "simplebar-react/dist/simplebar.min.css";
 
 // lightbox
-import 'yet-another-react-lightbox/styles.css'
-import 'yet-another-react-lightbox/plugins/captions.css'
-import 'yet-another-react-lightbox/plugins/thumbnails.css'
+import "yet-another-react-lightbox/styles.css";
+import "yet-another-react-lightbox/plugins/captions.css";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
 
 // map
-import 'mapbox-gl/dist/mapbox-gl.css'
+import "mapbox-gl/dist/mapbox-gl.css";
 
 // editor
-import 'react-quill/dist/quill.snow.css'
+import "react-quill/dist/quill.snow.css";
 
 // carousel
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 // image
-import 'react-lazy-load-image-component/src/effects/blur.css'
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 // ----------------------------------------------------------------------
 
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types";
 // locales
-import { LocalizationProvider } from 'src/locales'
+import { LocalizationProvider } from "src/locales";
 // theme
-import ThemeProvider from 'src/theme'
-import { primaryFont } from 'src/theme/typography'
+import ThemeProvider from "src/theme";
+import { primaryFont } from "src/theme/typography";
 // components
-import ProgressBar from 'src/components/progress-bar'
-import { MotionLazy } from 'src/components/animate/motion-lazy'
-import SnackbarProvider from 'src/components/snackbar/snackbar-provider'
-import { SettingsProvider } from 'src/components/settings'
+import ProgressBar from "src/components/progress-bar";
+import { MotionLazy } from "src/components/animate/motion-lazy";
+import SnackbarProvider from "src/components/snackbar/snackbar-provider";
+import { SettingsProvider } from "src/components/settings";
 
 // Auth
-import { AuthConsumer } from '@/auth/auth-consumer'
-import { AuthProvider } from '@/auth/auth-provider'
+import { AuthConsumer } from "@/auth/auth-consumer";
+import { AuthProvider } from "@/auth/auth-provider";
 
 // ----------------------------------------------------------------------
 
 export const metadata = {
-  title: 'Arkive Portal',
+  title: "Arkive Portal",
   icons: [
     {
-      rel: 'icon',
-      url: '/logo/arkive_logo.png',
+      rel: "icon",
+      url: "/logo/arkive_logo.png",
     },
   ],
-}
+};
 
 export default function RootLayout({ children }) {
   return (
@@ -57,11 +57,11 @@ export default function RootLayout({ children }) {
           <LocalizationProvider>
             <SettingsProvider
               defaultSettings={{
-                themeMode: 'light', // 'light' | 'dark'
-                themeDirection: 'ltr', //  'rtl' | 'ltr'
-                themeContrast: 'default', // 'default' | 'bold'
-                themeLayout: 'vertical', // 'vertical' | 'horizontal' | 'mini'
-                themeColorPresets: 'default', // 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red'
+                themeMode: "light", // 'light' | 'dark'
+                themeDirection: "ltr", //  'rtl' | 'ltr'
+                themeContrast: "default", // 'default' | 'bold'
+                themeLayout: "vertical", // 'vertical' | 'horizontal' | 'mini'
+                themeColorPresets: "default", // 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red'
                 themeStretch: false,
               }}
             >
@@ -78,9 +78,9 @@ export default function RootLayout({ children }) {
         </AuthProvider>
       </body>
     </html>
-  )
+  );
 }
 
 RootLayout.propTypes = {
   children: PropTypes.node,
-}
+};

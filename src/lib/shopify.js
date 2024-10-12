@@ -1,6 +1,7 @@
 "use server";
 
 import { SHOPIFY_API } from "@/config-global";
+
 const getOrders = async () => {
   try {
     const params = {
