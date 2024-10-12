@@ -1,17 +1,28 @@
 "use server";
-
-import { NextResponse } from "next/server";
 import Stripe from "stripe";
-
+import { DB } from "@/utils/firebase-config";
+import { collection, doc, setDoc } from "firebase/firestore";
 const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY);
 
-const createAccount = async (email, country) => {
+const createAccount = async (email, country, userId) => {
   try {
     const account = await stripe.accounts.create({
       type: "express",
       country,
       email,
     });
+
+    const usersCollection = collection(DB, "users");
+    // Get reference to the user's document and update it
+    const userDocRef = doc(usersCollection, userId);
+
+    await setDoc(
+      userDocRef,
+      {
+        accountId: account?.id, // Assuming `account.id` is the account ID
+      },
+      { merge: true }
+    );
 
     return account?.id;
   } catch (error) {
@@ -41,6 +52,7 @@ const initiatePayment = async (amount, currency, connectedAccountId) => {
       amount, // Amount in smallest currency unit (e.g., for $10, send 1000)
       currency, // Example: 'usd'
       payment_method_types: ["card"], // Specify the payment method type
+      on_behalf_of: connectedAccountId,
       transfer_data: {
         destination: connectedAccountId, // Connected account that will receive the funds
       },

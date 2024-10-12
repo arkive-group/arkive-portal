@@ -1,16 +1,17 @@
 import { Resend } from "resend";
-import WelcomeEmail from "@/components/emails/welcome-email";
+import PayoutEmail from "@/components/emails/payout-email";
 
 export async function POST(request) {
   try {
-    const { name, email } = await request.json();
+    const { name, email, amount, clientEmail, accountId } =
+      await request.json();
     const resend = new Resend(process.env.RESEND_API_KEY);
 
-    const { data, error } = await resend.emails.send({
+    await resend.emails.send({
       from: "Arkive <noreply@arkivegroup.com>",
       to: [email],
-      subject: "Welcome, you beautiful change-maker!",
-      react: WelcomeEmail(name),
+      subject: "Monthly Payout Request",
+      react: PayoutEmail(name, amount, clientEmail, accountId),
     });
 
     if (error) {

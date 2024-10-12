@@ -134,7 +134,10 @@ const AccountGeneralSettings = () => {
       // Get reference to the user's document and update it
       const userDocRef = doc(usersCollection, userId);
       await setDoc(userDocRef, userData, { merge: true }); // Merge to avoid overwriting
-      await updateUser({ ...userData, id: user?.id });
+      await updateUser({
+        ...userData,
+        ...user,
+      });
       enqueueSnackbar("User data updated successfully!");
     } catch (error) {
       console.error("Error updating user data:", error);

@@ -1,43 +1,43 @@
-'use client'
+"use client";
 
-import PropTypes from 'prop-types'
-import { useEffect, useCallback, useState } from 'react'
+import PropTypes from "prop-types";
+import { useEffect, useCallback, useState } from "react";
 
 // routes
-import { paths } from '@/routes/paths'
-import { useRouter } from '@/routes/hooks'
+import { paths } from "@/routes/paths";
+import { useRouter } from "@/routes/hooks";
 
 // Auth
-import { useAuthContext } from '@/auth/hooks'
+import { useAuthContext } from "@/auth/hooks";
 
 // ----------------------------------------------------------------------
 
 export default function AuthGuard({ children }) {
-  const router = useRouter()
+  const router = useRouter();
 
-  const { authenticated, method } = useAuthContext()
+  const { authenticated, method } = useAuthContext();
 
-  const [checked, setChecked] = useState(false)
+  const [checked, setChecked] = useState(false);
 
   const check = useCallback(() => {
     if (!authenticated) {
-      router.push(paths.auth.login)
+      router.push(paths.auth.login);
     } else {
-      setChecked(true)
+      setChecked(true);
     }
-  }, [authenticated, method, router])
+  }, [authenticated, method, router]);
 
   useEffect(() => {
-    check()
-  }, [])
+    check();
+  }, []);
 
   if (!checked) {
-    return null
+    return null;
   }
 
-  return <>{children}</>
+  return <>{children}</>;
 }
 
 AuthGuard.propTypes = {
   children: PropTypes.node,
-}
+};

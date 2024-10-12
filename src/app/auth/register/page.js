@@ -1,13 +1,13 @@
 // sections
 
-import RegisterView from '@/auth/views/register-view'
+import RegisterView from "@/auth/views/register-view";
 
 // ----------------------------------------------------------------------
 
 export const metadata = {
-  title: 'Arkive-Portal: Register',
-}
+  title: "Arkive-Portal: Register",
+};
 
 export default function LoginPage() {
-  return <RegisterView />
+  return <RegisterView />;
 }
