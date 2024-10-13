@@ -6,7 +6,7 @@ import Link from '@mui/material/Link';
 // routes
 import { RouterLink } from 'src/routes/components';
 //
-import Image from '../../image';
+import Image from '../../image/image';
 import TextMaxLine from '../../text-max-line';
 import Carousel, { CarouselDots, CarouselArrows, useCarousel } from '../../carousel';
 
