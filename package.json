@@ -43,7 +43,7 @@
     "@react-pdf/renderer": "^3.1.12",
     "@stripe/react-stripe-js": "^2.8.1",
     "@stripe/stripe-js": "^4.7.0",
-    "apexcharts": "^3.42.0",
+    "apexcharts": "^3.54.0",
     "autosuggest-highlight": "^3.3.4",
     "axios": "^1.7.7",
     "date-fns": "^2.30.0",
