@@ -17,7 +17,8 @@ import { useTheme, alpha } from "@mui/material/styles";
 import { ArrowRightIcon, ChevronUpIcon, ChevronDownIcon } from "@/svg";
 import { accountStatus, createAccount, createLink } from "@/lib/stripe";
 import { useSnackbar } from "src/components/snackbar";
-
+import { useRouter } from "@/routes/hooks";
+import axios from "axios";
 const BarChart = () => {
   const theme = useTheme();
 
@@ -151,6 +152,8 @@ const SalesEarnings = () => {
     isVerified: false,
   });
 
+  const router = useRouter();
+
   const [loading, setLoading] = useState(false);
 
   const getStatus = useCallback(async () => {
@@ -196,9 +199,9 @@ const SalesEarnings = () => {
 
     await axios.post("/api/payout-email", {
       name: `${user?.first_name} ${user?.last_name}`,
-      email: "ahsanmansoor7572@gmail.com",
+      email: ["eden@arkive.nl"],
       amount: 1000,
-      clientEmail: "test@test.com",
+      clientEmail: user?.email,
       accountId: user?.accountId,
     });
 

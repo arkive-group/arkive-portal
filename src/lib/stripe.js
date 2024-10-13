@@ -34,8 +34,8 @@ const createLink = async (account) => {
   try {
     const accountLink = await stripe.accountLinks.create({
       account, // The connected account's ID
-      refresh_url: "http://localhost:3000/payouts/",
-      return_url: "http://localhost:3000/payouts/",
+      refresh_url: `${process.env.NEXT_PUBLIC_APP_DOMAIN}/settings/payouts/`,
+      return_url: `${process.env.NEXT_PUBLIC_APP_DOMAIN}/settings/payouts/`,
       type: "account_onboarding",
     });
 
