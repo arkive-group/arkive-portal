@@ -2,15 +2,15 @@
 import DashboardLayout from "@/layouts/dashboard/dashboard-layout";
 
 import AuthGuard from "@/auth/auth-guard";
-import SyncView from "@/sections/sync/sync-view";
+import Payouts from "@/sections/payouts/payouts-view";
 
 // ----------------------------------------------------------------------
 
-export default async function HomePage() {
+export default async function PayoutPage() {
   return (
     <AuthGuard>
       <DashboardLayout>
-        <SyncView />
+        <Payouts />
       </DashboardLayout>
     </AuthGuard>
   );

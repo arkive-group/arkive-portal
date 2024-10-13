@@ -35,6 +35,10 @@ const OPTIONS = [
     label: "Plan & Billings",
     linkTo: "/settings/billing",
   },
+  {
+    label: "Payouts",
+    linkTo: "/settings/payouts",
+  },
 ];
 
 // ----------------------------------------------------------------------

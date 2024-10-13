@@ -64,4 +64,23 @@ const initiatePayment = async (amount, currency, connectedAccountId) => {
   }
 };
 
-export { initiatePayment, createAccount, createLink };
+const accountStatus = async (connectedAccountId) => {
+  try {
+    // Retrieve the connected account information
+    const account = await stripe.accounts.retrieve(connectedAccountId);
+    // Check if the account is enabled for charges and payouts
+    if (account.charges_enabled && account.payouts_enabled) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.log(error);
+    return {
+      status: "error",
+      message: "An error occurred while checking the connected account status.",
+    };
+  }
+};
+
+export { initiatePayment, createAccount, createLink, accountStatus };
