@@ -7,7 +7,7 @@ import { UploadBox } from '@/components/upload'
 import Iconify from '@/components/iconify'
 import Papa from 'papaparse'
 
-export default function UploadBoxs() {
+export default function UploadBoxs({ setProducts }) {
   const uploadOptions = [
     {
       value: 'one-by-one',
@@ -18,7 +18,6 @@ export default function UploadBoxs() {
       label: 'FTP Connectors',
     },
   ]
-  const [files, setFiles] = useState([])
 
   const handleDrop = useCallback(
     async acceptedFiles => {
@@ -38,7 +37,11 @@ export default function UploadBoxs() {
           header: true,
           dynamicTyping: true,
           complete: function(results) {
-            console.log(results)
+            for (let i = 0; i < results.data.length; i++) {
+              results.data[i].id = i
+            }
+            setProducts(results.data)
+            console.log(results.data)
           }
         })
       })
@@ -53,10 +56,9 @@ export default function UploadBoxs() {
 
       const success = await res.json()
 
-      setFiles([...files, ...newFiles])
     },
 
-    [files],
+    [setProducts],
   )
 
   return (

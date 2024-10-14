@@ -37,7 +37,7 @@
     "@mui/lab": "^5.0.0-alpha.142",
     "@mui/material": "^5.14.7",
     "@mui/system": "^5.14.7",
-    "@mui/x-data-grid": "^6.12.0",
+    "@mui/x-data-grid": "^7.20.0",
     "@mui/x-date-pickers": "^6.12.0",
     "@react-email/components": "0.0.25",
     "@react-pdf/renderer": "^3.1.12",
@@ -85,6 +85,7 @@
     "stylis": "^4.3.0",
     "stylis-plugin-rtl": "^2.1.1",
     "swr": "^2.2.2",
+    "uuid": "^10.0.0",
     "yet-another-react-lightbox": "^3.12.1",
     "yup": "^1.2.0"
   },
