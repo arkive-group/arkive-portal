@@ -5,11 +5,14 @@ import { useState } from 'react'
 import { Button, Paper } from "@mui/material"
 import { DataGrid, GridToolbar } from "@mui/x-data-grid"
 import { createProduct } from '@/lib/shopify'
+import { useAuthContext } from "@/auth/hooks";
 
 import shopifyTaxonomy from './shopify-taxonomy.json'
 
 export default function ProductSelection({ products }) {
     const [selectedRowIds, setSelectedRowIds] = useState([])
+    const { user } = useAuthContext()
+    
 
     const columns = [
         { field: "Title", headerName: "Title", width: 150 },
@@ -32,6 +35,7 @@ export default function ProductSelection({ products }) {
         handles.forEach(async (handle) => {
             const productObj = {
                 handle: handle,
+                media: [],
             }
             const productsWithHandle = products.filter((row) => row.Handle === handle)
             for (let i = 0; i < productsWithHandle.length; i++) {
@@ -48,7 +52,7 @@ export default function ProductSelection({ products }) {
                     }
                 }
                 if (productsWithHandle[i].Type !== null && productsWithHandle[i].Type !== "") {
-                    productObj.barcode = productsWithHandle[i].Type
+                    productObj.type = productsWithHandle[i].Type
                 }
                 if (productsWithHandle[i]["SEO Title"] !== null && productsWithHandle[i]["SEO Title"] !== "") {
                     productObj.seoTitle = productsWithHandle[i]["SEO Title"]
@@ -59,11 +63,24 @@ export default function ProductSelection({ products }) {
                 if (productsWithHandle[i].Vendor !== null && productsWithHandle[i].Vendor !== "") {
                     productObj.vendor = productsWithHandle[i].Vendor
                 }
+                if (user?.email !== null && user?.email !== "") {
+                    productObj.uploader = user.email
+                }
 
-                console.log(productObj)
-                const product = await createProduct(productObj);
-                console.log(product);
+                if (productsWithHandle[i]["Image Src"] !== null && productsWithHandle[i]["Image Src"] !== "") {
+                    let mediaObj = {
+                        originalSource: productsWithHandle[i]["Image Src"],
+                        mediaContentType: "IMAGE",
+                    }
+                    if (productsWithHandle[i]["Image Alt Text"] !== null && productsWithHandle[i]["Image Alt Text"] !== "") {
+                        mediaObj.alt = productsWithHandle[i]["Image Alt Text"]
+                    }
+                    productObj.media.push(mediaObj)
+                }  
             }
+            console.log(productObj)
+            const product = await createProduct(productObj);
+            console.log(product);
         });
     };
 
