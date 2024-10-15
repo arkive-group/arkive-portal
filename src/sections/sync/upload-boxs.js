@@ -5,8 +5,9 @@ import { Card, Grid, Stack, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { UploadBox } from '@/components/upload'
 import Iconify from '@/components/iconify'
+import Papa from 'papaparse'
 
-export default function UploadBoxs() {
+export default function UploadBoxs({ setProducts }) {
   const uploadOptions = [
     {
       value: 'one-by-one',
@@ -17,19 +18,37 @@ export default function UploadBoxs() {
       label: 'FTP Connectors',
     },
   ]
-  const [files, setFiles] = useState([])
 
   const handleDrop = useCallback(
     async acceptedFiles => {
-      const newFiles = acceptedFiles.map(file =>
-        Object.assign(file, {
-          preview: URL.createObjectURL(file),
-        }),
-      )
+      // const newFiles = acceptedFiles.map(file =>
+      //   Object.assign(file, {
+      //     preview: URL.createObjectURL(file),
+      //   }),
+      // )
+
+      acceptedFiles.forEach((file) => {
+        if (file.type !== 'text/csv') {
+          console.log('file type is not csv')
+          return
+        }
+        
+        Papa.parse(file, {
+          header: true,
+          dynamicTyping: true,
+          complete: function(results) {
+            for (let i = 0; i < results.data.length; i++) {
+              results.data[i].id = i
+            }
+            setProducts(results.data)
+            console.log(results.data)
+          }
+        })
+      })
 
       const res = await fetch('/api/files', {
         method: 'POST',
-        body: JSON.stringify(newFiles[0]),
+        body: JSON.stringify(acceptedFiles[0]),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -37,10 +56,9 @@ export default function UploadBoxs() {
 
       const success = await res.json()
 
-      setFiles([...files, ...newFiles])
     },
 
-    [files],
+    [setProducts],
   )
 
   return (
