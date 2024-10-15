@@ -369,7 +369,7 @@ const SalesEarnings = () => {
             variant="contained"
             color="primary"
             onClick={onCreate}
-            disabled={loading}
+            disabled={true}
           >
             {loading ? "Loading..." : "Create Stripe Connected Account"}
           </Button>

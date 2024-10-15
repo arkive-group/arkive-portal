@@ -134,7 +134,7 @@ const PricingCard = ({ plan }) => {
           type="submit"
           color="primary"
           loading={isSubmitting}
-          disabled={isFree}
+          disabled={true}
         >
           {isFree ? "Free Tier" : premium.isPremium ? "Manage Plan" : "Buy Now"}
         </LoadingButton>
