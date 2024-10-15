@@ -5,14 +5,15 @@ import AuthGuard from "@/auth/auth-guard";
 import DefaultView from "../../sections/default/default-view";
 import { Table } from "@mui/material";
 import { getOrders } from "@/lib/shopify";
+import OrdersView from "@/sections/orders/orders-view";
 
 export default async function Page() {
-  const orders = await getOrders();
   return (
     <AuthGuard>
       <DashboardLayout>
-        <DefaultView />
-        <Table>
+        {/* <DefaultView /> */}
+        <OrdersView />
+        {/* <Table>
           <thead>
             <tr>
               <th>Order ID</th>
@@ -31,7 +32,7 @@ export default async function Page() {
               </tr>
             ))}
           </tbody>
-        </Table>
+        </Table> */}
       </DashboardLayout>
     </AuthGuard>
   );

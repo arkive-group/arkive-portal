@@ -39,7 +39,16 @@ const getOrders = async () => {
       }),
     });
     const data = await response.json();
-    return data;
+    let orders = [];
+    data.data?.orders?.edges.forEach((edge) => {
+      let order = edge.node;
+      order.totalPrice = order.totalPriceSet?.shopMoney?.amount;
+      order.currencyCode = order.totalPriceSet?.shopMoney?.currencyCode;
+      order.seoDescription = order.seo?.description;
+      console.log(edge.node);
+      orders.push(edge.node);
+    });
+    return orders;
   } catch (error) {
     console.error(`---> An error occured`, error);
     return { text: `[Shopify][Fetch Orders]Bad request ${error}` };
