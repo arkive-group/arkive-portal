@@ -13,10 +13,10 @@ export default function UploadBoxs({ setProducts }) {
       value: 'one-by-one',
       label: 'One by One Upload Tool',
     },
-    {
-      value: 'ftp',
-      label: 'FTP Connectors',
-    },
+    // {
+    //   value: 'ftp',
+    //   label: 'FTP Connectors',
+    // },
   ]
 
   const handleDrop = useCallback(

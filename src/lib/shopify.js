@@ -51,11 +51,11 @@ const getOrders = async () => {
     return orders;
   } catch (error) {
     console.error(`---> An error occured`, error);
-    return { text: `[Shopify][Fetch Orders]Bad request ${error}` };
+    return { text: `[Shopify][Fetch Orders] Bad request ${error}` };
   }
 };
 
-const createProduct = async (product) => {
+const createProduct = async (productObj) => {
   try {
     const params = {
       apiKey: SHOPIFY_API.apiKey,
@@ -64,6 +64,23 @@ const createProduct = async (product) => {
       shop: SHOPIFY_API.shop,
     };
     const url = `https://${params.shop}/admin/api/2024-10/graphql.json`;
+    const variables = {
+      input: {
+        category: productObj.category,
+        handle: productObj.handle,
+        productType: productObj.type,
+        seo: {
+          title: productObj.seoTitle,
+          description: productObj.seoDescription,
+        },
+        title: productObj.title,
+        vendor: productObj.vendor,
+        status: "DRAFT", // 2 is for draft
+        tags: ["portal-uploaded", "portal-uploader:"+productObj.uploader],
+      },
+      media: [...productObj.media],
+      // productOptions: [...productObj.options],
+    };
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -82,31 +99,132 @@ const createProduct = async (product) => {
             }
           }
         }`,
-        variables: {
-          input: {
-            category: product.category,
-            handle: product.handle,
-            productType: product.type,
-            seo: {
-              title: product.seoTitle,
-              description: product.seoDescription,
-            },
-            title: product.title,
-            vendor: product.vendor,
-            status: "DRAFT", // 2 is for draft
-            tags: ["portal-uploaded", "portal-uploader:"+product.uploader],
-          },
-          media: [...product.media],
-        },
+        variables: variables,
       }),
     });
     const data = await response.json();
     return data;
   } catch (error) {
     console.error(`---> An error occured`, error);
-    return { text: `[Shopify][Create Products]Bad request ${error}` };
+    return { text: `[Shopify][Create Products] Bad request ${error}` };
   }
 
+};
+
+const createProductOptions = async (productId, productObj) => {
+  try {
+    const params = {
+      apiKey: SHOPIFY_API.apiKey,
+      apiSecretKey: SHOPIFY_API.apiSecretKey,
+      accessToken: SHOPIFY_API.accessToken,
+      shop: SHOPIFY_API.shop,
+    };
+    const url = `https://${params.shop}/admin/api/2024-10/graphql.json`;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Access-Token": params.accessToken,
+      },
+      body: JSON.stringify({
+        query: `mutation createOptions($productId: ID!, $options: [OptionCreateInput!]!) {
+          productOptionsCreate(productId: $productId, options: $options) {
+            userErrors {
+              field
+              message
+              code
+            }
+            product {
+              options {
+                name
+                linkedMetafield {
+                  namespace
+                  key
+                }
+                optionValues {
+                  name
+                  linkedMetafieldValue
+                }
+              }
+            }
+          }
+        }`,
+        variables: {
+          productId: productId,
+          options: [...productObj.options]
+        },
+      }),
+    });
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error(`---> An error occured`, error);
+    return { text: `[Shopify][Create Product Options] Bad request ${error}` };
+  }
+};
+
+const createProductVariants = async (productId, productObj) => {
+  try {
+    const params = {
+      apiKey: SHOPIFY_API.apiKey,
+      apiSecretKey: SHOPIFY_API.apiSecretKey,
+      accessToken: SHOPIFY_API.accessToken,
+      shop: SHOPIFY_API.shop,
+    };
+    const url = `https://${params.shop}/admin/api/2024-10/graphql.json`;
+    const variables = {
+      productId: productId,
+      variants: [...productObj.variants]
+    }
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Access-Token": params.accessToken,
+      },
+      body: JSON.stringify({
+        query: `mutation productVariantsBulkCreate($productId: ID!, $variants: [ProductVariantsBulkInput!]!) {
+          productVariantsBulkCreate(productId: $productId, variants: $variants, strategy: REMOVE_STANDALONE_VARIANT) {
+            userErrors {
+              field
+              message
+            }
+            product {
+              id
+              options {
+                id
+                name
+                values
+                position
+                optionValues {
+                  id
+                  name
+                  hasVariants
+                }
+              }
+            }
+            productVariants {
+              id
+              title
+              selectedOptions {
+                name
+                value
+              }
+            }
+          }
+        }`,
+        variables: variables,
+      }),
+    });
+    console.log(variables);
+    const data = await response.json();
+    // console.log(data.data?.productVariantsBulkCreate?.userErrors);
+    return data;
+  } catch (error) {
+    console.error(`---> An error occured`, error);
+    return { text: `[Shopify][Create Product Variants] Bad request ${error}` };
+  }
 };
 
 const getProducts = async (uploader) => {
@@ -160,8 +278,8 @@ const getProducts = async (uploader) => {
     return products;
   } catch (error) {
     console.error(`---> An error occured`, error);
-    return { text: `[Shopify][Fetch Products]Bad request ${error}` };
+    return { text: `[Shopify][Fetch Products] Bad request ${error}` };
   }
 };
 
-export { getOrders, createProduct, getProducts };
+export { getOrders, createProduct, getProducts, createProductOptions, createProductVariants };
