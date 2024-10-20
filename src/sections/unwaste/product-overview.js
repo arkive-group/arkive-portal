@@ -29,7 +29,7 @@ export default function ProductOverview() {
   ];
 
   return (
-    <Paper sx={{ height: 400, width: "100%" }}>
+    <Paper sx={{ height: 400 }}>
       <Box
         mb={3}
         display="flex"
