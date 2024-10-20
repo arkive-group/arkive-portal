@@ -223,7 +223,7 @@ export default function ProductSelection({ products }) {
         alignItems="center"
         justifyContent="space-between"
       >
-        <Typography variant="h4">Producrs</Typography>
+        <Typography variant="h4">Products</Typography>
         <Button variant="contained" onClick={getSelectedProducts}>
           Create Products
         </Button>
