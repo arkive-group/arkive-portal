@@ -2,7 +2,9 @@
 
 import { SHOPIFY_API } from "@/config-global";
 
-const getOrders = async () => {
+const getOrders = async (uploader, skuList) => {
+
+  const queryString = skuList.map((sku) => `sku:${sku}`).join(" OR ");
   try {
     const params = {
       apiKey: SHOPIFY_API.apiKey,
@@ -18,27 +20,36 @@ const getOrders = async () => {
         "X-Shopify-Access-Token": params.accessToken,
       },
       body: JSON.stringify({
-        query: `{
-                    orders(first: 10) {
-                        edges {
-                            node {
-                                id
-                                name
-                                email
-                                createdAt
-                                totalPriceSet {
-                                    shopMoney {
-                                        amount
-                                        currencyCode
-                                    }
-                                }
-                            }
+        query: `query {
+          orders(first: 50, reverse: true, query: "${queryString}") {
+              edges {
+                  node {
+                      id
+                      name
+                      email
+                      createdAt
+                      totalPriceSet {
+                          shopMoney {
+                              amount
+                              currencyCode
+                          }
+                      }
+                      lineItems(first: 100) {
+                        nodes {
+                          product {
+                            id
+                            tags
+                          }
                         }
-                    }
-                }`,
+                      }
+                  }
+              }
+            }
+          }`,
       }),
     });
     const data = await response.json();
+    console.log(data.data?.orders?.edges);
     let orders = [];
     data.data?.orders?.edges.forEach((edge) => {
       let order = edge.node;
@@ -255,6 +266,12 @@ const getProducts = async (uploader) => {
                   title
                   description
                 }
+                variants(first: 100) {
+                  nodes {
+                    id
+                    sku
+                  }
+                }
               }
               cursor
             }
@@ -269,11 +286,17 @@ const getProducts = async (uploader) => {
 
     let products = [];
     data.data?.products?.edges.forEach((edge) => {
-      let product = edge.node;
-      product.seoTitle = product.seo?.title;
-      product.seoDescription = product.seo?.description;
-      console.log(edge.node);
-      products.push(edge.node);
+      let productRaw = edge.node;
+      const product = {
+        id: productRaw.id,
+        title: productRaw.title,
+        handle: productRaw.handle,
+        status: productRaw.status,
+        seoTitle: productRaw.seo?.title,
+        seoDescription: productRaw.seo?.description,
+        variants: productRaw.variants?.nodes,
+      };
+      products.push(product);
     });
     return products;
   } catch (error) {
