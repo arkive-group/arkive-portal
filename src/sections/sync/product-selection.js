@@ -10,12 +10,14 @@ import {
   createProductVariants,
 } from "@/lib/shopify";
 import { useAuthContext } from "@/auth/hooks";
+import { useSnackbar } from "src/components/snackbar";
 
 import shopifyTaxonomy from "./shopify-taxonomy.json";
 
 export default function ProductSelection({ products }) {
   const [selectedRowIds, setSelectedRowIds] = useState([]);
   const { user } = useAuthContext();
+  const { enqueueSnackbar } = useSnackbar();
 
   const columns = [
     { field: "Title", headerName: "Title", width: 150 },
@@ -209,8 +211,12 @@ export default function ProductSelection({ products }) {
         const productVariants =
           res.data?.productVariantsBulkCreate?.product?.options;
         console.log(`Product variants created: ${productVariants}`);
+
+        enqueueSnackbar(`Product created with ID: ${productId}`);
       } else {
         console.log(`Product creation failed: ${res.text}`);
+
+        enqueueSnackbar(`Product creation failed: ${res.text}`, { variant: "error" });
       }
     });
   };
