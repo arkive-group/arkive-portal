@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 
 import { Button, Paper } from "@mui/material"
 import { DataGrid, GridToolbar } from "@mui/x-data-grid"
-import { getOrders } from "@/lib/shopify";
+import { getOrders, getProducts } from "@/lib/shopify";
 import { useAuthContext } from "@/auth/hooks";
 
 
@@ -14,8 +14,12 @@ export default function OrdersOverview() {
     
     
     useEffect(() => {
+        const uploader = user?.email;
         const fetchOrders = async () => {
-            const orderList = await getOrders()
+            const productList = await getProducts(uploader);
+            const skuList = productList.map((product) => product.variants.map((variant) => variant.sku)).flat();
+            
+            const orderList = await getOrders(uploader, skuList)
             console.log(orderList);
             setOrders(orderList);
         };
