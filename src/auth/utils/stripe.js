@@ -28,6 +28,7 @@ export const getCheckoutUrl = async () => {
     price: process.env.NEXT_PUBLIC_STRIPE_PRODUCT_ID,
     success_url: window.location.origin,
     cancel_url: window.location.origin,
+    trial_period_days: 90, // Add the 90-day trial period
   });
 
   return new Promise((resolve, reject) => {
