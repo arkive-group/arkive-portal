@@ -9,7 +9,7 @@ export async function POST(request) {
 
     await resend.emails.send({
       from: "Arkive <noreply@arkivegroup.com>",
-      to: [email],
+      to: email,
       subject: "Monthly Payout Request",
       react: PayoutEmail(name, amount, clientEmail, accountId),
     });
