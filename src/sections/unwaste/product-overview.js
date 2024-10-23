@@ -13,7 +13,10 @@ export default function ProductOverview() {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const productList = await getProducts(user?.email);
+      const company = user?.company;
+      const productList = await getProducts({
+        company,
+      });
       console.log(productList);
       setProducts(productList);
     };
