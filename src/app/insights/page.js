@@ -2,7 +2,7 @@
 import DashboardLayout from "@/layouts/dashboard/dashboard-layout";
 
 import AuthGuard from "@/auth/auth-guard";
-import SyncView from "@/sections/sync/sync-view";
+import InsightsView from "@/sections/insights/insights-view";
 
 // ----------------------------------------------------------------------
 
@@ -10,7 +10,7 @@ export default async function HomePage() {
   return (
     <AuthGuard>
       <DashboardLayout>
-        <SyncView />
+        <InsightsView />
       </DashboardLayout>
     </AuthGuard>
   );

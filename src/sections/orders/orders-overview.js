@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 
+import { StyledDataGrid } from "@/components/styled-data-grid";
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { getOrders, getProducts } from "@/lib/shopify";
@@ -13,8 +14,11 @@ export default function OrdersOverview() {
 
   useEffect(() => {
     const uploader = user?.email;
+    const company = user?.company;
     const fetchOrders = async () => {
-      const productList = await getProducts(uploader);
+      const productList = await getProducts({
+        company,
+      });
       const skuList = productList
         .map((product) => product.variants.map((variant) => variant.sku))
         .flat();
@@ -32,6 +36,7 @@ export default function OrdersOverview() {
     { field: "email", headerName: "Email", width: 200 },
     { field: "totalPrice", headerName: "Total Price", width: 100 },
     { field: "currencyCode", headerName: "Currency Code", width: 100 },
+    { field: "displayFulfillmentStatus", headerName: "Fullfillment", width: 100 },
   ];
 
   return (
@@ -42,9 +47,9 @@ export default function OrdersOverview() {
         alignItems="center"
         justifyContent="space-between"
       >
-        <Typography variant="h4">Products</Typography>
+        <Typography variant="h4">Orders</Typography>
       </Box>
-      <DataGrid
+      <StyledDataGrid
         rows={orders}
         columns={columns.map((col) => ({
           ...col,
@@ -52,6 +57,9 @@ export default function OrdersOverview() {
           minWidth: 100, // Ensure a minimum width to avoid squishing
         }))}
         getRowId={(row) => row["id"]}
+        getRowClassName={(params) =>
+          params.row.displayFulfillmentStatus === "FULFILLED" ? "super-app-theme--green" : "super-app-theme--red"
+        }
         initialState={{ pagination: { paginationModel: { pageSize: 5 } } }}
         pageSize={5}
         rowsPerPageOptions={[5]}

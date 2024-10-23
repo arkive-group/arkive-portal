@@ -64,11 +64,13 @@ export default function ProductSelection({ products }) {
       ) {
         productObj.seoDescription = productRaw["SEO Description"];
       }
-      if (productRaw.Vendor !== null && productRaw.Vendor !== "") {
-        productObj.vendor = productRaw.Vendor;
-      }
       if (user?.email !== null && user?.email !== "") {
         productObj.uploader = user.email;
+      }
+      if (user?.company !== null && user?.company !== "") {
+        productObj.vendor = user.company;
+      } else if (productRaw.Vendor !== null && productRaw.Vendor !== "") {
+        productObj.vendor = productRaw.Vendor;
       }
 
       // Medias
@@ -229,7 +231,7 @@ export default function ProductSelection({ products }) {
         alignItems="center"
         justifyContent="space-between"
       >
-        <Typography variant="h4">Products</Typography>
+        <Typography variant="h4">Select Products To Upload</Typography>
         <Button variant="contained" onClick={getSelectedProducts}>
           Create Products
         </Button>
