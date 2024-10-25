@@ -40,6 +40,11 @@ const getOrders = async (uploader, skuList) => {
                           url
                         }
                       }
+                      fulfillmentOrders(first: 10) {
+                        nodes {
+                          id
+                        }
+                      }
                       totalPriceSet {
                           shopMoney {
                               amount
@@ -61,7 +66,7 @@ const getOrders = async (uploader, skuList) => {
       }),
     });
     const data = await response.json();
-    console.log(data.data?.orders?.edges);
+    console.log(data);
     let orders = [];
     data.data?.orders?.edges.forEach((edge) => {
       let order = {
@@ -71,6 +76,7 @@ const getOrders = async (uploader, skuList) => {
         createdAt: edge.node.createdAt,
         displayFulfillmentStatus: edge.node.displayFulfillmentStatus,
         fulfillments: edge.node.fulfillments,
+        fulfillmentOrders: edge.node.fulfillmentOrders?.nodes,
         currencyCode: edge.node.totalPriceSet?.shopMoney?.currencyCode,
         totalPrice: edge.node.totalPriceSet?.shopMoney?.amount,
         seoDescription: edge.node.seo?.description,
@@ -83,6 +89,63 @@ const getOrders = async (uploader, skuList) => {
   } catch (error) {
     console.error(`---> An error occured`, error);
     return { text: `[Shopify][Fetch Orders] Bad request ${error}` };
+  }
+};
+
+const fulfillOrder = async ({fulfillmentOrderId, notifyCustomer, trackingInfo}) => {
+  try {
+    const params = {
+      apiKey: SHOPIFY_API.apiKey,
+      apiSecretKey: SHOPIFY_API.apiSecretKey,
+      accessToken: SHOPIFY_API.accessToken,
+      shop: SHOPIFY_API.shop,
+    };
+    const url = `https://${params.shop}/admin/api/2024-10/graphql.json`;
+    const variables = {
+      fulfillment: {
+        lineItemsByFulfillmentOrder: {
+          fulfillmentOrderId: fulfillmentOrderId,
+        },
+        notifyCustomer: notifyCustomer,
+        trackingInfo: {
+          company: trackingInfo.company,
+          number: trackingInfo.number,
+          url: trackingInfo.url,
+        }
+      }
+    };
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Access-Token": params.accessToken,
+      },
+      body: JSON.stringify({
+        query: `mutation fulfillmentCreate($fulfillment: FulfillmentInput!) {
+          fulfillmentCreate(fulfillment: $fulfillment) {
+            userErrors {
+              field
+              message
+            }
+            fulfillment {
+              id
+            }
+          }
+        }`,
+        variables: variables,
+      }),
+    });
+    const data = await response.json();
+    console.log(data);
+    if (data.errors) {
+      return {
+        userErrors: data.errors
+      }
+    }
+    return data.data?.fulfillmentCreate;
+  } catch (error) {
+    console.error(`---> An error occured`, error);
+    return { text: `[Shopify][Fulfill Order] Bad request ${error}` };
   }
 };
 
@@ -273,6 +336,8 @@ const getProducts = async ({uploader, company}) => {
     } else if (company !== undefined && company !== null && company !== "") {
       query = `vendor:'${company}'`;
     }
+    query = `${query} AND status:ACTIVE`;
+
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -391,4 +456,4 @@ const getMonthlyReport = async () => {
   }
 };
 
-export { getOrders, createProduct, getProducts, createProductOptions, createProductVariants, getMonthlyReport };
+export { getOrders, fulfillOrder, createProduct, getProducts, createProductOptions, createProductVariants, getMonthlyReport };

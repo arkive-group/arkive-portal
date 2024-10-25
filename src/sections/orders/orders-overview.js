@@ -6,11 +6,15 @@ import { Box, Button, Paper, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { getOrders, getProducts } from "@/lib/shopify";
 import { useAuthContext } from "@/auth/hooks";
+import FulfillPopup from "./fulfill-popup";
 
 export default function OrdersOverview() {
   const { user } = useAuthContext();
   const [selectedRowIds, setSelectedRowIds] = useState([]);
   const [orders, setOrders] = useState([]);
+
+  const [fulfillmentOrder, setFulfillmentOrder] = useState([]);
+  const [openFulfillPopup, setOpenFulfillPopup] = useState(false);
 
   useEffect(() => {
     const uploader = user?.email;
@@ -28,7 +32,25 @@ export default function OrdersOverview() {
       setOrders(orderList);
     };
     fetchOrders();
-  }, [user]);
+  }, [user, openFulfillPopup]);
+
+  const getSelectedOrders = async () => {
+    if (selectedRowIds.length === 0) return [];
+    const selectedOrders = orders.filter((order) =>
+      selectedRowIds.includes(order.id)
+    );
+    const order = selectedOrders[0];
+    let fulfillmentOrder = {
+      id: order.id,
+      name: order.name,
+      fulfillmentOrderIds: order.fulfillmentOrders.map(
+        (fulfillmentOrder) => fulfillmentOrder.id
+      ),
+    };
+    setFulfillmentOrder(fulfillmentOrder);
+    setOpenFulfillPopup(true);
+    console.log(fulfillmentOrder);
+  };
 
   const columns = [
     { field: "id", headerName: "ID", width: 150 },
@@ -48,6 +70,9 @@ export default function OrdersOverview() {
         justifyContent="space-between"
       >
         <Typography variant="h4">Orders</Typography>
+        <Button variant="contained" onClick={getSelectedOrders}>
+          Fulfill Orders
+        </Button>
       </Box>
       <StyledDataGrid
         rows={orders}
@@ -64,6 +89,7 @@ export default function OrdersOverview() {
         pageSize={5}
         rowsPerPageOptions={[5]}
         checkboxSelection
+        disableMultipleRowSelection={true}
         onRowSelectionModelChange={(ids) => {
           setSelectedRowIds(ids);
         }}
@@ -71,6 +97,8 @@ export default function OrdersOverview() {
           toolbar: GridToolbar,
         }}
       />
+
+      <FulfillPopup fulfillmentOrder={fulfillmentOrder} open={openFulfillPopup} setOpen={setOpenFulfillPopup} />
     </Paper>
   );
 }
