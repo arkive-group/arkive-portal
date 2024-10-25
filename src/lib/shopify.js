@@ -1,6 +1,7 @@
 "use server";
 
 import { SHOPIFY_API } from "@/config-global";
+import { query } from "firebase/firestore";
 
 const getOrders = async (uploader, skuList) => {
 
@@ -28,6 +29,22 @@ const getOrders = async (uploader, skuList) => {
                       name
                       email
                       createdAt
+                      displayFulfillmentStatus
+                      fulfillments (first: 10) {
+                        id
+                        status
+                        createdAt
+                        trackingInfo {
+                          company
+                          number
+                          url
+                        }
+                      }
+                      fulfillmentOrders(first: 10) {
+                        nodes {
+                          id
+                        }
+                      }
                       totalPriceSet {
                           shopMoney {
                               amount
@@ -49,20 +66,86 @@ const getOrders = async (uploader, skuList) => {
       }),
     });
     const data = await response.json();
-    console.log(data.data?.orders?.edges);
+    console.log(data);
     let orders = [];
     data.data?.orders?.edges.forEach((edge) => {
-      let order = edge.node;
-      order.totalPrice = order.totalPriceSet?.shopMoney?.amount;
-      order.currencyCode = order.totalPriceSet?.shopMoney?.currencyCode;
-      order.seoDescription = order.seo?.description;
-      console.log(edge.node);
-      orders.push(edge.node);
+      let order = {
+        id: edge.node.id,
+        name: edge.node.name,
+        email: edge.node.email,
+        createdAt: edge.node.createdAt,
+        displayFulfillmentStatus: edge.node.displayFulfillmentStatus,
+        fulfillments: edge.node.fulfillments,
+        fulfillmentOrders: edge.node.fulfillmentOrders?.nodes,
+        currencyCode: edge.node.totalPriceSet?.shopMoney?.currencyCode,
+        totalPrice: edge.node.totalPriceSet?.shopMoney?.amount,
+        seoDescription: edge.node.seo?.description,
+        lineItems: edge.node.lineItems.nodes,
+      };
+      console.log(order);
+      orders.push(order);
     });
     return orders;
   } catch (error) {
     console.error(`---> An error occured`, error);
     return { text: `[Shopify][Fetch Orders] Bad request ${error}` };
+  }
+};
+
+const fulfillOrder = async ({fulfillmentOrderId, notifyCustomer, trackingInfo}) => {
+  try {
+    const params = {
+      apiKey: SHOPIFY_API.apiKey,
+      apiSecretKey: SHOPIFY_API.apiSecretKey,
+      accessToken: SHOPIFY_API.accessToken,
+      shop: SHOPIFY_API.shop,
+    };
+    const url = `https://${params.shop}/admin/api/2024-10/graphql.json`;
+    const variables = {
+      fulfillment: {
+        lineItemsByFulfillmentOrder: {
+          fulfillmentOrderId: fulfillmentOrderId,
+        },
+        notifyCustomer: notifyCustomer,
+        trackingInfo: {
+          company: trackingInfo.company,
+          number: trackingInfo.number,
+          url: trackingInfo.url,
+        }
+      }
+    };
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Access-Token": params.accessToken,
+      },
+      body: JSON.stringify({
+        query: `mutation fulfillmentCreate($fulfillment: FulfillmentInput!) {
+          fulfillmentCreate(fulfillment: $fulfillment) {
+            userErrors {
+              field
+              message
+            }
+            fulfillment {
+              id
+            }
+          }
+        }`,
+        variables: variables,
+      }),
+    });
+    const data = await response.json();
+    console.log(data);
+    if (data.errors) {
+      return {
+        userErrors: data.errors
+      }
+    }
+    return data.data?.fulfillmentCreate;
+  } catch (error) {
+    console.error(`---> An error occured`, error);
+    return { text: `[Shopify][Fulfill Order] Bad request ${error}` };
   }
 };
 
@@ -238,7 +321,7 @@ const createProductVariants = async (productId, productObj) => {
   }
 };
 
-const getProducts = async (uploader) => {
+const getProducts = async ({uploader, company}) => {
   try {
     const params = {
       apiKey: SHOPIFY_API.apiKey,
@@ -247,6 +330,14 @@ const getProducts = async (uploader) => {
       shop: SHOPIFY_API.shop,
     };
     const url = `https://${params.shop}/admin/api/2024-10/graphql.json`;
+    var query = "";
+    if (uploader !== undefined && uploader !== null && uploader !== "") {
+      query = `tag:portal-uploaded AND tag:'portal-uploader:${uploader}'`;
+    } else if (company !== undefined && company !== null && company !== "") {
+      query = `vendor:'${company}'`;
+    }
+    query = `${query} AND status:ACTIVE`;
+
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -255,7 +346,7 @@ const getProducts = async (uploader) => {
       },
       body: JSON.stringify({
         query: `query {
-          products(first: 250, query: "tag:portal-uploaded AND tag:'portal-uploader:${uploader}'") {
+          products(first: 250, query: "${query}") {
             edges {
               node {
                 id
@@ -305,4 +396,64 @@ const getProducts = async (uploader) => {
   }
 };
 
-export { getOrders, createProduct, getProducts, createProductOptions, createProductVariants };
+
+const getMonthlyReport = async () => {
+  try {
+    const params = {
+      apiKey: SHOPIFY_API.apiKey,
+      apiSecretKey: SHOPIFY_API.apiSecretKey,
+      accessToken: SHOPIFY_API.accessToken,
+      shop: SHOPIFY_API.shop,
+    };
+    const url = `https://${params.shop}/admin/api/unstable/graphql.json`;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Access-Token": params.accessToken,
+      },
+      body: JSON.stringify({
+        query: `query {
+          shopifyqlQuery(
+            query: "FROM orders SHOW sum(net_sales) AS monthly_net_sales GROUP BY month SINCE -3m ORDER BY month"
+          ) {
+            __typename
+            ... on TableResponse {
+              tableData {
+                unformattedData
+                rowData
+                columns {
+                  name
+                  dataType
+                  displayName
+                }
+              }
+            }
+            parseErrors {
+              code
+              message
+              range {
+                start {
+                  line
+                  character
+                }
+                end {
+                  line
+                  character
+                }
+              }
+            }
+          }
+        }`,
+      }),
+    });
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error(`---> An error occured`, error);
+    return { text: `[Shopify][Fetch Monthly Report] Bad request ${error}` };
+  }
+};
+
+export { getOrders, fulfillOrder, createProduct, getProducts, createProductOptions, createProductVariants, getMonthlyReport };
