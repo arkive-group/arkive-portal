@@ -20,7 +20,7 @@ import { useAuthContext, usePremiumStatus } from "@/auth/hooks";
 const PricingCard = ({ plan }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { user } = useAuthContext();
-  const { isPremium } = usePremiumStatus(user);
+  const { premium } = usePremiumStatus(user);
 
   const router = useRouter();
 
@@ -127,7 +127,7 @@ const PricingCard = ({ plan }) => {
               boxShadow: 3,
             },
           }}
-          onClick={isPremium ? onCancleSubscription : onCheckoutSession}
+          onClick={premium.isPremium ? onCancleSubscription : onCheckoutSession}
           fullWidth
           variant={variant === "contained" ? "contained" : "outlined"}
           size="large"
@@ -136,7 +136,7 @@ const PricingCard = ({ plan }) => {
           loading={isSubmitting}
           disabled={isFree}
         >
-          {isFree ? "Free Tier" : isPremium ? "Manage Plan" : "Buy Now"}
+          {isFree ? "Free Tier" : premium.isPremium ? "Manage Plan" : "Buy Now"}
         </LoadingButton>
       </CardActions>
     </Card>

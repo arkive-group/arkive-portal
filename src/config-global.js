@@ -1,9 +1,9 @@
 // routes
-import { paths } from 'src/routes/paths'
+import { paths } from "src/routes/paths";
 
 // ROOT PATH AFTER LOGIN SUCCESSFUL
-export const PATH_AFTER_LOGIN = paths.home
-export const ARKIVE_STORE = 'https://arkivegroup.com/'
+export const PATH_AFTER_LOGIN = paths.home;
+export const ARKIVE_STORE = "https://arkivegroup.com/";
 
 export const FIREBASE_API = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -14,15 +14,15 @@ export const FIREBASE_API = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APPID,
   // measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
   databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
-}
+};
 
 export const ARKIVE_API = {
   BASE_URL: process.env.NEXT_PUBLIC_ARIVE_API_URL,
-}
+};
 
 export const SHOPIFY_API = {
   apiKey: process.env.NEXT_PUBLIC_SHOPIFY_API_KEY,
   apiSecretKey: process.env.NEXT_PUBLIC_SHOPIFY_API_SECRET_KEY,
   accessToken: process.env.NEXT_PUBLIC_SHOPIFY_ACCESS_TOKEN,
   shop: process.env.NEXT_PUBLIC_SHOPIFY_SHOP,
-}
+};

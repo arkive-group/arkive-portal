@@ -56,7 +56,7 @@ export default function AccountPopover() {
     try {
       await logout();
       popover.onClose();
-      router.replace("/");
+      router.push("/auth/login/");
     } catch (error) {
       console.error(error);
       enqueueSnackbar("Unable to logout!", { variant: "error" });
@@ -138,7 +138,7 @@ export default function AccountPopover() {
 
         <MenuItem
           onClick={handleLogout}
-          sx={{ m: 1, fontWeight: 'fontWeightBold', color: 'error.main' }}
+          sx={{ m: 1, fontWeight: "fontWeightBold", color: "error.main" }}
         >
           Logout
         </MenuItem>

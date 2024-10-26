@@ -29,7 +29,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const AccountGeneralSettings = () => {
   const { user, updateUser } = useAuthContext();
-  const { isPremium } = usePremiumStatus(user);
+  const { premium } = usePremiumStatus(user);
   const { enqueueSnackbar } = useSnackbar();
 
   const userSchema = Yup.object().shape({
@@ -204,9 +204,13 @@ const AccountGeneralSettings = () => {
               >
                 Your plan:
                 <Link
-                  href={isPremium ? "/settings/payouts" : "/settings/billing"}
+                  href={
+                    premium.isPremium
+                      ? "/settings/payouts"
+                      : "/settings/billing"
+                  }
                 >
-                  {isPremium ? "Eco Master Plan" : "Eco Starter Plan"}
+                  {premium.isPremium ? "Eco Master Plan" : "Eco Starter Plan"}
                 </Link>
               </Typography>
             </CardActions>

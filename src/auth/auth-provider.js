@@ -213,7 +213,6 @@ export function AuthProvider({ children }) {
   const logout = useCallback(async () => {
     await signOut(AUTH);
     state.user = null;
-    router.push(paths.auth.login);
   }, []);
 
   // ----------------------------------------------------------------------
