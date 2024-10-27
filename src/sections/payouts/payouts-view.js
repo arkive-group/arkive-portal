@@ -19,6 +19,15 @@ import { accountStatus, createAccount, createLink } from "@/lib/stripe";
 import { useSnackbar } from "src/components/snackbar";
 import { useRouter } from "@/routes/hooks";
 import axios from "axios";
+import {
+  doc,
+  setDoc,
+  getDocs,
+  collection,
+  query,
+  where,
+} from "firebase/firestore";
+import { DB } from "@/utils/firebase-config";
 const BarChart = () => {
   const theme = useTheme();
 
@@ -212,6 +221,61 @@ const SalesEarnings = () => {
 
   // Conditional CTA rendering based on Stripe status
   const renderCTA = () => {
+    const [canRequestPayout, setCanRequestPayout] = useState(false);
+    const [loadingPayoutStatus, setLoadingPayoutStatus] = useState(true);
+
+    // Check eligibility based on the last payout date
+    useEffect(() => {
+      const checkPayoutEligibility = async () => {
+        try {
+          const q = query(
+            collection(DB, "payout-requests"),
+            where("accountID", "==", user?.accountId)
+          );
+
+          const querySnapshot = await getDocs(q);
+
+          let lastPayoutDate = null;
+          querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            if (data.timestamp) {
+              lastPayoutDate = new Date(data.timestamp.seconds * 1000);
+            }
+          });
+
+          const oneMonthAgo = new Date();
+          oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+          // Enable the button if no previous payout or the last payout was more than a month ago
+          setCanRequestPayout(!lastPayoutDate || lastPayoutDate < oneMonthAgo);
+        } catch (error) {
+          console.error("Error checking payout eligibility:", error);
+        } finally {
+          setLoadingPayoutStatus(false);
+        }
+      };
+
+      checkPayoutEligibility();
+    }, [user?.accountId]);
+
+    const handlePayoutRequest = async () => {
+      const amount = 1000; // Define how you'll calculate or determine the payout amount
+
+      try {
+        await setDoc(doc(collection(db, "payout-requests")), {
+          accountID: user?.accountId,
+          amount,
+          timestamp: new Date(),
+        });
+        alert("Payout requested successfully!");
+        onRequest();
+        setCanRequestPayout(false); // Disable button after request
+      } catch (error) {
+        console.error("Error requesting payout:", error);
+        alert("Error requesting payout. Please try again.");
+      }
+    };
+
     if (!stripeStatus.isConnected) {
       return (
         <Alert severity="warning" sx={{ mt: 3 }}>
@@ -243,8 +307,14 @@ const SalesEarnings = () => {
           <Typography variant="body1" gutterBottom>
             Your Stripe account is connected and verified.
           </Typography>
-          <Button variant="contained" color="primary" onClick={onRequest}>
-            Request Payout
+
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handlePayoutRequest}
+            disabled={!canRequestPayout || loadingPayoutStatus}
+          >
+            {loadingPayoutStatus ? "Checking eligibility..." : "Request Payout"}
           </Button>
         </Alert>
       );
