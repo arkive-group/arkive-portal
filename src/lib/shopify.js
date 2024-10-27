@@ -357,10 +357,19 @@ const getProducts = async ({uploader, company}) => {
                   title
                   description
                 }
-                variants(first: 100) {
+                variants(first: 50) {
                   nodes {
                     id
                     sku
+                  }
+                }
+                resourcePublications(first: 10) {
+                  nodes {
+                    isPublished
+                    publication {
+                      name
+                      id
+                    }
                   }
                 }
               }
@@ -374,6 +383,7 @@ const getProducts = async ({uploader, company}) => {
       }),
     });
     const data = await response.json();
+    console.log(data);
 
     let products = [];
     data.data?.products?.edges.forEach((edge) => {
@@ -386,6 +396,7 @@ const getProducts = async ({uploader, company}) => {
         seoTitle: productRaw.seo?.title,
         seoDescription: productRaw.seo?.description,
         variants: productRaw.variants?.nodes,
+        salesChannels: productRaw.resourcePublications?.nodes.map((node) => node.publication?.name),
       };
       products.push(product);
     });

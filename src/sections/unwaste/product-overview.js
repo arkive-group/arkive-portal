@@ -5,11 +5,13 @@ import { Box, Button, Paper, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { getProducts } from "@/lib/shopify";
 import { useAuthContext } from "@/auth/hooks";
+import { Channels } from "@/components/active-channel";
 
-export default function ProductOverview() {
+export default function ProductOverview({ channel }) {
   const { user } = useAuthContext();
   const [selectedRowIds, setSelectedRowIds] = useState([]);
   const [products, setProducts] = useState([]);
+  const [productFilters, setProductFilters] = useState([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -23,12 +25,27 @@ export default function ProductOverview() {
     fetchProducts();
   }, [user]);
 
+  useEffect(() => {
+    if (Object.keys(Channels).includes(channel)) {
+      setProductFilters([
+        {
+          field: "salesChannels",
+          operator: "contains",
+          value: Channels[channel].alias,
+        },
+      ]);
+    } else {
+      setProductFilters([]);
+    }
+  }, [channel]);
+
   const columns = [
     { field: "id", headerName: "ID", width: 150 },
     { field: "title", headerName: "Title", width: 200 },
     { field: "handle", headerName: "Handle", width: 150 },
     { field: "status", headerName: "Status", width: 100 },
     { field: "seoDescription", headerName: "SEO Description", width: 100 },
+    { field: "salesChannels", headerName: "Sales Channels", width: 100 },
   ];
 
   return (
@@ -48,6 +65,9 @@ export default function ProductOverview() {
           flex: 1, // Allow flexible sizing based on content
           minWidth: 100, // Ensure a minimum width to avoid squishing
         }))}
+        filterModel={{
+          items: productFilters,
+        }}
         getRowId={(row) => row["id"]}
         initialState={{ pagination: { paginationModel: { pageSize: 5 } } }}
         pageSize={5}

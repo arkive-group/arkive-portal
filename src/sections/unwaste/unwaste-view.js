@@ -9,7 +9,7 @@ import Grid from "@mui/material/Grid";
 import UserProfileView from "@/sections/user/user-profile-view";
 import ProductUnavailable from "../error/product-unavailable";
 import ProductOverview from "./product-overview";
-import ActiveChannel from "./active-channel";
+import ActiveChannel from "@/components/active-channel";
 
 // ----------------------------------------------------------------------
 
