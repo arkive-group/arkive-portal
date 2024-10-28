@@ -1,43 +1,11 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
-import { Box, Button, Paper, Typography } from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { getProducts } from "@/lib/shopify";
-import { useAuthContext } from "@/auth/hooks";
-import { Channels } from "@/components/active-channel";
 
-export default function ProductOverview({ channel }) {
-  const { user } = useAuthContext();
+export default function ProductOverview({ products, productFilters }) {
   const [selectedRowIds, setSelectedRowIds] = useState([]);
-  const [products, setProducts] = useState([]);
-  const [productFilters, setProductFilters] = useState([]);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const company = user?.company;
-      const productList = await getProducts({
-        company,
-      });
-      console.log(productList);
-      setProducts(productList);
-    };
-    fetchProducts();
-  }, [user]);
-
-  useEffect(() => {
-    if (Object.keys(Channels).includes(channel)) {
-      setProductFilters([
-        {
-          field: "salesChannels",
-          operator: "contains",
-          value: Channels[channel].alias,
-        },
-      ]);
-    } else {
-      setProductFilters([]);
-    }
-  }, [channel]);
 
   const columns = [
     { field: "id", headerName: "ID", width: 150 },
@@ -58,28 +26,31 @@ export default function ProductOverview({ channel }) {
       >
         <Typography variant="h4">Products</Typography>
       </Box>
-      <DataGrid
-        rows={products}
-        columns={columns.map((col) => ({
-          ...col,
-          flex: 1, // Allow flexible sizing based on content
-          minWidth: 100, // Ensure a minimum width to avoid squishing
-        }))}
-        filterModel={{
-          items: productFilters,
-        }}
-        getRowId={(row) => row["id"]}
-        initialState={{ pagination: { paginationModel: { pageSize: 5 } } }}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
-        checkboxSelection
-        onRowSelectionModelChange={(ids) => {
-          setSelectedRowIds(ids);
-        }}
-        slots={{
-          toolbar: GridToolbar,
-        }}
-      />
+
+      <Box sx={{ height: "600px", width: "100%" }}>
+        <DataGrid
+          rows={products}
+          columns={columns.map((col) => ({
+            ...col,
+            flex: 1, // Allow flexible sizing based on content
+            minWidth: 100, // Ensure a minimum width to avoid squishing
+          }))}
+          filterModel={{
+            items: productFilters,
+          }}
+          getRowId={(row) => row["id"]}
+          initialState={{ pagination: { paginationModel: { pageSize: 5 } } }}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+          checkboxSelection
+          onRowSelectionModelChange={(ids) => {
+            setSelectedRowIds(ids);
+          }}
+          slots={{
+            toolbar: GridToolbar,
+          }}
+        />
+      </Box>
     </Paper>
   );
 }

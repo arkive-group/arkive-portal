@@ -18,6 +18,7 @@ export default function ProductSelection({ products }) {
   const [selectedRowIds, setSelectedRowIds] = useState([]);
   const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
+  const [loading, setLoading] = useState(false);
 
   const columns = [
     { field: "Title", headerName: "Title", width: 150 },
@@ -182,6 +183,7 @@ export default function ProductSelection({ products }) {
   };
 
   const getSelectedProducts = async () => {
+    setLoading(true);
     if (selectedRowIds.length === 0) return [];
     const selectedIDs = new Set(selectedRowIds);
     const handles = new Set();
@@ -190,12 +192,10 @@ export default function ProductSelection({ products }) {
         handles.add(products[i].Handle);
       }
     }
-    console.log(handles);
 
     handles.forEach(async (handle) => {
       // Read and extract product from handle
       const productObj = extractProductFromHandleArray(handle, products);
-      console.log(productObj);
 
       // Create product => options => variants
       var res = await createProduct(productObj);
@@ -212,13 +212,14 @@ export default function ProductSelection({ products }) {
         res = await createProductVariants(productId, productObj);
         const productVariants =
           res.data?.productVariantsBulkCreate?.product?.options;
-        console.log(`Product variants created: ${productVariants}`);
 
         enqueueSnackbar(`Product created with ID: ${productId}`);
+        setLoading(true);
       } else {
-        console.log(`Product creation failed: ${res.text}`);
-
-        enqueueSnackbar(`Product creation failed: ${res.text}`, { variant: "error" });
+        enqueueSnackbar(`Product creation failed: ${res.text}`, {
+          variant: "error",
+        });
+        setLoading(false);
       }
     });
   };
@@ -232,8 +233,12 @@ export default function ProductSelection({ products }) {
         justifyContent="space-between"
       >
         <Typography variant="h4">Select Products To Upload</Typography>
-        <Button variant="contained" onClick={getSelectedProducts}>
-          Create Products
+        <Button
+          disabled={loading || !selectedRowIds?.length}
+          variant="contained"
+          onClick={getSelectedProducts}
+        >
+          {loading ? "Creating..." : "Create Products"}
         </Button>
       </Box>
       <DataGrid
