@@ -72,6 +72,46 @@ const data = {
 const FinanceOverview = ({ report }) => (
   <Card>
     <Grid container>
+      {report?.products?.label && (
+        <Grid
+          item
+          md={4}
+          xs={12}
+          sx={{
+            alignItems: "center",
+            borderRight: (theme) => ({
+              md: `1px solid ${theme.palette.divider}`,
+            }),
+            borderBottom: (theme) => ({
+              md: "none",
+              xs: `1px solid ${theme.palette.divider}`,
+            }),
+            display: "flex",
+            justifyContent: "space-between",
+            p: 3,
+          }}
+        >
+          <div>
+            <Typography color="textSecondary" variant="overline">
+              {report?.products?.label}
+            </Typography>
+            <Typography color="textPrimary" variant="h5">
+              {numeral(report?.products?.data ?? 0).format("$0,0.00")}
+            </Typography>
+          </div>
+          <Box
+            sx={{
+              alignItems: "center",
+              display: "flex",
+              height: 54,
+              width: 177,
+            }}
+          >
+            <ChartLine />
+          </Box>
+        </Grid>
+      )}
+
       <Grid
         item
         md={4}
@@ -92,16 +132,21 @@ const FinanceOverview = ({ report }) => (
       >
         <div>
           <Typography color="textSecondary" variant="overline">
-            Sales
+            {report.sales?.label ?? report?.co2?.label}
           </Typography>
+
           <Typography color="textPrimary" variant="h5">
-            {numeral(report.sales?.current ?? 0).format("$0,0.00")}
+            {numeral(report.sales?.current ?? report?.co2?.data ?? 0).format(
+              "$0,0.00"
+            )}
           </Typography>
-          <Typography color="textSecondary" variant="caption">
-            vs.
-            {numeral(report.sales?.last ?? 0).format("$0,0.00")}
-            &nbsp; last month
-          </Typography>
+          {!report?.products?.label && (
+            <Typography color="textSecondary" variant="caption">
+              vs.
+              {numeral(report.sales?.last ?? 0).format("$0,0.00")}
+              &nbsp; last month
+            </Typography>
+          )}
         </div>
         <Box
           sx={{
@@ -134,16 +179,20 @@ const FinanceOverview = ({ report }) => (
       >
         <div>
           <Typography color="textSecondary" variant="overline">
-            Cost
+            {report.cost?.label ?? report?.rescured?.label}
           </Typography>
           <Typography color="textPrimary" variant="h5">
-            {numeral(report.cost?.current ?? 0).format("$0,0.00")}
+            {numeral(
+              report.cost?.current ?? report?.rescured?.data ?? 0
+            ).format("$0,0.00")}
           </Typography>
-          <Typography color="textSecondary" variant="caption">
-            vs.
-            {numeral(report.cost?.last ?? 0).format("$0,0.00")}
-            &nbsp; last month
-          </Typography>
+          {!report?.products?.label && (
+            <Typography color="textSecondary" variant="caption">
+              vs.
+              {numeral(report.cost?.last ?? 0).format("$0,0.00")}
+              &nbsp; last month
+            </Typography>
+          )}
         </div>
         <Box
           sx={{
@@ -169,16 +218,21 @@ const FinanceOverview = ({ report }) => (
       >
         <div>
           <Typography color="textSecondary" variant="overline">
-            Profit
+            {report.profit?.label ?? report?.materials?.label}
           </Typography>
           <Typography color="textPrimary" variant="h5">
-            {numeral(data.profit.current).format("$0,0.00")}
+            {numeral(
+              report?.profit?.current ?? report?.materials?.data ?? 0
+            ).format("$0,0.00")}
           </Typography>
-          <Typography color="textSecondary" variant="caption">
-            vs.
-            {numeral(data.profit.last).format("$0,0.00")}
-            &nbsp; last month
-          </Typography>
+
+          {!report?.products?.label && (
+            <Typography color="textSecondary" variant="caption">
+              vs.
+              {numeral(report?.profit?.last).format("$0,0.00")}
+              &nbsp; last month
+            </Typography>
+          )}
         </div>
         <Box
           sx={{

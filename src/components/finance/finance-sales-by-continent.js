@@ -46,21 +46,14 @@ const FinanceSalesByContinent = (props) => {
         color: theme.palette.divider,
         show: true,
       },
-      categories: [
-        "North America",
-        "South America",
-        "Europe",
-        "Australia",
-        "Asia",
-        "Africa",
-      ],
+      categories: ["Europe"],
     },
   };
 
   const chartSeries = [
     {
       name: "Sales",
-      data: [470, 440, 410, 380, 300, 187],
+      data: [470],
     },
   ];
 

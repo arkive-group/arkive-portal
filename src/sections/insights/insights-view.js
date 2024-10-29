@@ -22,14 +22,17 @@ export default function InsightsView() {
       sales: {
         current: 0,
         last: 0,
+        label: "Sales",
       },
       profit: {
         current: 0,
         last: 0,
+        label: "Profit",
       },
       cost: {
         current: 0,
         last: 0,
+        label: "Cost",
       },
     },
     repurposing: {
@@ -54,7 +57,7 @@ export default function InsightsView() {
       {
         name: "Monthly Revenue",
         data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      }
+      },
     ],
     channelBreakdown: [
       {
@@ -81,9 +84,8 @@ export default function InsightsView() {
   });
   const { user } = useAuthContext();
 
-
   const orderProc = (orders) => {
-    const now = new Date()
+    const now = new Date();
     let reportObj = report;
     orders.forEach((order) => {
       const orderDate = new Date(order.createdAt);
@@ -98,7 +100,9 @@ export default function InsightsView() {
       // For FinanceSalesRevenue
       for (let i = 0; i < 12; i++) {
         if (orderDate.getMonth() === now.getMonth() - i) {
-          reportObj.financeSalesRevenue[0].data[11 - i] += parseFloat(order.totalPrice);
+          reportObj.financeSalesRevenue[0].data[11 - i] += parseFloat(
+            order.totalPrice
+          );
         }
       }
 
@@ -121,7 +125,7 @@ export default function InsightsView() {
     });
 
     return reportObj;
-  }
+  };
 
   useEffect(() => {
     const uploader = user?.email;
@@ -157,11 +161,7 @@ export default function InsightsView() {
   return (
     <Container maxWidth="xl">
       <UserProfileView />
-      {loading ? (
-        <LoadingScreen />
-      ) : (
-        <InsightsCharts report={report} />
-      )}
+      {loading ? <LoadingScreen /> : <InsightsCharts report={report} />}
     </Container>
   );
 }
