@@ -51,6 +51,13 @@ const getOrders = async (uploader, skuList) => {
                               currencyCode
                           }
                       }
+                      shippingAddress {
+                        address1
+                        address2
+                        city
+                        country
+                        zip
+                      }
                       lineItems(first: 100) {
                         nodes {
                           product {
@@ -81,6 +88,11 @@ const getOrders = async (uploader, skuList) => {
         totalPrice: edge.node.totalPriceSet?.shopMoney?.amount,
         seoDescription: edge.node.seo?.description,
         lineItems: edge.node.lineItems.nodes,
+        address1: edge.node.shippingAddress?.address1,
+        address2: edge.node.shippingAddress?.address2,
+        city: edge.node.shippingAddress?.city,
+        country: edge.node.shippingAddress?.country,
+        zip: edge.node.shippingAddress?.zip,
       };
       console.log(order);
       orders.push(order);

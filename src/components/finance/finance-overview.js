@@ -56,21 +56,21 @@ const ChartLine = () => {
 
 const data = {
   sales: {
-    actualYear: 152996,
-    lastYear: 121420,
+    current: 152996,
+    last: 121420,
   },
   profit: {
-    actualYear: 32100,
-    lastYear: 25200,
+    current: 32100,
+    last: 25200,
   },
   cost: {
-    actualYear: 99700,
-    lastYear: 68300,
+    current: 99700,
+    last: 68300,
   },
 };
 
-const FinanceOverview = (props) => (
-  <Card {...props}>
+const FinanceOverview = ({ report }) => (
+  <Card>
     <Grid container>
       <Grid
         item
@@ -95,12 +95,12 @@ const FinanceOverview = (props) => (
             Sales
           </Typography>
           <Typography color="textPrimary" variant="h5">
-            {numeral(data.sales.actualYear).format("$0,0.00")}
+            {numeral(report.sales?.current ?? 0).format("$0,0.00")}
           </Typography>
           <Typography color="textSecondary" variant="caption">
             vs.
-            {numeral(data.sales.lastYear).format("$0,0.00")}
-            &nbsp; last year
+            {numeral(report.sales?.last ?? 0).format("$0,0.00")}
+            &nbsp; last month
           </Typography>
         </div>
         <Box
@@ -137,12 +137,12 @@ const FinanceOverview = (props) => (
             Cost
           </Typography>
           <Typography color="textPrimary" variant="h5">
-            {numeral(data.cost.actualYear).format("$0,0.00")}
+            {numeral(report.cost?.current ?? 0).format("$0,0.00")}
           </Typography>
           <Typography color="textSecondary" variant="caption">
             vs.
-            {numeral(data.cost.lastYear).format("$0,0.00")}
-            &nbsp; last year
+            {numeral(report.cost?.last ?? 0).format("$0,0.00")}
+            &nbsp; last month
           </Typography>
         </div>
         <Box
@@ -172,12 +172,12 @@ const FinanceOverview = (props) => (
             Profit
           </Typography>
           <Typography color="textPrimary" variant="h5">
-            {numeral(data.profit.actualYear).format("$0,0.00")}
+            {numeral(data.profit.current).format("$0,0.00")}
           </Typography>
           <Typography color="textSecondary" variant="caption">
             vs.
-            {numeral(data.profit.lastYear).format("$0,0.00")}
-            &nbsp; last year
+            {numeral(data.profit.last).format("$0,0.00")}
+            &nbsp; last month
           </Typography>
         </div>
         <Box

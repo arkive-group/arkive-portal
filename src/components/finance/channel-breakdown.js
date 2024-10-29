@@ -3,27 +3,8 @@ import numeral from "numeral";
 import { useTheme } from "@mui/material/styles";
 import { Box, Card, CardContent, CardHeader, Typography } from "@mui/material";
 
-const data = {
-  series: [
-    {
-      color: "#FFB547",
-      data: 14859,
-      label: "Strategy",
-    },
-    {
-      color: "#7BC67E",
-      data: 35690,
-      label: "Outsourcing",
-    },
-    {
-      color: "#7783DB",
-      data: 45120,
-      label: "Marketing",
-    },
-  ],
-};
 
-const FinanceCostBreakdown = (props) => {
+const ChannelBreakdown = ({ report }) => {
   const theme = useTheme();
 
   const chartOptions = {
@@ -34,13 +15,13 @@ const FinanceCostBreakdown = (props) => {
         show: false,
       },
     },
-    colors: data.series.map((item) => item.color),
+    colors: report.map((item) => item.color),
     dataLabels: {
       enabled: false,
     },
-    labels: data.series.map((item) => item.label),
+    labels: report.map((item) => item.label),
     legend: {
-      show: false,
+      show: true,
     },
     stroke: {
       colors: [theme.palette.background.paper],
@@ -51,10 +32,10 @@ const FinanceCostBreakdown = (props) => {
     },
   };
 
-  const chartSeries = data.series.map((item) => item.data);
+  const chartSeries = report.map((item) => item.data);
 
   return (
-    <Card {...props}>
+    <Card>
       <CardHeader title="Cost Breakdown" />
       <CardContent>
         <Chart
@@ -63,7 +44,7 @@ const FinanceCostBreakdown = (props) => {
           series={chartSeries}
           type="pie"
         />
-        {data.series.map((item) => (
+        {report.channelBreakdown?.map((item) => (
           <Box
             key={item.label}
             sx={{
@@ -94,4 +75,4 @@ const FinanceCostBreakdown = (props) => {
   );
 };
 
-export default FinanceCostBreakdown;
+export default ChannelBreakdown;

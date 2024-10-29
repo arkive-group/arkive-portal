@@ -1,14 +1,14 @@
 "use client";
 import { Box, Container, Grid } from "@mui/material";
 import {
-  FinanceCostBreakdown,
+  ChannelBreakdown,
   FinanceOverview,
   FinanceIncrementalSales,
   FinanceSalesByContinent,
   FinanceSalesRevenue,
 } from "@/components/finance";
 
-const InsightsCharts = () => {
+const InsightsCharts = ({ report }) => {
   return (
     <>
       <Box
@@ -20,13 +20,13 @@ const InsightsCharts = () => {
         <Box sx={{ mt: 3 }}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <FinanceOverview />
+              <FinanceOverview report={report.financeOverview} />
             </Grid>
             <Grid item md={8} xs={12}>
-              <FinanceSalesRevenue />
+              <FinanceSalesRevenue report={report.financeSalesRevenue} />
             </Grid>
             <Grid item md={4} xs={12}>
-              <FinanceCostBreakdown />
+              <ChannelBreakdown report={report.channelBreakdown} />
             </Grid>
             <Grid item md={8} xs={12}>
               <FinanceSalesByContinent />

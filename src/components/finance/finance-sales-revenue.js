@@ -1,9 +1,26 @@
+import { useEffect } from "react";
 import Chart from "react-apexcharts";
 import { useTheme } from "@mui/material/styles";
 import { Card, CardContent, CardHeader } from "@mui/material";
 
-const FinanceSalesRevenue = (props) => {
+const FinanceSalesRevenue = ({ report }) => {
   const theme = useTheme();
+
+  const currentMonth = new Date().getMonth();
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
 
   const chartOptions = {
     chart: {
@@ -44,20 +61,7 @@ const FinanceSalesRevenue = (props) => {
         color: theme.palette.divider,
         show: true,
       },
-      categories: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
+      categories: months.slice(currentMonth+1, 12).concat(months.slice(0, currentMonth+1)),
     },
   };
 
@@ -73,13 +77,13 @@ const FinanceSalesRevenue = (props) => {
   ];
 
   return (
-    <Card {...props}>
+    <Card>
       <CardHeader title="Sales Revenue" />
       <CardContent>
         <Chart
           height="360"
           options={chartOptions}
-          series={chartSeries}
+          series={report}
           type="area"
         />
       </CardContent>
