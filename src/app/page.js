@@ -10,6 +10,7 @@ export default async function HomePage() {
     <AuthGuard>
       <DashboardLayout>
         <HomeView />
+        
       </DashboardLayout>
     </AuthGuard>
   )
