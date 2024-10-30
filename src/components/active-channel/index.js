@@ -8,7 +8,7 @@ import Divider from "@mui/material/Divider";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Icon from "@mui/material/Icon";
-
+import { useAuthContext, usePremiumStatus } from "@/auth/hooks";
 export const Channels = {
   shopify: {
     name: "Shopify",
@@ -40,15 +40,19 @@ export const Channels = {
     name: "Repurposing",
     alias: "Repurposing",
     icon: undefined,
+    isPremium: true,
   },
   charity: {
     name: "Charity",
     alias: "Charity",
     icon: undefined,
+    isPremium: true,
   },
 };
 
 export default function ActiveChannel({ channel, onChannleChange }) {
+  const { user } = useAuthContext();
+  const { premium } = usePremiumStatus(user);
   return (
     <>
       <Card
@@ -64,29 +68,35 @@ export default function ActiveChannel({ channel, onChannleChange }) {
             />
           </ListItem>
           <Divider />
-          {Object.keys(Channels).map((key) => (
-            <ListItem key={key}>
-              <ListItemIcon sx={{ marginRight: 1 }}>
-                <Icon
-                  sx={{
-                    width: "2rem",
-                    height: "2rem",
-                    background: "#efefef",
-                    borderRadius: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "16px",
-                  }}
+          {Object.keys(Channels).map((key) => {
+            const isDisabled = Channels[key].isPremium && !premium.isPremium;
+            return (
+              <ListItem key={key}>
+                <ListItemIcon sx={{ marginRight: 1 }}>
+                  <Icon
+                    sx={{
+                      width: "2rem",
+                      height: "2rem",
+                      background: "#efefef",
+                      borderRadius: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "16px",
+                    }}
+                  >
+                    {Channels[key].name?.slice(0, 1)}
+                  </Icon>
+                </ListItemIcon>
+                <Button
+                  onClick={() => onChannleChange(key)}
+                  disabled={isDisabled}
                 >
-                  {Channels[key].name?.slice(0, 1)}
-                </Icon>
-              </ListItemIcon>
-              <Button onClick={() => onChannleChange(key)}>
-                {Channels[key].name}
-              </Button>
-            </ListItem>
-          ))}
+                  {Channels[key].name}
+                </Button>
+              </ListItem>
+            );
+          })}
         </List>
       </Card>
     </>
