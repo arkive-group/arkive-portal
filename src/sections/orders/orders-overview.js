@@ -30,7 +30,7 @@ export default function OrdersOverview() {
           .map((product) => product.variants.map((variant) => variant.sku))
           .flat();
 
-        const orderList = await getOrders(uploader, skuList);
+        const orderList = await getOrders({uploader, skuList});
         setOrders(orderList);
         setLoading(false);
       } catch (err) {

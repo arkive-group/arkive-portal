@@ -22,18 +22,18 @@ const InsightsCharts = ({ report }) => {
             <Grid item xs={12}>
               <FinanceOverview report={report.financeOverview} />
             </Grid>
-            <Grid item md={8} xs={12}>
+            <Grid item md={6} xs={12}>
               <FinanceSalesRevenue report={report.financeSalesRevenue} />
             </Grid>
-            <Grid item md={4} xs={12}>
+            <Grid item md={6} xs={12}>
               <ChannelBreakdown report={report.channelBreakdown} />
             </Grid>
-            <Grid item md={8} xs={12}>
+            <Grid item md={12} xs={12}>
               <FinanceSalesByContinent />
             </Grid>
-            <Grid item md={4} xs={12}>
+            {/* <Grid item md={4} xs={12}>
               <FinanceIncrementalSales />
-            </Grid>
+            </Grid> */}
           </Grid>
         </Box>
       </Box>

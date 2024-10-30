@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, use } from "react";
 import {
   Typography,
   Divider,
@@ -28,6 +28,10 @@ import {
   where,
 } from "firebase/firestore";
 import { DB } from "@/utils/firebase-config";
+import { getOrders, getProducts } from "@/lib/shopify";
+import { usePremiumStatus } from "@/auth/hooks";
+import { last } from "lodash";
+
 const BarChart = () => {
   const theme = useTheme();
 
@@ -155,6 +159,7 @@ const checkStripeAccountStatus = async (accountId) => {
 
 const SalesEarnings = () => {
   const { user } = useAuthContext();
+  const { premium } = usePremiumStatus(user);
   const { enqueueSnackbar } = useSnackbar();
   const [stripeStatus, setStripeStatus] = useState({
     isConnected: false,
@@ -165,9 +170,14 @@ const SalesEarnings = () => {
 
   const [loading, setLoading] = useState(false);
 
+
+  const [lastPayoutDate, setLastPayoutDate] = useState(null);
+
   const getStatus = useCallback(async () => {
     try {
       const status = await checkStripeAccountStatus(user?.accountId);
+      console.log(user);
+      console.log(status);
       setStripeStatus(status);
     } catch (err) {
       console.log(err);
@@ -179,22 +189,21 @@ const SalesEarnings = () => {
     getStatus();
   }, [getStatus]);
 
-  // Example data
-  const salesChannelData = {
-    channel: "Sales Channel",
-    earnings: 14000,
-  };
-
-  const purposeEarningsData = {
-    purpose: "Purchasing for You",
-    units: 70000,
-    rate: 0.2,
-    totalEarnings: 70000 * 0.2,
-  };
+  const [digest, setDigest] = useState({
+    unclaimedData: {
+      total: (0).toFixed(2),
+    },
+    pendingData: {
+      total: (0).toFixed(2),
+    },
+    totalClaimedData: {
+      total: (0).toFixed(2),
+    },
+  });
 
   const onCreate = async () => {
     setLoading(true);
-    const account = await createAccount(user?.email, "US", user?.id);
+    const account = await createAccount(user?.email, "NL", user?.id);
     if (account) {
       const link = await createLink(account);
 
@@ -203,13 +212,13 @@ const SalesEarnings = () => {
     setLoading(false);
   };
 
-  const onRequest = async () => {
+  const onRequest = async ({ amount }) => {
     setLoading(true);
 
     await axios.post("/api/payout-email", {
       name: `${user?.first_name} ${user?.last_name}`,
       email: ["eden@arkive.nl"],
-      amount: 1000,
+      amount: (amount * (1 - (premium.commission ?? 0.3))).toFixed(2),
       clientEmail: user?.email,
       accountId: user?.accountId,
     });
@@ -224,6 +233,31 @@ const SalesEarnings = () => {
     const [canRequestPayout, setCanRequestPayout] = useState(false);
     const [loadingPayoutStatus, setLoadingPayoutStatus] = useState(true);
 
+    const handlePayoutRequest = async () => {
+      const amount = digest.unclaimedData.total; // Define how you'll calculate or determine the payout amount
+      
+      const payoutCollection = collection(DB, "payout-requests");
+      const userId = user?.id;
+      // Get reference to the user's document and update it
+      const payoutRef = doc(payoutCollection);
+  
+      try {
+        const timestamp = new Date();
+        await setDoc(payoutRef, {
+          accountID: user?.accountId,
+          amount,
+          timestamp: timestamp,
+        });
+        alert("Payout requested successfully!");
+        onRequest({ amount });
+        setLastPayoutDate(timestamp);
+        setCanRequestPayout(false); // Disable button after request
+      } catch (error) {
+        console.error("Error requesting payout:", error);
+        alert("Error requesting payout. Please try again.");
+      }
+    };
+
     // Check eligibility based on the last payout date
     useEffect(() => {
       const checkPayoutEligibility = async () => {
@@ -235,19 +269,27 @@ const SalesEarnings = () => {
 
           const querySnapshot = await getDocs(q);
 
-          let lastPayoutDate = null;
+          var latestDate = null;
           querySnapshot.forEach((doc) => {
             const data = doc.data();
             if (data.timestamp) {
-              lastPayoutDate = new Date(data.timestamp.seconds * 1000);
+              const payoutDate = new Date(data.timestamp.seconds * 1000);
+              if (!latestDate || latestDate < payoutDate) {
+                latestDate = payoutDate;
+              }
             }
           });
+          if (latestDate) {
+            setLastPayoutDate(latestDate);
+          } else {
+            setLastPayoutDate(new Date(0));
+          }
 
           const oneMonthAgo = new Date();
           oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
           // Enable the button if no previous payout or the last payout was more than a month ago
-          setCanRequestPayout(!lastPayoutDate || lastPayoutDate < oneMonthAgo);
+          setCanRequestPayout(!latestDate || latestDate < oneMonthAgo);
         } catch (error) {
           console.error("Error checking payout eligibility:", error);
         } finally {
@@ -258,23 +300,63 @@ const SalesEarnings = () => {
       checkPayoutEligibility();
     }, [user?.accountId]);
 
-    const handlePayoutRequest = async () => {
-      const amount = 1000; // Define how you'll calculate or determine the payout amount
-
-      try {
-        await setDoc(doc(collection(db, "payout-requests")), {
-          accountID: user?.accountId,
-          amount,
-          timestamp: new Date(),
+    useEffect(() => {
+      const fetchPendingAmount = async () => {
+        if (!user) return;
+        if (!lastPayoutDate) return;
+        const uploader = user?.email;
+        const company = user?.company;
+        const productList = await getProducts({
+          company,
         });
-        alert("Payout requested successfully!");
-        onRequest();
-        setCanRequestPayout(false); // Disable button after request
-      } catch (error) {
-        console.error("Error requesting payout:", error);
-        alert("Error requesting payout. Please try again.");
-      }
-    };
+        const skuList = productList
+          .map((product) => product.variants.map((variant) => variant.sku))
+          .flat();
+
+        const orderList = await getOrders({
+          uploader,
+          skuList,
+          fulfilled: true,
+        });
+
+        console.log(orderList);
+        console.log(lastPayoutDate);
+
+        if (lastPayoutDate !== new Date(0)) {
+          const unclaimedAmount = orderList.reduce((acc, order) => {
+            const orderDate = new Date(order.createdAt);
+            
+            if (orderDate > lastPayoutDate) {
+              return acc + parseFloat(order.totalPrice);
+            }
+            return acc;
+          }, 0);
+          setDigest({
+            unclaimedData: {
+              total: unclaimedAmount.toFixed(2),
+            },
+            pendingData: {
+              total: digest.pendingData.total,
+            },
+          });
+        } else {
+          const unclaimedAmount = orderList.reduce(
+            (acc, order) => acc + parseFloat(order.totalPrice),
+            0
+          );
+          setDigest({
+            unclaimedData: {
+              total: unclaimedAmount.toFixed(2),
+            },
+            pendingData: {
+              total: digest.pendingData.total,
+            },
+          });
+        }
+      };
+
+      fetchPendingAmount();
+    }, [lastPayoutDate]);
 
     if (!stripeStatus.isConnected) {
       return (
@@ -324,7 +406,7 @@ const SalesEarnings = () => {
   return (
     <Box>
       <Typography variant="h4" gutterBottom>
-        Earnings Breakdown
+        Payout Digest
       </Typography>
       <Grid container spacing={4}>
         {/* Sales Channel Card */}
@@ -332,17 +414,17 @@ const SalesEarnings = () => {
           <Card sx={{ borderRadius: "16px", boxShadow: 3 }}>
             <CardContent>
               <Typography variant="h6" color="primary">
-                {salesChannelData.channel}
+                Unclaimed Earnings
               </Typography>
               <Typography variant="h4" sx={{ mt: 2 }}>
-                ${salesChannelData.earnings.toLocaleString()}
+                ${digest.unclaimedData.total}
               </Typography>
               <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
-                Total earnings from {salesChannelData.channel}.
+                Total earnings since {!lastPayoutDate || lastPayoutDate.toDateString() === (new Date(0)).toDateString() ? "joining" : lastPayoutDate.toDateString()}.
               </Typography>
               <Divider sx={{ my: 2 }} />
               <Typography variant="body2" color="textSecondary">
-                Earnings from {purposeEarningsData.purpose}.
+                A commission of {(premium.commission ?? 0.3) * 100}% will be deducted from your earnings.
               </Typography>
             </CardContent>
           </Card>
@@ -353,19 +435,17 @@ const SalesEarnings = () => {
           <Card sx={{ borderRadius: "16px", boxShadow: 3 }}>
             <CardContent>
               <Typography variant="h6" color="primary">
-                {purposeEarningsData.purpose}
+                Pending Payout
               </Typography>
               <Typography variant="h4" sx={{ mt: 2 }}>
-                ${purposeEarningsData.totalEarnings.toLocaleString()}
+                ${digest.pendingData.total}
               </Typography>
               <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
-                {`${purposeEarningsData.units.toLocaleString()} units x $${purposeEarningsData.rate.toFixed(
-                  2
-                )} per unit`}
+                Total pending payout.
               </Typography>
               <Divider sx={{ my: 2 }} />
               <Typography variant="body2" color="textSecondary">
-                Earnings from {purposeEarningsData.purpose}.
+                Usually processed within 7 business days.
               </Typography>
             </CardContent>
           </Card>
@@ -377,7 +457,8 @@ const SalesEarnings = () => {
   );
 };
 
-export default function Insights() {
+
+const PayoutReports = ({ report }) => {
   return (
     <Grid container spacing={2}>
       <Grid item sm={6} xs={12}>
@@ -539,7 +620,7 @@ export default function Insights() {
                 Pending Amount
               </Typography>
               <Typography color="textPrimary" sx={{ mt: 1 }} variant="h5">
-                131,3K
+                $ 1.0
               </Typography>
             </div>
             <BarChart />
@@ -570,9 +651,14 @@ export default function Insights() {
           </Box>
         </Card>
       </Grid>
+    </Grid>
+  )
+};
+
+export default function Insights() {
+  return (
       <Grid item xs={12}>
         <SalesEarnings />
       </Grid>
-    </Grid>
   );
 }

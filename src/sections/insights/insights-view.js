@@ -9,6 +9,7 @@ import { getMonthlyReport, getOrders, getProducts } from "@/lib/shopify";
 import { useAuthContext } from "@/auth/hooks";
 import { LoadingScreen } from "@/components/loading-screen";
 import InsightsCharts from "./insights-charts";
+import { InsightsCards } from "./insights-cards";
 import { parse } from "date-fns";
 import { lowerCase } from "lodash";
 
@@ -58,22 +59,22 @@ export default function InsightsView() {
     ],
     channelBreakdown: [
       {
-        color: "#FFB547",
+        color: "#92BA43",
         data: 0,
         label: "Shopify",
       },
       {
-        color: "#7BC67E",
+        color: "#FFC0CB",
         data: 0,
         label: "Bol.com",
       },
       {
-        color: "#7783DB",
+        color: "#FF9900",
         data: 0,
         label: "Amazon",
       },
       {
-        color: "#F6C343",
+        color: "#4285F4",
         data: 0,
         label: "Google",
       },
@@ -97,28 +98,31 @@ export default function InsightsView() {
 
       // For FinanceSalesRevenue
       for (let i = 0; i < 12; i++) {
-        if (orderDate.getMonth() === now.getMonth() - i) {
+        if (orderDate.getMonth() === (now.getMonth() - i) % 12) {
           reportObj.financeSalesRevenue[0].data[11 - i] += parseFloat(order.totalPrice);
         }
       }
 
       // For ChannelBreakdown
       const name = lowerCase(order.name);
-      switch (name) {
-        case name.includes("bol"):
-          reportObj.channelBreakdown[1].data += parseFloat(order.totalPrice);
-          break;
-        case name.includes("amazon"):
-          reportObj.channelBreakdown[2].data += parseFloat(order.totalPrice);
-          break;
-        case name.includes("google"):
-          reportObj.channelBreakdown[3].data += parseFloat(order.totalPrice);
-          break;
-        default:
-          reportObj.channelBreakdown[0].data += parseFloat(order.totalPrice);
-          break;
+      
+      
+      if (name.includes("bol")){
+        reportObj.channelBreakdown[1].data += parseFloat(order.totalPrice);
       }
+      else if (name.includes("amazon")) {
+        reportObj.channelBreakdown[2].data += parseFloat(order.totalPrice);
+      }
+      else if (name.includes("google")) {
+        reportObj.channelBreakdown[3].data += parseFloat(order.totalPrice);
+      }
+      else {
+        reportObj.channelBreakdown[0].data += parseFloat(order.totalPrice);
+      }
+
     });
+
+    reportObj.financeSalesRevenue[0].data = reportObj.financeSalesRevenue[0].data.map((data) => parseFloat(data.toFixed(2)));
 
     return reportObj;
   }
@@ -136,7 +140,7 @@ export default function InsightsView() {
           .map((product) => product.variants.map((variant) => variant.sku))
           .flat();
 
-        const orderList = await getOrders(uploader, skuList);
+        const orderList = await getOrders({uploader, skuList});
 
         console.log(orderList);
         setOrders(orderList);
@@ -160,7 +164,10 @@ export default function InsightsView() {
       {loading ? (
         <LoadingScreen />
       ) : (
-        <InsightsCharts report={report} />
+        <>
+          <InsightsCards report={report} />
+          <InsightsCharts report={report} />
+        </>
       )}
     </Container>
   );

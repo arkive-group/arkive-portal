@@ -3,9 +3,15 @@
 import { SHOPIFY_API } from "@/config-global";
 import { query } from "firebase/firestore";
 
-const getOrders = async (uploader, skuList) => {
-
-  const queryString = skuList.map((sku) => `sku:${sku}`).join(" OR ");
+const getOrders = async ({ uploader, skuList, fulfilled }) => {
+  if (!skuList || skuList.length === 0) {
+    return [];
+  }
+  var queryString = `${skuList.map((sku) => `sku:${sku}`).join(" OR ")}`;
+  if (fulfilled !== undefined) {
+    queryString = `(${queryString}) AND (fulfillment_status:${fulfilled ? "shipped" : "unshipped"})`;
+  }
+  // console.log(queryString);
   try {
     const params = {
       apiKey: SHOPIFY_API.apiKey,
@@ -73,7 +79,7 @@ const getOrders = async (uploader, skuList) => {
       }),
     });
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     let orders = [];
     data.data?.orders?.edges.forEach((edge) => {
       let order = {
@@ -94,7 +100,7 @@ const getOrders = async (uploader, skuList) => {
         country: edge.node.shippingAddress?.country,
         zip: edge.node.shippingAddress?.zip,
       };
-      console.log(order);
+      // console.log(order);
       orders.push(order);
     });
     return orders;
@@ -395,7 +401,7 @@ const getProducts = async ({uploader, company}) => {
       }),
     });
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
 
     let products = [];
     data.data?.products?.edges.forEach((edge) => {
