@@ -72,7 +72,7 @@ const FinanceIncrementalSales = (props) => {
     },
     tooltip: {
       y: {
-        formatter: (value) => numeral(value).format("$0,0.00"),
+        formatter: (value) => numeral(value).format("€0,0.00"),
       },
     },
     xaxis: {

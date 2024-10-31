@@ -245,8 +245,10 @@ const SalesEarnings = () => {
         const timestamp = new Date();
         await setDoc(payoutRef, {
           accountID: user?.accountId,
-          amount,
+          amount: (amount * (1 - (premium.commission ?? 0.3))).toFixed(2),
           timestamp: timestamp,
+          commission: premium.commission ?? 0.3,
+          grossAmount: amount,
         });
         alert("Payout requested successfully!");
         onRequest({ amount });
@@ -418,7 +420,7 @@ const SalesEarnings = () => {
                 Unclaimed Earnings
               </Typography>
               <Typography variant="h4" sx={{ mt: 2 }}>
-                ${digest.unclaimedData.total}
+                €{digest.unclaimedData.total}
               </Typography>
               <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
                 Total earnings since {!lastPayoutDate || lastPayoutDate.toDateString() === (new Date(0)).toDateString() ? "joining" : lastPayoutDate.toDateString()}.
@@ -439,7 +441,7 @@ const SalesEarnings = () => {
                 Pending Payout
               </Typography>
               <Typography variant="h4" sx={{ mt: 2 }}>
-                ${digest.pendingData.total}
+                €{digest.pendingData.total}
               </Typography>
               <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
                 Total pending payout.

@@ -66,7 +66,7 @@ const ChannelBreakdown = ({ report }) => {
             </Typography>
             <Box sx={{ flexGrow: 1 }} />
             <Typography color="textSecondary" variant="subtitle2">
-              {numeral(item.data).format("$0,0.00")}
+              {numeral(item.data).format("€0,0.00")}
             </Typography>
           </Box>
         ))}

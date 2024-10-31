@@ -61,7 +61,7 @@ export default function PayoutRequestEmail(
         <Text style={paragraph}>Dear Team Arkive,</Text>
         <Text style={paragraph}>
           I hope this message finds you well. I would like to request my monthly
-          payout of <strong>${amount}</strong> for the current billing cycle.
+          payout of <strong>€{amount}</strong> for the current billing cycle.
         </Text>
         <Text style={paragraph}>Please find my account details below:</Text>
         <Text style={paragraph}>

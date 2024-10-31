@@ -95,11 +95,11 @@ const FinanceOverview = ({ report }) => (
             Sales
           </Typography>
           <Typography color="textPrimary" variant="h5">
-            {numeral(report.sales?.current ?? 0).format("$0,0.00")}
+            {numeral(report.sales?.current ?? 0).format("€0,0.00")}
           </Typography>
           <Typography color="textSecondary" variant="caption">
             vs.
-            {numeral(report.sales?.last ?? 0).format("$0,0.00")}
+            {numeral(report.sales?.last ?? 0).format("€0,0.00")}
             &nbsp; last month
           </Typography>
         </div>
@@ -137,11 +137,11 @@ const FinanceOverview = ({ report }) => (
             Cost
           </Typography>
           <Typography color="textPrimary" variant="h5">
-            {numeral(report.cost?.current ?? 0).format("$0,0.00")}
+            {numeral(report.cost?.current ?? 0).format("€0,0.00")}
           </Typography>
           <Typography color="textSecondary" variant="caption">
             vs.
-            {numeral(report.cost?.last ?? 0).format("$0,0.00")}
+            {numeral(report.cost?.last ?? 0).format("€0,0.00")}
             &nbsp; last month
           </Typography>
         </div>
@@ -172,11 +172,11 @@ const FinanceOverview = ({ report }) => (
             Profit
           </Typography>
           <Typography color="textPrimary" variant="h5">
-            {numeral(data.profit.current).format("$0,0.00")}
+            {numeral(data.profit.current).format("€0,0.00")}
           </Typography>
           <Typography color="textSecondary" variant="caption">
             vs.
-            {numeral(data.profit.last).format("$0,0.00")}
+            {numeral(data.profit.last).format("€0,0.00")}
             &nbsp; last month
           </Typography>
         </div>
