@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Button, Paper, Box, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import {
+  getProducts,
   createProduct,
   createProductOptions,
   createProductVariants,
@@ -193,33 +194,46 @@ export default function ProductSelection({ products }) {
       }
     }
 
+    // Get all products published on Shopify
+    const allProducts = await getProducts({ company: user?.company });
+    const allHandles = new Set(allProducts.map((product) => product.handle));
+    console.log(allHandles);
+
     handles.forEach(async (handle) => {
       // Read and extract product from handle
       const productObj = extractProductFromHandleArray(handle, products);
 
-      // Create product => options => variants
-      var res = await createProduct(productObj);
-      const productId = res.data?.productCreate?.product?.id;
-      if (productId) {
-        console.log(`Product created with ID: ${productId}`);
-
-        // Create product options
-        res = await createProductOptions(productId, productObj);
-        const productOptions = res.data?.productOptionsCreate?.product?.options;
-        console.log(`Product options created: ${productOptions}`);
-
-        // Create product variants
-        res = await createProductVariants(productId, productObj);
-        const productVariants =
-          res.data?.productVariantsBulkCreate?.product?.options;
-
-        enqueueSnackbar(`Product created with ID: ${productId}`);
-        setLoading(true);
-      } else {
-        enqueueSnackbar(`Product creation failed: ${res.text}`, {
-          variant: "error",
+      // Check if product already exists on Shopify
+      if (allHandles.has(productObj.handle)) {
+        enqueueSnackbar(`Product with handle ${productObj.handle} already exists`, {
+          variant: "warning",
         });
         setLoading(false);
+      } else {
+        // Create product => options => variants
+        var res = await createProduct(productObj);
+        const productId = res.data?.productCreate?.product?.id;
+        if (productId) {
+          console.log(`Product created with ID: ${productId}`);
+
+          // Create product options
+          res = await createProductOptions(productId, productObj);
+          const productOptions = res.data?.productOptionsCreate?.product?.options;
+          console.log(`Product options created: ${productOptions}`);
+
+          // Create product variants
+          res = await createProductVariants(productId, productObj);
+          const productVariants =
+            res.data?.productVariantsBulkCreate?.product?.options;
+
+          enqueueSnackbar(`Product created with ID: ${productId}`);
+          setLoading(true);
+        } else {
+          enqueueSnackbar(`Product creation failed: ${res.text}`, {
+            variant: "error",
+          });
+          setLoading(false);
+        }
       }
     });
   };

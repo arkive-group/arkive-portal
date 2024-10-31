@@ -339,7 +339,7 @@ const createProductVariants = async (productId, productObj) => {
   }
 };
 
-const getProducts = async ({uploader, company}) => {
+const getProducts = async ({uploader, company, active}) => {
   try {
     const params = {
       apiKey: SHOPIFY_API.apiKey,
@@ -354,7 +354,10 @@ const getProducts = async ({uploader, company}) => {
     } else if (company !== undefined && company !== null && company !== "") {
       query = `vendor:'${company}'`;
     }
-    query = `${query} AND status:ACTIVE`;
+    if (active !== undefined && active !== null && active) {
+      query = `${query} AND status:active`;
+    }
+    
 
     const response = await fetch(url, {
       method: "POST",
@@ -390,6 +393,11 @@ const getProducts = async ({uploader, company}) => {
                     }
                   }
                 }
+                images(first:1) {
+                  nodes {
+                    url
+                  }
+                }
               }
               cursor
             }
@@ -415,6 +423,7 @@ const getProducts = async ({uploader, company}) => {
         seoDescription: productRaw.seo?.description,
         variants: productRaw.variants?.nodes,
         salesChannels: productRaw.resourcePublications?.nodes.map((node) => node.publication?.name),
+        imageUrl: productRaw.images?.nodes[0]?.url,
       };
       products.push(product);
     });

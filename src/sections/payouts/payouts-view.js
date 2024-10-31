@@ -308,6 +308,7 @@ const SalesEarnings = () => {
         const company = user?.company;
         const productList = await getProducts({
           company,
+          active: true,
         });
         const skuList = productList
           .map((product) => product.variants.map((variant) => variant.sku))
