@@ -26,8 +26,10 @@
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "src/app/api/email/route.js"  ],
+    "**/*.tsx",
+    "src/app/api/email/route.js",
+    "src/app/api/**/*.js",
+  ],
   "exclude": [
     "node_modules"
   ]
