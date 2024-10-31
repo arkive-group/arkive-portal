@@ -22,22 +22,14 @@ const getProductBySku = async ({skuList}) => {
           query {
             products(first: 10, reverse: true, query: "${queryString}") {
               edges {
-                node {
-                  id
-                  title
-                  variants(first: 1) {
-                    edges {
-                      node {
+                    node {
                         id
                         title
                         handle
                         status
                         vendor
-                      }
                     }
-                  }
                 }
-              }
             }
           }
         `;

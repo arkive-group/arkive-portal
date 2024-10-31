@@ -11,8 +11,8 @@ export default function HomeView() {
   return (
     <Container maxWidth="xl">
       <UserProfileView />
-      <ProductUnavailable />
-      {/* <HomeDashboard /> */}
+      {/* <ProductUnavailable /> */}
+      <HomeDashboard />
     </Container>
   )
 }

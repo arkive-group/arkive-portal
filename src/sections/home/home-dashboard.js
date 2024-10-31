@@ -1,11 +1,14 @@
 'use client'
-
+import { useEffect } from 'react'
 import { useAuthContext } from '@/auth/hooks'
 import { Card } from '@mui/material'
 import EmptyContent from '@/components/empty-content'
 
 export default function HomeDashboard() {
   const { user } = useAuthContext()
+
+  useEffect (() => {
+  }, [user]);
 
   return (
     <Card sx={{ p: 3 }}>
