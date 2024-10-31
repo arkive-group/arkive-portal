@@ -34,6 +34,11 @@ export default function InsightsView() {
       },
     },
     repurposing: {
+      sales: {
+        label: "SALES",
+        current: 0,
+        last: 0,
+      },
       products: {
         label: "PRODUCTS CREATED",
         data: 0,
@@ -85,8 +90,6 @@ export default function InsightsView() {
 
   const orderProc = ({orders, products, skus}) => {
     const now = new Date()
-    const oneMonthAgo = new Date();
-    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
     let reportObj = report;
     orders.forEach((order) => {
@@ -94,8 +97,10 @@ export default function InsightsView() {
       // For FinanceOverview
       if (orderDate.getMonth() === now.getMonth() && orderDate.getFullYear() === now.getFullYear()) {
         reportObj.financeOverview.sales.current += parseFloat(order.totalPrice);
-      } else if (orderDate.getMonth() === oneMonthAgo.getMonth() && orderDate.getFullYear() === oneMonthAgo.getFullYear()) {
+        reportObj.repurposing.sales.current += parseFloat(order.totalPrice);
+      } else if (orderDate.getMonth() === (now.getMonth() - 1) % 12) {
         reportObj.financeOverview.sales.last += parseFloat(order.totalPrice);
+        reportObj.repurposing.sales.last += parseFloat(order.totalPrice);
       }
 
       // For FinanceSalesRevenue
