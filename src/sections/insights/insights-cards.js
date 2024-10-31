@@ -2,27 +2,27 @@
 import { Box, Container, Grid, Card, CardContent, Typography } from "@mui/material";
 
 
-export function InsightsCards({  }) {
+export function InsightsCards({ report }) {
 
-
-    const report = {
-        products: {
-          label: "PRODUCTS CREATED",
-          data: 0,
-        },
-        co2: {
-          label: "METRIC TONS CO2 ON AVERAGE PER PRODUCT",
-          data: 0,
-        },
-        rescured: {
-          label: "RESCUED MATERIALS + INGREDIENTS",
-          data: 0,
-        },
-        materials: {
-          label: "MATERIALS + INGREDIENTS ON AVERAGE PER PRODUCT",
-          data: 0,
-        },
-    }
+    
+    // const report = {
+    //     products: {
+    //       label: "PRODUCTS CREATED",
+    //       data: 0,
+    //     },
+    //     co2: {
+    //       label: "METRIC TONS CO2 ON AVERAGE PER PRODUCT",
+    //       data: 0,
+    //     },
+    //     rescured: {
+    //       label: "RESCUED MATERIALS + INGREDIENTS",
+    //       data: 0,
+    //     },
+    //     materials: {
+    //       label: "MATERIALS + INGREDIENTS ON AVERAGE PER PRODUCT",
+    //       data: 0,
+    //     },
+    // }
     return (
         <Grid
             container

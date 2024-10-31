@@ -3,13 +3,16 @@
 import { SHOPIFY_API } from "@/config-global";
 import { query } from "firebase/firestore";
 
-const getOrders = async ({ uploader, skuList, fulfilled }) => {
+const getOrders = async ({ uploader, skuList, fulfilled, after }) => {
   if (!skuList || skuList.length === 0) {
     return [];
   }
   var queryString = `${skuList.map((sku) => `sku:${sku}`).join(" OR ")}`;
   if (fulfilled !== undefined) {
     queryString = `(${queryString}) AND (fulfillment_status:${fulfilled ? "shipped" : "unshipped"})`;
+  }
+  if (after !== undefined) {
+    queryString = `(${queryString}) AND (created_at:>${after})`;
   }
   // console.log(queryString);
   try {
@@ -28,7 +31,7 @@ const getOrders = async ({ uploader, skuList, fulfilled }) => {
       },
       body: JSON.stringify({
         query: `query {
-          orders(first: 50, reverse: true, query: "${queryString}") {
+          orders(first: 250, reverse: true, query: "${queryString}") {
               edges {
                   node {
                       id

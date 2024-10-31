@@ -30,7 +30,12 @@ export default function OrdersOverview() {
           .map((product) => product.variants.map((variant) => variant.sku))
           .flat();
 
-        const orderList = await getOrders({uploader, skuList});
+        const afterString = (new Date(new Date().setMonth(new Date().getMonth() - 3))).toISOString();
+        const orderList = await getOrders({
+          uploader,
+          skuList,
+          after: afterString,
+        });
         setOrders(orderList);
         setLoading(false);
       } catch (err) {
