@@ -31,6 +31,7 @@ import { DB } from "@/utils/firebase-config";
 import { getOrders, getProducts } from "@/lib/shopify";
 import { usePremiumStatus } from "@/auth/hooks";
 import { last } from "lodash";
+import { af } from "date-fns/locale";
 
 const BarChart = () => {
   const theme = useTheme();
@@ -176,8 +177,6 @@ const SalesEarnings = () => {
   const getStatus = useCallback(async () => {
     try {
       const status = await checkStripeAccountStatus(user?.accountId);
-      console.log(user);
-      console.log(status);
       setStripeStatus(status);
     } catch (err) {
       console.log(err);
@@ -217,7 +216,7 @@ const SalesEarnings = () => {
 
     await axios.post("/api/payout-email", {
       name: `${user?.first_name} ${user?.last_name}`,
-      email: ["eden@arkive.nl"],
+      email: ["service@arkive.nl"],
       amount: (amount * (1 - (premium.commission ?? 0.3))).toFixed(2),
       clientEmail: user?.email,
       accountId: user?.accountId,
@@ -316,14 +315,13 @@ const SalesEarnings = () => {
           .map((product) => product.variants.map((variant) => variant.sku))
           .flat();
 
+        const afterString = (new Date(new Date().setMonth(new Date().getMonth() - 2))).toISOString();
         const orderList = await getOrders({
           uploader,
           skuList,
           fulfilled: true,
+          after: afterString,
         });
-
-        console.log(orderList);
-        console.log(lastPayoutDate);
 
         if (lastPayoutDate !== new Date(0)) {
           const unclaimedAmount = orderList.reduce((acc, order) => {

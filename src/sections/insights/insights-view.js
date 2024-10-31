@@ -34,12 +34,17 @@ export default function InsightsView() {
       },
     },
     repurposing: {
+      sales: {
+        label: "SALES",
+        current: 0,
+        last: 0,
+      },
       products: {
         label: "PRODUCTS CREATED",
         data: 0,
       },
       co2: {
-        label: "METRIC TONS CO2 ON AVERAGE PER PRODUCT",
+        label: "KILO GRAM CO2 SAVED IN TOTAL",
         data: 0,
       },
       rescured: {
@@ -83,22 +88,24 @@ export default function InsightsView() {
   const { user } = useAuthContext();
 
 
-  const orderProc = (orders) => {
+  const orderProc = ({orders, products, skus}) => {
     const now = new Date()
+
     let reportObj = report;
     orders.forEach((order) => {
       const orderDate = new Date(order.createdAt);
-
       // For FinanceOverview
-      if (orderDate.getMonth() === now.getMonth()) {
+      if (orderDate.getMonth() === now.getMonth() && orderDate.getFullYear() === now.getFullYear()) {
         reportObj.financeOverview.sales.current += parseFloat(order.totalPrice);
-      } else if (orderDate.getMonth() === now.getMonth() - 1) {
+        reportObj.repurposing.sales.current += parseFloat(order.totalPrice);
+      } else if (orderDate.getMonth() === (now.getMonth() - 1) % 12) {
         reportObj.financeOverview.sales.last += parseFloat(order.totalPrice);
+        reportObj.repurposing.sales.last += parseFloat(order.totalPrice);
       }
 
       // For FinanceSalesRevenue
       for (let i = 0; i < 12; i++) {
-        if (orderDate.getMonth() === (now.getMonth() - i) % 12) {
+        if (orderDate.getMonth() === now.getMonth() - i) {
           reportObj.financeSalesRevenue[0].data[11 - i] += parseFloat(order.totalPrice);
         }
       }
@@ -120,9 +127,14 @@ export default function InsightsView() {
         reportObj.channelBreakdown[0].data += parseFloat(order.totalPrice);
       }
 
+      // For Repurposing
+      reportObj.repurposing.co2.data += 0.029;
+
     });
 
     reportObj.financeSalesRevenue[0].data = reportObj.financeSalesRevenue[0].data.map((data) => parseFloat(data.toFixed(2)));
+    reportObj.repurposing.co2.data = parseFloat(reportObj.repurposing.co2.data.toFixed(2));
+    reportObj.repurposing.products.data = new Set(skus).size;
 
     return reportObj;
   }
@@ -140,12 +152,22 @@ export default function InsightsView() {
           .map((product) => product.variants.map((variant) => variant.sku))
           .flat();
 
-        const orderList = await getOrders({uploader, skuList});
+        const afterString = (new Date(new Date().setFullYear(new Date().getFullYear() - 1))).toISOString();
+        const orderList = await getOrders({
+          uploader, 
+          skuList, 
+          fulfilled: true,
+          after: afterString,
+        });
 
         console.log(orderList);
         setOrders(orderList);
 
-        const report = orderProc(orderList);
+        const report = orderProc({
+          orders: orderList,
+          products: productList,
+          skus: skuList
+        });
         console.log(report);
         setReport(report);
         setLoading(false);
@@ -165,7 +187,7 @@ export default function InsightsView() {
         <LoadingScreen />
       ) : (
         <>
-          <InsightsCards report={report} />
+          <InsightsCards report={report.repurposing} />
           <InsightsCharts report={report} />
         </>
       )}
