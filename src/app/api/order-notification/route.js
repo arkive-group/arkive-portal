@@ -11,13 +11,11 @@ export async function POST(request) {
     const skuList = line_items.map((item) => item.sku);
     const products = await getProductBySku({ skuList });
 
+    console.log(admin_graphql_api_id, customer, line_items);
     console.log(products);
 
     if (products.length === 0) {
-      return NextResponse.json(
-        { error: "No products found" },
-        { status: 404 }
-      );
+      return new Response(JSON.stringify({ error: "Product not found" }));
     }
 
     const vendor = products[0].vendor;
