@@ -160,7 +160,6 @@ export default function InsightsView() {
           after: afterString,
         });
 
-        console.log(orderList);
         setOrders(orderList);
 
         const report = orderProc({
