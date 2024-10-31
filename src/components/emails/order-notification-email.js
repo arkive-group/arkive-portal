@@ -7,7 +7,7 @@ import {
     Link,
   } from "@react-email/components";
   
-  export default function OrderNotificationEmail({name, orderId, orderName}) {
+  export default function OrderNotificationEmail({name, orderId, orderName, order_status_url}) {
     const main = {
       backgroundColor: "#ffffff",
       fontFamily:
@@ -72,6 +72,10 @@ import {
             </Text>
             <Text style={paragraph}>
             <Link href={`${process.env.NEXT_PUBLIC_APP_DOMAIN}/orders/`}>Check orders</Link>
+            </Text>
+            <br />
+            <Text style={paragraph}>
+            <Link href={order_status_url}>Check order status</Link>
             </Text>
           <Text style={paragraph}>
             With circular kisses, <br />
