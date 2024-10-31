@@ -90,6 +90,8 @@ export const getPremiumStatus = async () => {
     where("cancel_at_period_end", "==", false)
   );
 
+  console.log(q);
+
   return new Promise((resolve, reject) => {
     const unsubscribe = onSnapshot(
       q,

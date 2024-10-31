@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Button, Paper, Box, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import {
+  getProducts,
   createProduct,
   createProductOptions,
   createProductVariants,
@@ -18,6 +19,7 @@ export default function ProductSelection({ products }) {
   const [selectedRowIds, setSelectedRowIds] = useState([]);
   const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
+  const [loading, setLoading] = useState(false);
 
   const columns = [
     { field: "Title", headerName: "Title", width: 150 },
@@ -64,11 +66,13 @@ export default function ProductSelection({ products }) {
       ) {
         productObj.seoDescription = productRaw["SEO Description"];
       }
-      if (productRaw.Vendor !== null && productRaw.Vendor !== "") {
-        productObj.vendor = productRaw.Vendor;
-      }
       if (user?.email !== null && user?.email !== "") {
         productObj.uploader = user.email;
+      }
+      if (user?.company !== null && user?.company !== "") {
+        productObj.vendor = user.company;
+      } else if (productRaw.Vendor !== null && productRaw.Vendor !== "") {
+        productObj.vendor = productRaw.Vendor;
       }
 
       // Medias
@@ -180,6 +184,7 @@ export default function ProductSelection({ products }) {
   };
 
   const getSelectedProducts = async () => {
+    setLoading(true);
     if (selectedRowIds.length === 0) return [];
     const selectedIDs = new Set(selectedRowIds);
     const handles = new Set();
@@ -188,35 +193,47 @@ export default function ProductSelection({ products }) {
         handles.add(products[i].Handle);
       }
     }
-    console.log(handles);
+
+    // Get all products published on Shopify
+    const allProducts = await getProducts({ company: user?.company });
+    const allHandles = new Set(allProducts.map((product) => product.handle));
+    console.log(allHandles);
 
     handles.forEach(async (handle) => {
       // Read and extract product from handle
       const productObj = extractProductFromHandleArray(handle, products);
-      console.log(productObj);
 
-      // Create product => options => variants
-      var res = await createProduct(productObj);
-      const productId = res.data?.productCreate?.product?.id;
-      if (productId) {
-        console.log(`Product created with ID: ${productId}`);
-
-        // Create product options
-        res = await createProductOptions(productId, productObj);
-        const productOptions = res.data?.productOptionsCreate?.product?.options;
-        console.log(`Product options created: ${productOptions}`);
-
-        // Create product variants
-        res = await createProductVariants(productId, productObj);
-        const productVariants =
-          res.data?.productVariantsBulkCreate?.product?.options;
-        console.log(`Product variants created: ${productVariants}`);
-
-        enqueueSnackbar(`Product created with ID: ${productId}`);
+      // Check if product already exists on Shopify
+      if (allHandles.has(productObj.handle)) {
+        enqueueSnackbar(`Product with handle ${productObj.handle} already exists`, {
+          variant: "warning",
+        });
+        setLoading(false);
       } else {
-        console.log(`Product creation failed: ${res.text}`);
+        // Create product => options => variants
+        var res = await createProduct(productObj);
+        const productId = res.data?.productCreate?.product?.id;
+        if (productId) {
+          console.log(`Product created with ID: ${productId}`);
 
-        enqueueSnackbar(`Product creation failed: ${res.text}`, { variant: "error" });
+          // Create product options
+          res = await createProductOptions(productId, productObj);
+          const productOptions = res.data?.productOptionsCreate?.product?.options;
+          console.log(`Product options created: ${productOptions}`);
+
+          // Create product variants
+          res = await createProductVariants(productId, productObj);
+          const productVariants =
+            res.data?.productVariantsBulkCreate?.product?.options;
+
+          enqueueSnackbar(`Product created with ID: ${productId}`);
+          setLoading(true);
+        } else {
+          enqueueSnackbar(`Product creation failed: ${res.text}`, {
+            variant: "error",
+          });
+          setLoading(false);
+        }
       }
     });
   };
@@ -229,9 +246,13 @@ export default function ProductSelection({ products }) {
         alignItems="center"
         justifyContent="space-between"
       >
-        <Typography variant="h4">Products</Typography>
-        <Button variant="contained" onClick={getSelectedProducts}>
-          Create Products
+        <Typography variant="h4">Select Products To Upload</Typography>
+        <Button
+          disabled={loading || !selectedRowIds?.length}
+          variant="contained"
+          onClick={getSelectedProducts}
+        >
+          {loading ? "Creating..." : "Create Products"}
         </Button>
       </Box>
       <DataGrid

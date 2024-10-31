@@ -13,8 +13,6 @@ const pricingPlans = [
       "Sales channels on 30% commission",
       "Standard dashboard",
       "Chat support",
-      "Repurposing channels",
-      "Donation channels",
       "Customer success*",
     ],
     chipLabel: "BASIC",
