@@ -8,6 +8,7 @@ import {
   signInWithEmailAndPassword,
   sendSignInLinkToEmail,
   signInWithEmailLink,
+  createUserWithEmailAndPassword,
 } from "firebase/auth";
 import {
   collection,
@@ -114,12 +115,38 @@ export function AuthProvider({ children }) {
   };
 
   const login = useCallback(async (email, password) => {
-    const useCredentials = await signInWithEmailAndPassword(
-      AUTH,
-      email,
-      password
-    );
-    return useCredentials;
+    try {
+      const useCredentials = await signInWithEmailAndPassword(
+        AUTH,
+        email,
+        password
+      );
+      console.log("useCredentials", useCredentials);
+
+      const userData = await findUserByEmail(email);
+      if (userData) {
+        setFoundUser(userData);
+        if (useCredentials.user.emailVerified) {
+          dispatch({
+            type: "INITIAL",
+            payload: {
+              user: userData,
+            },
+          });
+          router.push(paths.home);
+        } else {
+          await sendSignInLinkToEmail(AUTH, email, actionCodeSettings);
+          router.push(paths.auth.verify + `?email=${email}`);
+        }
+      } else {
+        router.push(paths.auth.register + `?email=${email}`);
+      }
+      
+    } catch (error) {
+      console.error("Error signing in:", error);
+      throw error;
+    }
+
   }, []);
 
   const signup = useCallback(async (data) => {
@@ -130,6 +157,15 @@ export function AuthProvider({ children }) {
       );
       return null;
     }
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(AUTH, data.email, data.password);
+      console.log("userCredential", userCredential);
+    } catch (error) {
+      console.error("Error creating user:", error);
+      return null;
+    }
+
     const usersCollection = collection(DB, "users");
     try {
       const avatarRef = ref(

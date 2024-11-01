@@ -30,7 +30,7 @@ import { RouterLink } from '@/routes/components'
 // ----------------------------------------------------------------------
 
 export default function LoginView() {
-  const { loginWithLink } = useAuthContext()
+  const { login, loginWithLink } = useAuthContext()
 
   const router = useRouter()
 
@@ -41,12 +41,12 @@ export default function LoginView() {
     email: Yup.string()
       .required('Email is required')
       .email('Email must be a valid email address'),
-    // password: Yup.string().required('Password is required'),
+    password: Yup.string().required('Password is required'),
   })
 
   const defaultValues = {
     email: '',
-    // password: '',
+    password: '',
   }
 
   const methods = useForm({
@@ -62,11 +62,25 @@ export default function LoginView() {
 
   const onSubmit = handleSubmit(async data => {
     try {
-      await loginWithLink?.(data.email)
+      await login?.(data.email, data.password)
     } catch (error) {
       console.error(error)
       reset()
-      setErrorMsg(typeof error === 'string' ? error : error.message)
+      switch (error.code) {
+        case 'auth/invalid-credential':
+          setErrorMsg('Invalid credential')
+          break
+        case 'auth/user-disabled':
+          setErrorMsg('User disabled')
+          break
+        case 'auth/user-not-found':
+          setErrorMsg('User not found')
+          break
+        default:
+          setErrorMsg(error.message)
+          break
+      }
+      // setErrorMsg(typeof error === 'string' ? error : error.message)
     }
   })
 
@@ -94,7 +108,7 @@ export default function LoginView() {
 
       <RHFTextField name="email" label="Email address" />
 
-      {/* <RHFTextField
+      <RHFTextField
         name="password"
         label="Password"
         type={password.value ? 'text' : 'password'}
@@ -111,9 +125,9 @@ export default function LoginView() {
             </InputAdornment>
           ),
         }}
-      /> */}
+      />
 
-      {/* <Link
+      <Link
         component={RouterLink}
         href="#"
         // href={paths.auth.resetPassword}
@@ -123,10 +137,11 @@ export default function LoginView() {
         sx={{ alignSelf: 'flex-end' }}
       >
         Forgot password?
-      </Link> */}
+      </Link>
 
       <LoadingButton
         fullWidth
+        name="login"
         color="primary"
         size="large"
         type="submit"
