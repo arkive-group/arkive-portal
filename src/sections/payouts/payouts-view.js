@@ -30,8 +30,8 @@ import {
 import { DB } from "@/utils/firebase-config";
 import { getOrders, getProducts } from "@/lib/shopify";
 import { usePremiumStatus } from "@/auth/hooks";
-import { last } from "lodash";
-import { af } from "date-fns/locale";
+import { createVendor, updateOrders, getOrders as getOrdersFirebase, updatePayout } from "@/lib/firebase-db";
+import { create } from "lodash";
 
 const BarChart = () => {
   const theme = useTheme();
@@ -231,24 +231,19 @@ const SalesEarnings = () => {
   const renderCTA = () => {
     const [canRequestPayout, setCanRequestPayout] = useState(false);
     const [loadingPayoutStatus, setLoadingPayoutStatus] = useState(true);
+    const [unclaimedOrders, setUnclaimedOrders] = useState([]);
 
     const handlePayoutRequest = async () => {
       const amount = digest.unclaimedData.total; // Define how you'll calculate or determine the payout amount
-      
-      const payoutCollection = collection(DB, "payout-requests");
-      const userId = user?.id;
-      // Get reference to the user's document and update it
-      const payoutRef = doc(payoutCollection);
   
       try {
         const timestamp = new Date();
-        await setDoc(payoutRef, {
-          accountID: user?.accountId,
-          amount: (amount * (1 - (premium.commission ?? 0.3))).toFixed(2),
-          timestamp: timestamp,
-          commission: premium.commission ?? 0.3,
-          grossAmount: amount,
-        });
+        await updatePayout({ amount, timestamp, user, premium });
+        
+        if (unclaimedOrders.length > 0) {
+          await updateOrders({ vendorName: user?.company, orders: unclaimedOrders });
+        }
+
         alert("Payout requested successfully!");
         onRequest({ amount });
         setLastPayoutDate(timestamp);
@@ -307,6 +302,9 @@ const SalesEarnings = () => {
         if (!lastPayoutDate) return;
         const uploader = user?.email;
         const company = user?.company;
+
+        await createVendor({ name: company });
+
         const productList = await getProducts({
           company,
           active: true,
@@ -322,16 +320,25 @@ const SalesEarnings = () => {
           fulfilled: true,
           after: afterString,
         });
+        console.log(orderList);
+
+        // Fetch previous claimed orders from Firebase
+        const claimedOrders = await getOrdersFirebase({ vendorName: company });
+        const claimedOrderIds = claimedOrders.map((doc) => doc?.id);
 
         if (lastPayoutDate !== new Date(0)) {
+          let unclaimedOrders = [];
           const unclaimedAmount = orderList.reduce((acc, order) => {
             const orderDate = new Date(order.createdAt);
             
-            if (orderDate > lastPayoutDate) {
-              return acc + parseFloat(order.totalPrice);
+            if (orderDate > lastPayoutDate && !claimedOrderIds.includes(order.id)) {
+              unclaimedOrders.push(order);
+              acc += parseFloat(order.totalPrice);
             }
             return acc;
           }, 0);
+          setUnclaimedOrders(unclaimedOrders);
+          console.log(unclaimedOrders);
           setDigest({
             unclaimedData: {
               total: unclaimedAmount.toFixed(2),
@@ -345,6 +352,7 @@ const SalesEarnings = () => {
             (acc, order) => acc + parseFloat(order.totalPrice),
             0
           );
+          setUnclaimedOrders(orderList);
           setDigest({
             unclaimedData: {
               total: unclaimedAmount.toFixed(2),
