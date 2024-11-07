@@ -35,6 +35,8 @@ export default function RegisterView() {
   const email = searchParams.get('email') || ''
 
   const { enqueueSnackbar } = useSnackbar()
+  const phoneRegExp = `/^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/`
+  const emailRegExp = `/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/`
 
   const NewUserSchema = Yup.object().shape({
     first_name: Yup.string().required('First name is required'),
@@ -42,7 +44,7 @@ export default function RegisterView() {
     email: Yup.string()
       .required('Email is required')
       .email('Email must be a valid email address'),
-    phoneNumber: Yup.string().required('Phone number is required'),
+    phoneNumber: Yup.string().nullable().notRequired().matches(phoneRegExp, { message: 'Phone number is not valid', excludeEmptyString: true }),
     company: Yup.string().required('Company is required'),
     role: Yup.string().required('Role is required'),
     avatar: Yup.mixed().nullable().required('Avatar is required'),
