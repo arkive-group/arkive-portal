@@ -137,8 +137,7 @@ export default function LoginView() {
 
       <Link
         component={RouterLink}
-        href="#"
-        // href={paths.auth.resetPassword}
+        href={paths.auth.resetPassword}
         variant="body2"
         color="inherit"
         underline="always"

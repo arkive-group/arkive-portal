@@ -7,7 +7,7 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   sendSignInLinkToEmail,
-  signInWithEmailLink,
+  sendPasswordResetEmail,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import {
@@ -267,6 +267,42 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
+  const resetPasswordWithLink = useCallback(async (email) => {
+    try {
+      const userData = await findUserByEmail(email);
+      if (userData) {
+        await sendPasswordResetEmail(AUTH, email, {
+          url: `${
+            process.env.NODE_ENV === "development"
+              ? "http://localhost:3000"
+              : `https://${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}`
+          }/auth/login`, // Redirect to login after reset
+          handleCodeInApp: true,
+        });
+
+        enqueueSnackbar("Password reset link sent! Check your email.", {
+          variant: "success",
+        });
+
+        router.push(paths.auth.verify + `?email=${email}&reset=true`);
+      } else {
+        enqueueSnackbar(
+          "No account found with this email. Please register instead.",
+          {
+            variant: "warning",
+          }
+        );
+
+        router.push(paths.auth.register + `?email=${email}`);
+      }
+    } catch (error) {
+      console.error("Error sending password reset link:", error);
+      enqueueSnackbar("Failed to send password reset email. Try again.", {
+        variant: "error",
+      });
+    }
+  }, []);
+
   // LOGOUT
   const logout = useCallback(async () => {
     await signOut(AUTH);
@@ -293,6 +329,7 @@ export function AuthProvider({ children }) {
       loginWithLink,
       checkLoginLink,
       updateUser,
+      resetPasswordWithLink,
     }),
     [
       status,
@@ -304,6 +341,7 @@ export function AuthProvider({ children }) {
       loginWithLink,
       checkLoginLink,
       updateUser,
+      resetPasswordWithLink,
     ]
   );
 
