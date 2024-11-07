@@ -124,6 +124,7 @@ export function AuthProvider({ children }) {
 
   const signup = useCallback(async (data) => {
     const existingUser = await findUserByEmail(data.email);
+    console.log("existingUser", existingUser);
     if (existingUser) {
       enqueueSnackbar(
         "User with this email already exists. Please login or use a different email."
@@ -144,7 +145,7 @@ export function AuthProvider({ children }) {
         last_name: data.last_name,
         role: data.role,
         company: data.company,
-        phoneNumber: data.phoneNumber,
+        phoneNumber: data.phoneNumber ?? "",
         avatar: avatarUrl,
       };
       await setDoc(doc(usersCollection), user);
@@ -198,6 +199,7 @@ export function AuthProvider({ children }) {
     try {
       const credentials = await signInWithEmailLink(AUTH, email);
       if (credentials.user.emailVerified) {
+        console.log("User verified!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         state.user = foundUser;
         router.push(paths.home);
         setFoundUser(null);
