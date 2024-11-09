@@ -1,7 +1,7 @@
 'use client'
 
 import * as Yup from 'yup'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 // @mui
@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography'
 
 // utils
 import { fData } from 'src/utils/format-number'
+
 // routes
 
 import { useSearchParams } from 'src/routes/hooks'
@@ -21,7 +22,7 @@ import FormProvider, {
   RHFTextField,
   RHFUploadAvatar,
 } from 'src/components/hook-form'
-import { CardHeader } from '@mui/material'
+import { CardHeader, InputAdornment, IconButton, Iconify } from '@mui/material'
 
 // Firebase
 import { useAuthContext } from '@/auth/hooks/use-auth-context'
@@ -48,6 +49,11 @@ export default function RegisterView() {
     company: Yup.string().required('Company is required'),
     role: Yup.string().required('Role is required'),
     avatar: Yup.mixed().nullable().required('Avatar is required'),
+    password: Yup.string().required('Password is required'),
+    confirmPassword: Yup.string().oneOf(
+      [Yup.ref('password'), null],
+      'Passwords must match',
+    ),
   })
 
   const defaultValues = useMemo(
@@ -151,6 +157,18 @@ export default function RegisterView() {
           <RHFTextField name="phoneNumber" label="Phone Number" />
           <RHFTextField name="company" label="Company" />
           <RHFTextField name="role" label="Role" />
+        </Box>
+        <Box rowGap={3} mt={3} display="grid">
+          <RHFTextField
+            name="password"
+            label="Password"
+            type="password"
+          />
+          <RHFTextField
+            name="confirmPassword"
+            label="Confirm Password"
+            type="password"
+          />
         </Box>
         <LoadingButton
           type="submit"
