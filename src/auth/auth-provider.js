@@ -6,6 +6,7 @@ import {
   signOut,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  signInWithEmailLink,
   sendSignInLinkToEmail,
   sendPasswordResetEmail,
   createUserWithEmailAndPassword,
@@ -248,7 +249,7 @@ export function AuthProvider({ children }) {
 
   const checkLoginLink = useCallback(async (email, password) => {
     try {
-      const credentials = await signInWithEmailAndPassword(AUTH, email);
+      const credentials = await signInWithEmailLink(AUTH, email);
       if (credentials.user.emailVerified) {
         const foundUser = await findUserByEmail(email);
         dispatch({
@@ -257,7 +258,7 @@ export function AuthProvider({ children }) {
             user: foundUser,
           },
         });
-        router.push(paths.home);
+        console.log("foundUser", foundUser);
         setFoundUser(null);
       }
       return credentials;
