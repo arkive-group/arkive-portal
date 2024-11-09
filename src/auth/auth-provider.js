@@ -6,8 +6,10 @@ import {
   signOut,
   onAuthStateChanged,
   signInWithEmailAndPassword,
-  sendSignInLinkToEmail,
   signInWithEmailLink,
+  sendSignInLinkToEmail,
+  sendPasswordResetEmail,
+  createUserWithEmailAndPassword,
 } from "firebase/auth";
 import {
   collection,
@@ -113,13 +115,51 @@ export function AuthProvider({ children }) {
     handleCodeInApp: true,
   };
 
+  const actionCodeSettings2 = {
+    url: `${
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:3000"
+        : `https://${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}`
+    }`,
+    handleCodeInApp: true,
+  };
+
   const login = useCallback(async (email, password) => {
-    const useCredentials = await signInWithEmailAndPassword(
-      AUTH,
-      email,
-      password
-    );
-    return useCredentials;
+    try {
+      await signInWithEmailAndPassword(AUTH, email, password);
+
+      const userData = await findUserByEmail(email);
+
+      setFoundUser(userData);
+      dispatch({
+        type: "INITIAL",
+        payload: {
+          user: userData,
+        },
+      });
+      router.push(paths.home);
+
+      // if (userData) {
+      //   setFoundUser(userData);
+      //   if (useCredentials.user.emailVerified) {
+      //     dispatch({
+      //       type: "INITIAL",
+      //       payload: {
+      //         user: userData,
+      //       },
+      //     });
+      //     router.push(paths.home);
+      //   } else {
+      //     await sendSignInLinkToEmail(AUTH, email, actionCodeSettings);
+      //     router.push(paths.auth.verify + `?email=${email}`);
+      //   }
+      // } else {
+      //   router.push(paths.auth.register + `?email=${email}`);
+      // }
+    } catch (error) {
+      console.error("Error signing in:", error);
+      throw error;
+    }
   }, []);
 
   const signup = useCallback(async (data) => {
@@ -130,6 +170,19 @@ export function AuthProvider({ children }) {
       );
       return null;
     }
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        AUTH,
+        data.email,
+        data.password
+      );
+      console.log("userCredential", userCredential);
+    } catch (error) {
+      console.error("Error creating user:", error);
+      return null;
+    }
+
     const usersCollection = collection(DB, "users");
     try {
       const avatarRef = ref(
@@ -157,7 +210,7 @@ export function AuthProvider({ children }) {
         body: JSON.stringify({ name: data.first_name, email: data.email }),
       });
 
-      await sendSignInLinkToEmail(AUTH, user.email, actionCodeSettings);
+      await sendSignInLinkToEmail(AUTH, user.email, actionCodeSettings2);
       router.push(paths.auth.verify + `?email=${user.email}`);
       return user;
     } catch (error) {
@@ -194,7 +247,7 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  const checkLoginLink = useCallback(async (email) => {
+  const checkLoginLink = useCallback(async (email, password) => {
     try {
       const credentials = await signInWithEmailLink(AUTH, email);
       if (credentials.user.emailVerified) {
@@ -205,13 +258,49 @@ export function AuthProvider({ children }) {
             user: foundUser,
           },
         });
-        router.push(paths.home);
+        console.log("foundUser", foundUser);
         setFoundUser(null);
       }
       return credentials;
     } catch (error) {
       console.error("Error signing in:", error);
       return null;
+    }
+  }, []);
+
+  const resetPasswordWithLink = useCallback(async (email) => {
+    try {
+      const userData = await findUserByEmail(email);
+      if (userData) {
+        await sendPasswordResetEmail(AUTH, email, {
+          url: `${
+            process.env.NODE_ENV === "development"
+              ? "http://localhost:3000"
+              : `https://${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}`
+          }/auth/login`, // Redirect to login after reset
+          handleCodeInApp: true,
+        });
+
+        enqueueSnackbar("Password reset link sent! Check your email.", {
+          variant: "success",
+        });
+
+        router.push(paths.auth.verify + `?email=${email}&reset=true`);
+      } else {
+        enqueueSnackbar(
+          "No account found with this email. Please register instead.",
+          {
+            variant: "warning",
+          }
+        );
+
+        router.push(paths.auth.register + `?email=${email}`);
+      }
+    } catch (error) {
+      console.error("Error sending password reset link:", error);
+      enqueueSnackbar("Failed to send password reset email. Try again.", {
+        variant: "error",
+      });
     }
   }, []);
 
@@ -241,6 +330,7 @@ export function AuthProvider({ children }) {
       loginWithLink,
       checkLoginLink,
       updateUser,
+      resetPasswordWithLink,
     }),
     [
       status,
@@ -252,6 +342,7 @@ export function AuthProvider({ children }) {
       loginWithLink,
       checkLoginLink,
       updateUser,
+      resetPasswordWithLink,
     ]
   );
 
