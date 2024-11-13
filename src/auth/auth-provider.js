@@ -185,12 +185,15 @@ export function AuthProvider({ children }) {
 
     const usersCollection = collection(DB, "users");
     try {
-      const avatarRef = ref(
-        STORAGE,
-        `avatars/${data.avatar.name}_${data.email}`
-      );
-      await uploadBytes(avatarRef, data.avatar);
-      const avatarUrl = await getDownloadURL(avatarRef);
+      var avatarUrl = "";
+      if (data.avatar) {
+        const avatarRef = ref(
+          STORAGE,
+          `avatars/${data.avatar.name}_${data.email}`
+        );
+        await uploadBytes(avatarRef, data.avatar);
+        avatarUrl = await getDownloadURL(avatarRef);
+      }
       const user = {
         email: data.email,
         first_name: data.first_name,
@@ -211,6 +214,16 @@ export function AuthProvider({ children }) {
       });
 
       await sendSignInLinkToEmail(AUTH, user.email, actionCodeSettings2);
+
+      // [ADMIN] Send email to admin about new user
+      await fetch("/api/admin/user/onboard", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user, email: process.env.NEXT_PUBLIC_VERCEL_ADMIN_EMAIL }),
+      });
+
       router.push(paths.auth.verify + `?email=${user.email}`);
       return user;
     } catch (error) {

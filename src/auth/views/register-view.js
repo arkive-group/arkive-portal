@@ -48,7 +48,7 @@ export default function RegisterView() {
     phoneNumber: Yup.string().nullable().notRequired().matches(phoneRegExp, { message: 'Phone number is not valid', excludeEmptyString: true }),
     company: Yup.string().required('Company is required'),
     role: Yup.string().required('Role is required'),
-    avatar: Yup.mixed().nullable().required('Avatar is required'),
+    avatar: Yup.mixed().nullable().notRequired(),
     password: Yup.string().required('Password is required'),
     confirmPassword: Yup.string().oneOf(
       [Yup.ref('password'), null],
