@@ -67,7 +67,7 @@ export default function WelcomeEmail(name) {
           Together, we’re building a circular beauty industry.
         </Text>
         <Text style={paragraph}>
-          Early members can get 3 months of our EcoBoost Plan free, and another
+          Early members can get 3 months of our EcoMaster Plan free, and another
           3 months if you recommend a new beauty business that assigns to a paid
           plan [
           <Link href="https://www.canva.com/design/DAGO9Xhnr_E/o1wuyTbwHAtT-nBaJt7BGg/edit?utm_content=DAGO9Xhnr_E&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton">
