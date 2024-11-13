@@ -11,7 +11,7 @@ import Icon from "@mui/material/Icon";
 import { useAuthContext, usePremiumStatus } from "@/auth/hooks";
 export const Channels = {
   shopify: {
-    name: "Shopify",
+    name: "Arkive",
     alias: "Online Store",
     icon: undefined,
   },
@@ -91,6 +91,8 @@ export default function ActiveChannel({ channel, onChannleChange }) {
                 <Button
                   onClick={() => onChannleChange(key)}
                   disabled={isDisabled}
+                  fullWidth
+                  variant={key === channel ? "contained" : "text"}
                 >
                   {Channels[key].name}
                 </Button>
