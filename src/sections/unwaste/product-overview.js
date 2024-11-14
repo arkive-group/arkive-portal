@@ -9,8 +9,8 @@ export default function ProductOverview({ products, productFilters }) {
 
   const columns = [
     {
-      field: 'imageUrl',
-      headerName: 'Image',
+      field: "imageUrl",
+      headerName: "Image",
       width: 160,
       editable: true,
       renderCell: (params) => (
@@ -25,8 +25,9 @@ export default function ProductOverview({ products, productFilters }) {
             justifyContent: "center",
             fontSize: "16px",
             mx: "auto",
-          }}>
-        <img src={params.value} />
+          }}
+        >
+          <img src={params.value} />
         </Icon>
       ), // renderCell will render the component
     },
@@ -38,6 +39,7 @@ export default function ProductOverview({ products, productFilters }) {
     { field: "salesChannels", headerName: "Sales Channels", width: 100 },
   ];
 
+  console.log(productFilters, "productFilters");
   return (
     <Paper sx={{ height: 400 }}>
       <Box

@@ -38,13 +38,13 @@ const AccountGeneralSettings = () => {
     email: Yup.string()
       .required("Email is required")
       .email("Email must be a valid email address"),
-    phoneNumber: Yup.string().required("Phone number is required"),
-    company: Yup.string().required("Company is required"),
+    phoneNumber: Yup.string(),
+    company: Yup.string().required("Role is required"),
     role: Yup.string().required("Role is required"),
     avatar: Yup.mixed().nullable().required("Avatar is required"),
-    country: Yup.string().required("Country is required"),
-    state: Yup.string().required("State/Region is required"),
-    city: Yup.string().required("City is required"),
+    country: Yup.string(),
+    state: Yup.string(),
+    city: Yup.string(),
   });
 
   const defaultValues = useMemo(
@@ -234,7 +234,7 @@ const AccountGeneralSettings = () => {
                   <RHFTextField name="phoneNumber" label="Phone Number" />
                 </Grid>
                 <Grid item md={6} xs={12}>
-                  <RHFTextField name="company" label="Company" />
+                  <RHFTextField name="company" label="Company" disabled />
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <RHFTextField name="role" label="Role" disabled />
