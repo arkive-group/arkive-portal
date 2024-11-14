@@ -11,8 +11,8 @@ import ProductOverview from "./product-overview";
 import ActiveChannel from "@/components/active-channel";
 import { getProducts } from "@/lib/shopify";
 import { useAuthContext } from "@/auth/hooks";
-
 import { LoadingScreen } from "@/components/loading-screen";
+
 // ----------------------------------------------------------------------
 
 export default function UnwasteView() {
@@ -33,8 +33,9 @@ export default function UnwasteView() {
           active: true,
         });
         setProducts(productList);
-        setLoading(false);
       } catch (err) {
+        console.error("Failed to fetch products:", err);
+      } finally {
         setLoading(false);
       }
     };
@@ -42,7 +43,12 @@ export default function UnwasteView() {
   }, [user]);
 
   const onChannleChange = (value) => {
-    if (Object.keys(Channels).includes(value)) {
+    setChannel(value); // Only update the channel
+  };
+
+  // Sync productFilters when channel changes
+  useEffect(() => {
+    if (Object.keys(Channels).includes(channel)) {
       setProductFilters([
         {
           field: "salesChannels",
@@ -53,9 +59,7 @@ export default function UnwasteView() {
     } else {
       setProductFilters([]);
     }
-
-    setChannel(value);
-  };
+  }, [channel]);
 
   return (
     <Container maxWidth="xl">

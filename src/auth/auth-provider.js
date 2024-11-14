@@ -130,32 +130,28 @@ export function AuthProvider({ children }) {
 
       const userData = await findUserByEmail(email);
 
-      setFoundUser(userData);
       dispatch({
         type: "INITIAL",
         payload: {
           user: userData,
         },
       });
-      router.push(paths.home);
 
-      // if (userData) {
-      //   setFoundUser(userData);
-      //   if (useCredentials.user.emailVerified) {
-      //     dispatch({
-      //       type: "INITIAL",
-      //       payload: {
-      //         user: userData,
-      //       },
-      //     });
-      //     router.push(paths.home);
-      //   } else {
-      //     await sendSignInLinkToEmail(AUTH, email, actionCodeSettings);
-      //     router.push(paths.auth.verify + `?email=${email}`);
-      //   }
-      // } else {
-      //   router.push(paths.auth.register + `?email=${email}`);
-      // }
+      console.log(userData, "userData");
+
+      if (userData) {
+        setFoundUser(userData);
+
+        dispatch({
+          type: "INITIAL",
+          payload: {
+            user: userData,
+          },
+        });
+        router.push(paths.home);
+      } else {
+        router.push(paths.auth.register + `?email=${email}`);
+      }
     } catch (error) {
       console.error("Error signing in:", error);
       throw error;
@@ -221,7 +217,10 @@ export function AuthProvider({ children }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ user, email: process.env.NEXT_PUBLIC_VERCEL_ADMIN_EMAIL }),
+        body: JSON.stringify({
+          user,
+          email: process.env.NEXT_PUBLIC_VERCEL_ADMIN_EMAIL,
+        }),
       });
 
       router.push(paths.auth.verify + `?email=${user.email}`);
@@ -271,8 +270,7 @@ export function AuthProvider({ children }) {
             user: foundUser,
           },
         });
-        console.log("foundUser", foundUser);
-        setFoundUser(null);
+        setFoundUser(foundUser);
       }
       return credentials;
     } catch (error) {
@@ -320,6 +318,7 @@ export function AuthProvider({ children }) {
   // LOGOUT
   const logout = useCallback(async () => {
     await signOut(AUTH);
+    setFoundUser(null);
     state.user = null;
   }, []);
 
