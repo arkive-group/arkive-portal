@@ -10,6 +10,7 @@ import {
   createProductOptions,
   createProductVariants,
 } from "@/lib/shopify";
+import { updateProduct as updateProductFirebase } from "@/lib/firebase-db";
 import { useAuthContext } from "@/auth/hooks";
 import { useSnackbar } from "src/components/snackbar";
 
@@ -202,6 +203,7 @@ export default function ProductSelection({ products }) {
     handles.forEach(async (handle) => {
       // Read and extract product from handle
       const productObj = extractProductFromHandleArray(handle, products);
+      console.log(productObj);
 
       // Check if product already exists on Shopify
       if (allHandles.has(productObj.handle)) {
@@ -226,6 +228,12 @@ export default function ProductSelection({ products }) {
           const productVariants =
             res.data?.productVariantsBulkCreate?.product?.options;
 
+          // Create product in Firebase
+          await updateProductFirebase({
+            vendorName: user?.company,
+            productId: productId,
+            product: productObj,
+          });
           enqueueSnackbar(`Product created with ID: ${productId}`);
           setLoading(true);
         } else {
