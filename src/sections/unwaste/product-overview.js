@@ -25,6 +25,7 @@ export default function ProductOverview({ products, productFilters }) {
             justifyContent: "center",
             fontSize: "16px",
             mx: "auto",
+            boxShadow: 3,
           }}
         >
           <img src={params.value} />
