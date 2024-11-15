@@ -8,9 +8,9 @@ export async function POST(request) {
     const resend = new Resend(process.env.RESEND_API_KEY);
 
     await resend.emails.send({
-      from: "Arkive <noreply@arkivegroup.com>",
+      from: "Arkive-Admin <noreply@arkivegroup.com>",
       to: email,
-      subject: "Monthly Payout Request",
+      subject: "[IMPORTANT] Monthly Payout Request",
       react: PayoutEmail(name, amount, clientEmail, accountId),
     });
 

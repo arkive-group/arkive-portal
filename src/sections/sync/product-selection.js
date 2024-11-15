@@ -10,6 +10,7 @@ import {
   createProductOptions,
   createProductVariants,
 } from "@/lib/shopify";
+import { updateProduct as updateProductFirebase } from "@/lib/firebase-db";
 import { useAuthContext } from "@/auth/hooks";
 import { useSnackbar } from "src/components/snackbar";
 
@@ -36,6 +37,7 @@ export default function ProductSelection({ products }) {
       options: [],
       variants: [],
     };
+    productObj.status = "draft";
     const productsWithHandle = products.filter((row) => row.Handle === handle);
     for (let i = 0; i < productsWithHandle.length; i++) {
       const productRaw = productsWithHandle[i];
@@ -196,15 +198,16 @@ export default function ProductSelection({ products }) {
 
     // Get all products published on Shopify
     const allProducts = await getProducts({ company: user?.company });
-    const allHandles = new Set(allProducts.map((product) => product.handle));
+    const allHandles = allProducts.map((product) => product.handle);
     console.log(allHandles);
 
     handles.forEach(async (handle) => {
       // Read and extract product from handle
       const productObj = extractProductFromHandleArray(handle, products);
+      console.log(productObj);
 
       // Check if product already exists on Shopify
-      if (allHandles.has(productObj.handle)) {
+      if (allHandles.some(str => str.includes(productObj.handle))) {
         enqueueSnackbar(`Product with handle ${productObj.handle} already exists`, {
           variant: "warning",
         });
@@ -226,8 +229,14 @@ export default function ProductSelection({ products }) {
           const productVariants =
             res.data?.productVariantsBulkCreate?.product?.options;
 
+          // Create product in Firebase
+          await updateProductFirebase({
+            vendorName: user?.company,
+            productId: productId,
+            product: productObj,
+          });
           enqueueSnackbar(`Product created with ID: ${productId}`);
-          setLoading(true);
+          setLoading(false);
         } else {
           enqueueSnackbar(`Product creation failed: ${res.text}`, {
             variant: "error",

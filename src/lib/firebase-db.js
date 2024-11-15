@@ -9,9 +9,10 @@ import {
     where,
 } from "firebase/firestore";
 import { DB } from "@/utils/firebase-config";
-import { get } from "lodash";
+import { id } from "date-fns/locale";
 
 
+// [Vendor]
 const createVendor = async (vendor) => {
     try {
         const vendorsCollection = collection(DB, "vendors");
@@ -19,7 +20,7 @@ const createVendor = async (vendor) => {
         await setDoc(vendorDocRef, vendor, { merge: true }); // Merge to avoid overwriting
             
     } catch (error) {
-        console.log(error);
+        console.log(`[Firebase-db][createVendor] Error: ${error}`);
     }
 }
 
@@ -31,10 +32,11 @@ const getVendorByName = async (name) => {
         if (doc.exists) {
             return doc.data();
         } else {
-            console.log("No such vendor!");
+            console.log(`[Firebase-db][getVendorByName] No such document!`);
+            return null;
         }
     } catch (error) {
-        console.log(error);
+        console.log(`[Firebase-db][getVendorByName] Error: ${error}`);
     }
 }
 
@@ -45,11 +47,12 @@ const updateOrders = async ({vendorName, orders}) => {
         const ordersCollection = collection(vendorDocRef, "orders");
 
         orders.forEach(async (order) => {
-            const orderDocRef = doc(ordersCollection);
-            await setDoc(orderDocRef, order);
+            const orderIdFirebase = order.id.split("/")[order.id.split("/").length - 1];
+            const orderDocRef = doc(ordersCollection, orderIdFirebase);
+            await setDoc(orderDocRef, order, { merge: true });
         });
     } catch (error) {
-        console.log(error);
+        console.log(`[Firebase-db][updateOrders] Error: ${error}`);
     }
 }
 
@@ -64,15 +67,59 @@ const getOrders = async ({vendorName}) => {
         const orders = [];
 
         querySnapshot.forEach((doc) => {
-            orders.push(doc.data());
+            orders.push({
+                orderId: doc.id,
+                ...doc.data()
+            });
         });
 
         return orders;
     } catch (error) {
-        console.log(error);
+        console.log(`[Firebase-db][getOrders] Error: ${error}`);
     }
 }
 
+const updateProduct = async ({vendorName, productId, product}) => {
+    try {
+        const vendorsCollection = collection(DB, "vendors");
+        const vendorDocRef = doc(vendorsCollection, vendorName);
+        const productsCollection = collection(vendorDocRef, "products");
+
+        const productIdFirebase = productId.split("/")[productId.split("/").length - 1];
+        const productDocRef = doc(productsCollection, productIdFirebase);
+        await setDoc(productDocRef, {
+            productId,
+            ...product
+        }, { merge: true });
+    } catch (error) {
+        console.log(`[Firebase-db][updateProduct] Error: ${error}`);
+    }
+}
+
+const getProducts = async ({vendorName}) => {
+    try {
+        const vendorsCollection = collection(DB, "vendors");
+        const vendorDocRef = doc(vendorsCollection, vendorName);
+        const productsCollection = collection(vendorDocRef, "products");
+
+        const querySnapshot = await getDocs(productsCollection);
+        const products = [];
+
+        querySnapshot.forEach((doc) => {
+            products.push({
+                id: doc.id,
+                ...doc.data()
+            });
+        });
+
+        return products;
+    } catch (error) {
+        console.log(`[Firebase-db][getProducts] Error: ${error}`);
+    }
+}
+
+
+// [Payout]
 const updatePayout = async ({amount, timestamp, user, premium}) => {
     try {
         const payoutCollection = collection(DB, "payout-requests");
@@ -86,8 +133,15 @@ const updatePayout = async ({amount, timestamp, user, premium}) => {
             grossAmount: amount,
         });
     } catch (error) {
-        console.log(error);
+        console.log(`[Firebase-db][updatePayout] Error: ${error}`);
     }
 }
 
-export {createVendor, getVendorByName, updateOrders, getOrders, updatePayout};
+export {
+    createVendor,
+    getVendorByName,
+    updateOrders,
+    getOrders,
+    updateProduct,
+    getProducts,
+    updatePayout};

@@ -19,6 +19,7 @@ import {
   getDocs,
   where,
 } from "firebase/firestore";
+import { createVendor } from "@/lib/firebase-db";
 
 // config
 import { AUTH, DB, STORAGE } from "@/utils/firebase-config";
@@ -84,6 +85,11 @@ export function AuthProvider({ children }) {
                 user: userData,
               },
             });
+
+            // create vendor if user is a vendor
+            if (userData.company !== null && userData.company !== "") {
+              await createVendor({ name: userData.company });
+            }
             return;
           }
         } else {

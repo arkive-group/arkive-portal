@@ -357,7 +357,7 @@ const getProducts = async ({uploader, company, active}) => {
     } else if (company !== undefined && company !== null && company !== "") {
       query = `vendor:'${company}'`;
     }
-    if (active !== undefined && active !== null && active) {
+    if (active === true) {
       query = `${query} AND status:active`;
     }
     

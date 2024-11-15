@@ -100,17 +100,17 @@ export default function OrdersOverview() {
         <Box sx={{ height: "600px", width: "100%" }}>
           <StyledDataGrid
             rows={orders}
+            getRowClassName={(params) =>
+              params.row.displayFulfillmentStatus === "FULFILLED"
+                ? "super-app-theme--green"
+                : "super-app-theme--red"
+            }
             columns={columns.map((col) => ({
               ...col,
               flex: 1, // Allow flexible sizing based on content
               minWidth: 100, // Ensure a minimum width to avoid squishing
             }))}
             getRowId={(row) => row["id"]}
-            getRowClassName={(params) =>
-              params.row.displayFulfillmentStatus === "FULFILLED"
-                ? "super-app-theme--green"
-                : "super-app-theme--red"
-            }
             initialState={{ pagination: { paginationModel: { pageSize: 5 } } }}
             pageSize={5}
             rowsPerPageOptions={[5]}
