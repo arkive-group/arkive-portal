@@ -127,14 +127,14 @@ export default function ProductSelection({ products }) {
         productRaw["Variant Barcode"] !== ""
       ) {
         let variantObj = {
-          barcode: productRaw["Variant Barcode"].toString(),
+          barcode: productRaw["Variant Barcode"].toString().replaceAll("'", "").replaceAll(`"`, ""),
           price: productRaw["Variant Price"],
           mediaSrc: [productRaw["Variant Image"]],
           inventoryPolicy: productRaw["Variant Inventory Policy"].toUpperCase(),
           taxable: productRaw["Variant Taxable"],
           taxCode: productRaw["Variant Tax Code"],
           inventoryItem: {
-            sku: productRaw["Variant SKU"].toString(),
+            sku: productRaw["Variant SKU"].toString().replaceAll("'", "").replaceAll(`"`, ""),
             requiresShipping: productRaw["Variant Requires Shipping"],
           },
           optionValues: [],
