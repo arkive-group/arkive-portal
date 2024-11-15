@@ -7,7 +7,7 @@ const getOrders = async ({ uploader, skuList, fulfilled, after }) => {
   if (!skuList || skuList.length === 0) {
     return [];
   }
-  var queryString = `${skuList.map((sku) => `sku:${sku}`).join(" OR ")}`;
+  var queryString = `${skuList.map((sku) => `sku:'${sku}'`).join(" OR ")}`;
   if (fulfilled !== undefined) {
     queryString = `(${queryString}) AND (fulfillment_status:${fulfilled ? "shipped" : "unshipped"})`;
   }
