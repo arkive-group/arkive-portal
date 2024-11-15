@@ -37,6 +37,7 @@ export default function ProductSelection({ products }) {
       options: [],
       variants: [],
     };
+    productObj.status = "draft";
     const productsWithHandle = products.filter((row) => row.Handle === handle);
     for (let i = 0; i < productsWithHandle.length; i++) {
       const productRaw = productsWithHandle[i];

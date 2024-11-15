@@ -9,6 +9,7 @@ import {
     where,
 } from "firebase/firestore";
 import { DB } from "@/utils/firebase-config";
+import { id } from "date-fns/locale";
 
 
 // [Vendor]
@@ -46,7 +47,7 @@ const updateOrders = async ({vendorName, orders}) => {
         const ordersCollection = collection(vendorDocRef, "orders");
 
         orders.forEach(async (order) => {
-            const orderIdFirebase = order.orderId.split("/")[order.orderId.split("/").length - 1];
+            const orderIdFirebase = order.id.split("/")[order.id.split("/").length - 1];
             const orderDocRef = doc(ordersCollection, orderIdFirebase);
             await setDoc(orderDocRef, order, { merge: true });
         });
@@ -66,7 +67,10 @@ const getOrders = async ({vendorName}) => {
         const orders = [];
 
         querySnapshot.forEach((doc) => {
-            orders.push(doc.data());
+            orders.push({
+                orderId: doc.id,
+                ...doc.data()
+            });
         });
 
         return orders;
@@ -102,7 +106,10 @@ const getProducts = async ({vendorName}) => {
         const products = [];
 
         querySnapshot.forEach((doc) => {
-            products.push(doc.data());
+            products.push({
+                id: doc.id,
+                ...doc.data()
+            });
         });
 
         return products;
@@ -136,4 +143,5 @@ export {
     updateOrders,
     getOrders,
     updateProduct,
+    getProducts,
     updatePayout};

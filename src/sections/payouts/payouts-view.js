@@ -216,7 +216,7 @@ const SalesEarnings = () => {
 
     await axios.post("/api/payout-email", {
       name: `${user?.first_name} ${user?.last_name}`,
-      email: ["service@arkive.nl"],
+      email: [process.env.NEXT_PUBLIC_VERCEL_ADMIN_EMAIL],
       amount: (amount * (1 - (premium.commission ?? 0.3))).toFixed(2),
       clientEmail: user?.email,
       accountId: user?.accountId,
@@ -318,7 +318,7 @@ const SalesEarnings = () => {
           uploader,
           skuList,
           fulfilled: true,
-          after: afterString,
+          // after: afterString,
         });
         console.log(orderList);
 

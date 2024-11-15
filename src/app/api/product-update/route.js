@@ -1,6 +1,6 @@
 import { Resend } from "resend";
-import ProductCreationEmail from "@/components/emails/admin/product-creation-email";
-import { getProductBySku } from "@/lib/shopify-serverside";
+import ProductUpdateEmail from "@/components/emails/product-update-email";
+import { getProducts, updateProduct } from "@/lib/firebase-db";
 import { DB } from "@/utils/firebase-config";
 import {
     doc,
@@ -13,12 +13,27 @@ import {
 
 export async function POST(request) {
   try {
+
     const { vendor, id, title, handle, product_type, status } = await request.json();
-    if (status !== "draft") {
-      return new Response(JSON.stringify({ message: "Product is not in draft" }));
+
+    const shopfrontUrl = `https://arkivegroup.com/products/${handle}`
+
+    if (status !== "active") {
+        return new Response(JSON.stringify({ message: "Product is not in active" }));
     }
 
-    const productUrl = `https://admin.shopify.com/store/shoparkive/products/${id}`
+    const products = await getProducts({ vendorName: vendor });
+    const product = products.find((product) => product.id === String(id));
+    if (!product) {
+        return new Response(JSON.stringify({ message: "Product not found" }));
+    }
+    if (product.status === status) {
+        return new Response(JSON.stringify({ message: "Product status is already active" }));
+    }
+
+    await updateProduct({ vendorName: vendor, productId: product.id, product: { status } });
+
+
     const resend = new Resend(process.env.RESEND_API_KEY);
 
     console.log(vendor, id);
@@ -35,11 +50,10 @@ export async function POST(request) {
     
 
     const { data, error } = await resend.emails.send({
-      from: "Arkive-Admin <noreply@arkivegroup.com>",
-      to: [process.env.NEXT_PUBLIC_VERCEL_ADMIN_EMAIL],
-      cc: emails,
-      subject: `New Product Added to Draft By ${vendor} - ${title}`,
-      react: ProductCreationEmail({vendor, title, handle, product_type, url: productUrl}),
+      from: "Arkive <noreply@arkivegroup.com>",
+      to: emails,
+      subject: `Product Activated - ${title}`,
+      react: ProductUpdateEmail({vendor, title, handle, status, product_type, url: shopfrontUrl}),
     });
 
     if (error) {
