@@ -198,7 +198,7 @@ export default function ProductSelection({ products }) {
 
     // Get all products published on Shopify
     const allProducts = await getProducts({ company: user?.company });
-    const allHandles = new Set(allProducts.map((product) => product.handle));
+    const allHandles = allProducts.map((product) => product.handle);
     console.log(allHandles);
 
     handles.forEach(async (handle) => {
@@ -207,7 +207,7 @@ export default function ProductSelection({ products }) {
       console.log(productObj);
 
       // Check if product already exists on Shopify
-      if (allHandles.has(productObj.handle)) {
+      if (allHandles.some(str => str.includes(productObj.handle))) {
         enqueueSnackbar(`Product with handle ${productObj.handle} already exists`, {
           variant: "warning",
         });

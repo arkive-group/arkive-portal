@@ -3,6 +3,7 @@ import { useState } from "react";
 
 import { Box, Paper, Typography, Icon } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import Link from "next/link";
 
 export default function ProductOverview({ products, productFilters }) {
   const [selectedRowIds, setSelectedRowIds] = useState([]);
@@ -14,6 +15,7 @@ export default function ProductOverview({ products, productFilters }) {
       width: 160,
       editable: true,
       renderCell: (params) => (
+        <Link href={`https://arkivegroup.com/products/${params.row.handle}`}>
         <Icon
           sx={{
             width: "100px",
@@ -30,6 +32,7 @@ export default function ProductOverview({ products, productFilters }) {
         >
           <img src={params.value} />
         </Icon>
+        </Link>
       ), // renderCell will render the component
     },
     { field: "id", headerName: "ID", width: 150 },
@@ -65,11 +68,6 @@ export default function ProductOverview({ products, productFilters }) {
             items: productFilters,
           }}
           getRowId={(row) => row["id"]}
-          getRowClassName={(params) =>
-            params.row.status === "DRAFT"
-              ? "super-app-theme--green"
-              : "super-app-theme--red"
-          }
           initialState={{ pagination: { paginationModel: { pageSize: 5 } } }}
           pageSize={5}
           rowsPerPageOptions={[5]}

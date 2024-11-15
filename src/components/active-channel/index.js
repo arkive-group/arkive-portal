@@ -64,7 +64,7 @@ export default function ActiveChannel({ channel, onChannleChange }) {
           <ListItem>
             <ListItemText
               primary="Active Channel"
-              secondary={Channels[channel].name}
+              secondary={Channels[channel]?.name}
             />
           </ListItem>
           <Divider />

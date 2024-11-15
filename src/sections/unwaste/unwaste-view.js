@@ -17,7 +17,7 @@ import { LoadingScreen } from "@/components/loading-screen";
 
 export default function UnwasteView() {
   const { user } = useAuthContext();
-  const [channel, setChannel] = useState("shopify");
+  const [channel, setChannel] = useState("");
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
   const [productFilters, setProductFilters] = useState([]);
@@ -42,7 +42,11 @@ export default function UnwasteView() {
   }, [user]);
 
   const onChannleChange = (value) => {
-    setChannel(value); // Only update the channel
+    if (channel === value) {
+      setChannel("");
+    } else {
+      setChannel(value);
+    }
   };
 
   // Sync productFilters when channel changes
