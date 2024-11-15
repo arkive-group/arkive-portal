@@ -29,13 +29,14 @@ export default function OrdersOverview() {
         const skuList = productList
           .map((product) => product.variants.map((variant) => variant.sku))
           .flat();
-
+        // console.log(skuList);
         const afterString = (new Date(new Date().setMonth(new Date().getMonth() - 3))).toISOString();
         const orderList = await getOrders({
           uploader,
           skuList,
           after: afterString,
         });
+        // console.log(orderList);
         setOrders(orderList);
         setLoading(false);
       } catch (err) {
