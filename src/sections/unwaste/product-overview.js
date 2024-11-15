@@ -65,6 +65,11 @@ export default function ProductOverview({ products, productFilters }) {
             items: productFilters,
           }}
           getRowId={(row) => row["id"]}
+          getRowClassName={(params) =>
+            params.row.status === "DRAFT"
+              ? "super-app-theme--green"
+              : "super-app-theme--red"
+          }
           initialState={{ pagination: { paginationModel: { pageSize: 5 } } }}
           pageSize={5}
           rowsPerPageOptions={[5]}

@@ -235,7 +235,7 @@ export default function ProductSelection({ products }) {
             product: productObj,
           });
           enqueueSnackbar(`Product created with ID: ${productId}`);
-          setLoading(true);
+          setLoading(false);
         } else {
           enqueueSnackbar(`Product creation failed: ${res.text}`, {
             variant: "error",

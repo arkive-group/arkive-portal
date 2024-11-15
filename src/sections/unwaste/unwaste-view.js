@@ -30,7 +30,6 @@ export default function UnwasteView() {
         const company = user?.company;
         const productList = await getProducts({
           company,
-          active: true,
         });
         setProducts(productList);
       } catch (err) {

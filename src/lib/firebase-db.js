@@ -46,8 +46,9 @@ const updateOrders = async ({vendorName, orders}) => {
         const ordersCollection = collection(vendorDocRef, "orders");
 
         orders.forEach(async (order) => {
-            const orderDocRef = doc(ordersCollection);
-            await setDoc(orderDocRef, order);
+            const orderIdFirebase = order.orderId.split("/")[order.orderId.split("/").length - 1];
+            const orderDocRef = doc(ordersCollection, orderIdFirebase);
+            await setDoc(orderDocRef, order, { merge: true });
         });
     } catch (error) {
         console.log(`[Firebase-db][updateOrders] Error: ${error}`);
@@ -80,8 +81,12 @@ const updateProduct = async ({vendorName, productId, product}) => {
         const vendorDocRef = doc(vendorsCollection, vendorName);
         const productsCollection = collection(vendorDocRef, "products");
 
-        const productDocRef = doc(productsCollection, productId);
-        await setDoc(productDocRef, product, { merge: true });
+        const productIdFirebase = productId.split("/")[productId.split("/").length - 1];
+        const productDocRef = doc(productsCollection, productIdFirebase);
+        await setDoc(productDocRef, {
+            productId,
+            ...product
+        }, { merge: true });
     } catch (error) {
         console.log(`[Firebase-db][updateProduct] Error: ${error}`);
     }
