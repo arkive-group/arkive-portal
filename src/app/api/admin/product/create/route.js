@@ -36,7 +36,7 @@ export async function POST(request) {
 
     const { data, error } = await resend.emails.send({
       from: "Arkive-Admin <noreply@arkivegroup.com>",
-      to: [process.env.NEXT_PUBLIC_VERCEL_ADMIN_EMAIL],
+      to: process.env.NEXT_PUBLIC_VERCEL_ADMIN_EMAIL.split(',').map(item=>item.trim()).filter(i => i),
       cc: emails,
       subject: `New Product Added to Draft By ${vendor} - ${title}`,
       react: ProductCreationEmail({vendor, title, handle, product_type, url: productUrl}),

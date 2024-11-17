@@ -37,12 +37,14 @@ export default function ProductSelection({ products }) {
       options: [],
       variants: [],
     };
-    productObj.status = "draft";
     const productsWithHandle = products.filter((row) => row.Handle === handle);
     for (let i = 0; i < productsWithHandle.length; i++) {
       const productRaw = productsWithHandle[i];
       if (productRaw.Title !== null && productRaw.Title !== "") {
         productObj.title = productRaw.Title;
+      }
+      if (productRaw["Body (HTML)"] !== null && productRaw["Body (HTML)"] !== "") {
+        productObj.descriptionHtml = productRaw["Body (HTML)"];
       }
       if (
         productRaw["Product Category"] !== null &&
