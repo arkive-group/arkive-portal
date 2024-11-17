@@ -224,8 +224,7 @@ export function AuthProvider({ children }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          user,
-          email: process.env.NEXT_PUBLIC_VERCEL_ADMIN_EMAIL,
+          user
         }),
       });
 
