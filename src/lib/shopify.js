@@ -184,6 +184,7 @@ const createProduct = async (productObj) => {
         category: productObj.category,
         handle: productObj.handle,
         productType: productObj.type,
+        descriptionHtml: productObj.descriptionHtml,
         seo: {
           title: productObj.seoTitle,
           description: productObj.seoDescription,
