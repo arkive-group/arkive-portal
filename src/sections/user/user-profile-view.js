@@ -6,11 +6,19 @@ import Card from '@mui/material/Card'
 //
 import ProfileCover from './profile-cover'
 import { useAuthContext } from '@/auth/hooks'
+import { useEffect } from 'react'
+import { loginWithCredentials } from '@/lib/tradedoubler'
 
 // ----------------------------------------------------------------------
 
 export default function UserProfileView() {
   const { user } = useAuthContext()
+
+  useEffect(() => {
+    // loginWithCredentials().then((data) => {
+    //   console.log(data)
+    // })
+  }, [user])
 
   return (
     <>

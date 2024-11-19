@@ -10,7 +10,7 @@ import { useAuthContext } from "@/auth/hooks";
 import { LoadingScreen } from "@/components/loading-screen";
 import InsightsCharts from "./insights-charts";
 import { InsightsCards } from "./insights-cards";
-import { parse } from "date-fns";
+import { InsightsTD } from "./insights-td";
 import { lowerCase } from "lodash";
 
 // ----------------------------------------------------------------------
@@ -186,6 +186,7 @@ export default function InsightsView() {
         <LoadingScreen />
       ) : (
         <>
+          <InsightsTD />
           <InsightsCards report={report.repurposing} />
           <InsightsCharts report={report} />
         </>
