@@ -2,12 +2,21 @@
 import { useState, useEffect } from "react";
 
 import { StyledDataGrid } from "@/components/styled-data-grid";
-import { Box, Button, Paper, Typography } from "@mui/material";
-import { GridToolbar } from "@mui/x-data-grid";
+import { Box, Button, Paper, Typography, Tooltip } from "@mui/material";
+import { GridToolbar, GridRow } from "@mui/x-data-grid";
 import { getOrders, getProducts } from "@/lib/shopify";
 import { useAuthContext } from "@/auth/hooks";
 import FulfillPopup from "./fulfill-popup";
 import { LoadingScreen } from "@/components/loading-screen";
+
+const TootlipedRow = (props) => {
+  return (
+    <Tooltip placement="bottom" title={props.row.displayFulfillmentStatus}>
+      <GridRow {...props} />
+    </Tooltip>
+  );
+};
+
 
 export default function OrdersOverview() {
   const { user } = useAuthContext();
@@ -65,16 +74,24 @@ export default function OrdersOverview() {
   };
 
   const columns = [
-    { field: "id", headerName: "ID", width: 150 },
-    { field: "name", headerName: "Name", width: 100 },
-    { field: "email", headerName: "Email", width: 200 },
+    { field: "id", headerName: "ID", width: 100 },
+    { field: "name", headerName: "Name", width: 200 },
+    { field: "email", headerName: "Email", width: 100 },
     { field: "totalPrice", headerName: "Total Price", width: 100 },
     { field: "currencyCode", headerName: "Currency Code", width: 100 },
-    {
-      field: "displayFulfillmentStatus",
-      headerName: "Fullfillment",
-      width: 100,
-    },
+    { field: "firstName", headerName: "First Name", width: 100 },
+    { field: "lastName", headerName: "Last Name", width: 100 },
+    { field: "address1", headerName: "Address", width: 200 },
+    { field: "address2", headerName: "Address 2", width: 100 },
+    { field: "city", headerName: "City", width: 100 },
+    { field: "country", headerName: "Country", width: 100 },
+    { field: "zip", headerName: "Zip", width: 100 },
+    { field: "phone", headerName: "Phone", width: 100 },
+    // {
+    //   field: "displayFulfillmentStatus",
+    //   headerName: "Fullfillment",
+    //   width: 100,
+    // },
   ];
 
   return (
@@ -108,10 +125,12 @@ export default function OrdersOverview() {
             }
             columns={columns.map((col) => ({
               ...col,
-              flex: 1, // Allow flexible sizing based on content
-              minWidth: 100, // Ensure a minimum width to avoid squishing
+              // flex: 'auto', // Allow flexible sizing based on content
+              // minWidth: 200, // Ensure a minimum width to avoid squishing
             }))}
             getRowId={(row) => row["id"]}
+            getEstimatedRowHeight={() => 100}
+            getRowHeight={() => 'auto'}
             initialState={{ pagination: { paginationModel: { pageSize: 5 } } }}
             pageSize={5}
             rowsPerPageOptions={[5]}
@@ -122,6 +141,7 @@ export default function OrdersOverview() {
             }}
             slots={{
               toolbar: GridToolbar,
+              row: TootlipedRow,
             }}
           />
         </Box>

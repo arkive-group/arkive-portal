@@ -5,9 +5,10 @@ import {
     Text,
     Img,
     Link,
+    Row,
   } from "@react-email/components";
   
-  export default function OrderNotificationEmail({name, orderId, orderName, order_status_url}) {
+  export default function OrderNotificationEmail({name, orderId, orderName, order_status_url, shipping_address}) {
     const main = {
       backgroundColor: "#ffffff",
       fontFamily:
@@ -65,18 +66,50 @@ import {
             New order has been placed with the following details:
           </Text>
             <Text style={paragraph}>
-                Order ID: {orderId}
+              <strong>Order ID:</strong> {orderId}
             </Text>
             <Text style={paragraph}>
-                Order Name: {orderName}
+              <strong>Order Name:</strong> {orderName}
             </Text>
+            <Text style={paragraph}><strong>Shipping Address:</strong></Text>
+            <Section>
+                <Row>
+                    <strong>First Name:</strong> {shipping_address.first_name}
+                </Row>
+                <Row>
+                    <strong>Last Name:</strong> {shipping_address.last_name}
+                </Row>
+                <Row>
+                    <strong>Address:</strong> {shipping_address.address1}
+                </Row>
+                <Row>
+                    <strong>Address 2:</strong> {shipping_address.address2}
+                </Row>
+                <Row>
+                    <strong>City:</strong> {shipping_address.city}
+                </Row>
+                <Row>
+                    <strong>Country:</strong> {shipping_address.country}
+                </Row>
+                <Row>
+                    <strong>Country Code:</strong> {shipping_address.country_code}
+                </Row>
+                <Row>
+                    <strong>Zip:</strong> {shipping_address.zip}
+                </Row>
+                <Row>
+                    <strong>Phone Number:</strong> {shipping_address.phone}
+                </Row>
+            </Section>
+            
             <Text style={paragraph}>
-            <Link href={`${process.env.NEXT_PUBLIC_APP_DOMAIN}/orders/`}>Check orders</Link>
+            <Link href={`${process.env.NEXT_PUBLIC_APP_DOMAIN}/orders/`}>Check orders with Arkive Portal</Link>
             </Text>
-            <br />
-            <Text style={paragraph}>
-            <Link href={order_status_url}>Check order status</Link>
-            </Text>
+            <Section style={btnContainer}>
+              <Button style={button} href={order_status_url}>
+                Check order status
+              </Button>
+            </Section>
           <Text style={paragraph}>
             With circular kisses, <br />
             Team Arkive

@@ -1,6 +1,6 @@
 
 ### Order-notifications
-POST https://portal.arkivegroup.com/api/order-notification/
+POST http://localhost:3000/api/order-notification/
 Content-Type: application/json
 
 {
