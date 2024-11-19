@@ -66,6 +66,11 @@ const getOrders = async ({ uploader, skuList, fulfilled, after }) => {
                         city
                         country
                         zip
+                        address1
+                        firstName
+                        lastName
+                        phone
+                        formattedArea
                       }
                       lineItems(first: 100) {
                         nodes {
@@ -102,6 +107,10 @@ const getOrders = async ({ uploader, skuList, fulfilled, after }) => {
         city: edge.node.shippingAddress?.city,
         country: edge.node.shippingAddress?.country,
         zip: edge.node.shippingAddress?.zip,
+        firstName: edge.node.shippingAddress?.firstName,
+        lastName: edge.node.shippingAddress?.lastName,
+        phone: edge.node.shippingAddress?.phone,
+        formattedArea: edge.node.shippingAddress?.formattedArea,
       };
       // console.log(order);
       orders.push(order);
