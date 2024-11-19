@@ -14,7 +14,7 @@ import {
 export async function POST(request) {
   try {
 
-    const { admin_graphql_api_id, customer, line_items, order_status_url } = await request.json();
+    const { admin_graphql_api_id, customer, line_items, order_status_url, shipping_address } = await request.json();
     const resend = new Resend(process.env.RESEND_API_KEY);
 
     const skuList = line_items.map((item) => item.sku);
@@ -48,7 +48,7 @@ export async function POST(request) {
       from: "Arkive <noreply@arkivegroup.com>",
       to: emails,
       subject: "Incoming Arkive Order",
-      react: OrderNotificationEmail({name, orderId, orderName, order_status_url}),
+      react: OrderNotificationEmail({name, orderId, orderName, order_status_url, shipping_address}),
     });
 
     if (error) {
