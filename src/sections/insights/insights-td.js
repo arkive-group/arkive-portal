@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { loginWithCredentials, getOAuthToken, getTradeDoublerDashboard } from '@/lib/tradedoubler';
-
+import { loginWithCredentials, getOAuthToken, getTradeDoublerDashboard, getTradeDoublerEvents, getTradeDoublerPrograms } from '@/lib/tradedoubler';
 
 export function InsightsTD({}) {
     const [dashboard, setDashboard] = useState(null);
@@ -21,8 +20,12 @@ export function InsightsTD({}) {
 
     useEffect(() => {
         if (accessToken) {
-            getTradeDoublerDashboard({ accessToken, intervalType: 'TODAY' }).then((data) => {
-                console.log(data)
+            // getTradeDoublerDashboard({ accessToken, intervalType: 'TODAY' }).then((data) => {
+            //     console.log(data)
+            //     setDashboard(data);
+            // })
+            getTradeDoublerPrograms({ accessToken }).then((data) => {
+                console.log(data);
                 setDashboard(data);
             })
         }

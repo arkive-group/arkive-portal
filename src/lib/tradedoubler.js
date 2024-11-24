@@ -54,7 +54,7 @@ const loginWithCredentials = async () => {
 
 const getTradeDoublerDashboard = async ({ accessToken, intervalType }) => {
     
-    const url = `https://connect.tradedoubler.com/advertiser/report/dashboard?intervalType=TODAY&reportCurrencyCode=GBP`;
+    const url = `https://connect.tradedoubler.com/advertiser/report/dashboard?intervalType=TODAY&reportCurrencyCode=EUR`;
     const options = {
         method: 'GET',
         headers: {Accept: 'application/json', Authorization: `Bearer ${accessToken}`}
@@ -74,4 +74,48 @@ const getTradeDoublerDashboard = async ({ accessToken, intervalType }) => {
     }
 }
 
-export { getOAuthToken, loginWithCredentials, getTradeDoublerDashboard };
+const getTradeDoublerEvents = async ({ accessToken }) => {
+
+    const url = 'https://connect.tradedoubler.com/advertiser/events';
+    const options = {
+      method: 'GET',
+      headers: {Accept: 'application/json', Authorization: 'Bearer ' + accessToken}
+    };
+    
+    try {
+      const response = await fetch(url, options);
+      const data = await response.json();
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.error(`---> An error occured`, error);
+      return new Response(
+        JSON.stringify({ text: `[TradeDoubler][Get TradeDoubler Events]Bad request ${error}` }),
+        { status: 400 }
+    );
+    }
+}
+
+const getTradeDoublerPrograms = async ({ accessToken }) => {
+    
+    const url = 'https://connect.tradedoubler.com/advertiser/programs';
+    const options = {
+        method: 'GET',
+        headers: {Accept: 'application/json', Authorization: 'Bearer ' + accessToken}
+    };
+
+    try {
+        const response = await fetch(url, options);
+        const data = await response.json();
+        console.log(data);
+        return data;
+    } catch (error) {
+        console.error(`---> An error occured`, error);
+        return new Response(
+            JSON.stringify({ text: `[TradeDoubler][Get TradeDoubler Programs]Bad request ${error}` }),
+            { status: 400 }
+        );
+    }
+}
+
+export { getOAuthToken, loginWithCredentials, getTradeDoublerDashboard, getTradeDoublerEvents, getTradeDoublerPrograms };
