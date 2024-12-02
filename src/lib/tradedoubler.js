@@ -118,4 +118,52 @@ const getTradeDoublerPrograms = async ({ accessToken }) => {
     }
 }
 
-export { getOAuthToken, loginWithCredentials, getTradeDoublerDashboard, getTradeDoublerEvents, getTradeDoublerPrograms };
+const getConnectedSources = async ({ accessToken, programId }) => {
+    const url = `https://connect.tradedoubler.com/advertiser/programs/${programId}/sources`;
+    const options = {
+        method: 'GET',
+        headers: {Accept: 'application/json', Authorization: 'Bearer ' + accessToken}
+    };
+
+    try {
+        const response = await fetch(url, options);
+        const data = await response.json();
+        console.log(data);
+        return data;
+    } catch (error) {
+        console.error(`---> An error occured`, error);
+        return new Response(
+            JSON.stringify({ text: `[TradeDoubler][Get Connected Sources]Bad request ${error}` }),
+            { status: 400 }
+        );
+    }
+}
+
+const getStatisticsBySource = async ({ accessToken, programId }) => {
+    const today = new Date();
+    const toDate = today.toISOString().slice(0,10).replace(/-/g,"");
+    const fromDate = new Date(today.setMonth(today.getMonth() - 1)).toISOString().slice(0,10).replace(/-/g,"");
+    const limit = 100;
+
+
+    const url = `https://connect.tradedoubler.com/advertiser/report/statistics/programs/${programId}/sources?intervalType=month&fromDate=${fromDate}&toDate=${toDate}&reportCurrencyCode=EUR&sortBy=clicks&sortOrder=desc&limit=${limit}`;
+    const options = {
+        method: 'GET',
+        headers: {Accept: 'application/json', Authorization: 'Bearer ' + accessToken}
+    };
+
+    try {
+        const response = await fetch(url, options);
+        const data = await response.json();
+        console.log(data);
+        return data;
+    } catch (error) {
+        console.error(`---> An error occured`, error);
+        return new Response(
+            JSON.stringify({ text: `[TradeDoubler][Get Statistics By Source]Bad request ${error}` }),
+            { status: 400 }
+        );
+    }
+}
+
+export { getOAuthToken, loginWithCredentials, getTradeDoublerDashboard, getTradeDoublerEvents, getTradeDoublerPrograms, getConnectedSources, getStatisticsBySource };

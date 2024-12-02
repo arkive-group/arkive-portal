@@ -182,11 +182,11 @@ export default function InsightsView() {
   return (
     <Container maxWidth="xl">
       <UserProfileView />
-      <InsightsTD />
       {loading ? (
         <LoadingScreen />
       ) : (
         <>
+          <InsightsTD />
           <InsightsCards report={report.repurposing} />
           <InsightsCharts report={report} />
         </>
