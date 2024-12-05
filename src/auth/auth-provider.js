@@ -99,10 +99,17 @@ export function AuthProvider({ children }) {
               user: null,
             },
           });
+          router.push("/");
         }
       });
     } catch (error) {
-      console.error(error);
+      dispatch({
+        type: "INITIAL",
+        payload: {
+          user: null,
+        },
+      });
+      router.push("/");
     }
   }, []);
 
@@ -224,7 +231,7 @@ export function AuthProvider({ children }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          user
+          user,
         }),
       });
 
