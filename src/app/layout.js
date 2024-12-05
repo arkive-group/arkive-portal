@@ -32,7 +32,7 @@ import ProgressBar from "src/components/progress-bar";
 import { MotionLazy } from "src/components/animate/motion-lazy";
 import SnackbarProvider from "src/components/snackbar/snackbar-provider";
 import { SettingsProvider } from "src/components/settings";
-import { Analytics as VercelAnalytics } from "@vercel/analytics/react"
+import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
 
 // Auth
 import { AuthConsumer } from "@/auth/auth-consumer";
