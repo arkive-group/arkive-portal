@@ -9,11 +9,16 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Icon from "@mui/material/Icon";
 import { useAuthContext, usePremiumStatus } from "@/auth/hooks";
+import RondoUrl from "./icons/rondo.svg";
+import ShopifyUrl from "./icons/shopify.svg";
+import { height } from "@mui/system";
+
+
 export const Channels = {
   shopify: {
     name: "Arkive",
     alias: "Online Store",
-    icon: undefined,
+    icon: ShopifyUrl,
   },
   bol: {
     name: "Bol.com",
@@ -37,9 +42,9 @@ export const Channels = {
     icon: undefined,
   },
   repurposing: {
-    name: "Repurposing",
-    alias: "Repurposing",
-    icon: undefined,
+    name: "Rondo",
+    alias: "Rondo",
+    icon: RondoUrl,
     isPremium: true,
   },
   charity: {
@@ -72,30 +77,38 @@ export default function ActiveChannel({ channel, onChannleChange }) {
             const isDisabled = Channels[key].isPremium && !premium.isPremium;
             return (
               <ListItem key={key}>
-                <ListItemIcon sx={{ marginRight: 1 }}>
-                  <Icon
-                    sx={{
-                      width: "2rem",
-                      height: "2rem",
-                      background: "#efefef",
-                      borderRadius: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "16px",
-                    }}
-                  >
-                    {Channels[key].name?.slice(0, 1)}
-                  </Icon>
-                </ListItemIcon>
-                <Button
-                  onClick={() => onChannleChange(key)}
-                  disabled={isDisabled}
-                  fullWidth
-                  variant={key === channel ? "contained" : "text"}
+              <ListItemIcon sx={{ marginRight: 1 }}>
+                <Icon
+                sx={{
+                  width: "3rem",
+                  height: "3rem",
+                  background: "#efefef",
+                  borderRadius: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "16px",
+                  boxShadow: 1,
+                }}
                 >
-                  {Channels[key].name}
-                </Button>
+                {Channels[key].icon ? (
+                  <img 
+                  src={Channels[key].icon}
+                  style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }}
+                  />
+                ) : (
+                  Channels[key].name?.slice(0, 1)
+                )}
+                </Icon>
+              </ListItemIcon>
+              <Button
+                onClick={() => onChannleChange(key)}
+                disabled={isDisabled}
+                fullWidth
+                variant={key === channel ? "contained" : "text"}
+              >
+                {Channels[key].name}
+              </Button>
               </ListItem>
             );
           })}

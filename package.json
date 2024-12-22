@@ -86,6 +86,7 @@
     "stylis": "^4.3.0",
     "stylis-plugin-rtl": "^2.1.1",
     "swr": "^2.2.2",
+    "url-loader": "^4.1.1",
     "uuid": "^10.0.0",
     "yet-another-react-lightbox": "^3.12.1",
     "yup": "^1.2.0"
@@ -112,5 +113,6 @@
     "prettier": "^3.0.3",
     "react-email": "3.0.1",
     "typescript": "^5.2.2"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
