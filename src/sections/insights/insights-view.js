@@ -92,7 +92,7 @@ export default function InsightsView() {
 
   const orderProc = ({orders, products, skus}) => {
     const now = new Date()
-
+    console.log(orders, 'orders total array')
     let reportObj = report;
     orders.forEach((order) => {
       const orderDate = new Date(order.createdAt);

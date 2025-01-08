@@ -122,7 +122,11 @@ const getOrders = async ({ uploader, skuList, fulfilled, after }) => {
   }
 };
 
-const fulfillOrder = async ({fulfillmentOrderId, notifyCustomer, trackingInfo}) => {
+const fulfillOrder = async ({
+  fulfillmentOrderId,
+  notifyCustomer,
+  trackingInfo,
+}) => {
   try {
     const params = {
       apiKey: SHOPIFY_API.apiKey,
@@ -141,8 +145,8 @@ const fulfillOrder = async ({fulfillmentOrderId, notifyCustomer, trackingInfo}) 
           company: trackingInfo.company,
           number: trackingInfo.number,
           url: trackingInfo.url,
-        }
-      }
+        },
+      },
     };
     const response = await fetch(url, {
       method: "POST",
@@ -169,8 +173,8 @@ const fulfillOrder = async ({fulfillmentOrderId, notifyCustomer, trackingInfo}) 
     console.log(data);
     if (data.errors) {
       return {
-        userErrors: data.errors
-      }
+        userErrors: data.errors,
+      };
     }
     return data.data?.fulfillmentCreate;
   } catch (error) {
@@ -201,7 +205,7 @@ const createProduct = async (productObj) => {
         title: productObj.title,
         vendor: productObj.vendor,
         status: "DRAFT", // 2 is for draft
-        tags: ["portal-uploaded", "portal-uploader:"+productObj.uploader],
+        tags: ["portal-uploaded", "portal-uploader:" + productObj.uploader],
       },
       media: [...productObj.media],
       // productOptions: [...productObj.options],
@@ -233,7 +237,6 @@ const createProduct = async (productObj) => {
     console.error(`---> An error occured`, error);
     return { text: `[Shopify][Create Products] Bad request ${error}` };
   }
-
 };
 
 const createProductOptions = async (productId, productObj) => {
@@ -276,7 +279,7 @@ const createProductOptions = async (productId, productObj) => {
         }`,
         variables: {
           productId: productId,
-          options: [...productObj.options]
+          options: [...productObj.options],
         },
       }),
     });
@@ -300,8 +303,8 @@ const createProductVariants = async (productId, productObj) => {
     const url = `https://${params.shop}/admin/api/2024-10/graphql.json`;
     const variables = {
       productId: productId,
-      variants: [...productObj.variants]
-    }
+      variants: [...productObj.variants],
+    };
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -352,7 +355,7 @@ const createProductVariants = async (productId, productObj) => {
   }
 };
 
-const getProducts = async ({uploader, company, active}) => {
+const getProducts = async ({ uploader, company, active }) => {
   try {
     const params = {
       apiKey: SHOPIFY_API.apiKey,
@@ -370,7 +373,6 @@ const getProducts = async ({uploader, company, active}) => {
     if (active === true) {
       query = `${query} AND status:active`;
     }
-    
 
     const response = await fetch(url, {
       method: "POST",
@@ -435,7 +437,9 @@ const getProducts = async ({uploader, company, active}) => {
         seoTitle: productRaw.seo?.title,
         seoDescription: productRaw.seo?.description,
         variants: productRaw.variants?.nodes,
-        salesChannels: productRaw.resourcePublications?.nodes.map((node) => node.publication?.name),
+        salesChannels: productRaw.resourcePublications?.nodes.map(
+          (node) => node.publication?.name
+        ),
         imageUrl: productRaw.images?.nodes[0]?.url,
       };
       products.push(product);
@@ -446,7 +450,6 @@ const getProducts = async ({uploader, company, active}) => {
     return { text: `[Shopify][Fetch Products] Bad request ${error}` };
   }
 };
-
 
 const getMonthlyReport = async () => {
   try {
@@ -507,4 +510,59 @@ const getMonthlyReport = async () => {
   }
 };
 
-export { getOrders, fulfillOrder, createProduct, getProducts, createProductOptions, createProductVariants, getMonthlyReport };
+const getActiveSalesChannels = async () => {
+  try {
+    const params = {
+      apiKey: SHOPIFY_API.apiKey,
+      apiSecretKey: SHOPIFY_API.apiSecretKey,
+      accessToken: SHOPIFY_API.accessToken,
+      shop: SHOPIFY_API.shop,
+    };
+    const url = `https://${params.shop}/admin/api/unstable/graphql.json`;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Access-Token": params.accessToken,
+      },
+      body: JSON.stringify({
+        query: `query {
+                  publications(first: 50) {
+                    edges {
+                      node {
+                        name
+                      }
+                    }
+                  }
+                }`,
+      }),
+    });
+    const data = await response.json();
+    let channels = [];
+    data.data?.publications?.edges.forEach((edge) => {
+      let productRaw = edge?.node;
+      const channel = {
+        name: productRaw?.name,
+        
+      };
+      channels.push(channel);
+    });
+    console.log(data)
+    return channels;
+
+  } catch (error) {
+    console.error(`---> An error occured`, error);
+    return { text: `[Shopify][getActiveSalesChannels] Bad request ${error}` };
+  }
+};
+
+export {
+  getOrders,
+  fulfillOrder,
+  createProduct,
+  getProducts,
+  createProductOptions,
+  createProductVariants,
+  getMonthlyReport,
+  getActiveSalesChannels
+};

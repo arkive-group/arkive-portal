@@ -1,15 +1,17 @@
 "use client";
 import { useEffect, useCallback, useState, useRef } from "react";
 import { useAuthContext } from "@/auth/hooks";
-import { Grid, Typography, Paper } from "@mui/material";
+import { Grid, Typography, Paper, Card, List, Divider, ListItem, ListItemText, ListItemIcon, Icon, Button } from "@mui/material";
+
+
 import EmptyContent from "@/components/empty-content";
 
 import { reportDefaultTemplate } from "../../utils/report-default-object";
 import {InsightsSummaryCards} from "./insights-summary-cards"
 import { LoadingScreen } from "@/components/loading-screen";
 import { lowerCase } from "lodash";
-import { getMonthlyReport, getOrders, getProducts } from "@/lib/shopify";
-
+import { getMonthlyReport, getOrders, getProducts, getActiveSalesChannels } from "@/lib/shopify";
+import ActiveChannel from "@/components/active-channel";
 export default function InsightsSummary() {
   const { user } = useAuthContext();
   // useRef is a quick fix for useEffect that fetches data to prevent from running twice
@@ -21,7 +23,7 @@ export default function InsightsSummary() {
   // const memoizedUser = useMemo(() => user, [user]);
   const [loading, setLoading] = useState(false);
   const [orders, setOrders] = useState([]);
-  const [co2, setco2] = useState(0)
+  const [activeChannels, setActiveChannels] = useState([])
   const [report, setReport] = useState({
     financeOverview: {
       sales: {
@@ -166,6 +168,10 @@ export default function InsightsSummary() {
         fulfilled: true,
         after: afterString,
       })
+
+      const channels = await getActiveSalesChannels()
+      setActiveChannels(channels)
+      console.log(channels, 'channels')
       // console.log(orderList)
       setOrders(orderList);
 
@@ -176,7 +182,7 @@ export default function InsightsSummary() {
       });
 
       setReport(report);
-      console.log(report)
+      console.log(orderList)
       // if (orderList) {
       //   const co2calculation = orderList.length * 0.029
       //   console.log(co2calculation, 'co2calculation')
@@ -203,8 +209,57 @@ export default function InsightsSummary() {
       {loading ? (
         <LoadingScreen />
       ) : (
-
+          <>
           <InsightsSummaryCards report={report.repurposing} co2={report.repurposing.co2.data}/>
+          <>
+      <Card
+        sx={{
+          mb: 3,
+        }}
+      >
+        <List>
+          <ListItem>
+            <ListItemText
+              primary="Active Channel"
+              secondary={activeChannels?.name}
+            />
+          </ListItem>
+          <Divider />
+          {Object.keys(activeChannels).map((key) => {
+            const isDisabled = true
+            return (
+              <ListItem key={key}>
+                <ListItemIcon sx={{ marginRight: 1 }}>
+                  <Icon
+                    sx={{
+                      width: "2rem",
+                      height: "2rem",
+                      background: "#efefef",
+                      borderRadius: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "16px",
+                    }}
+                  >activeChannels
+                    {activeChannels[key].name?.slice(0, 1)}
+                  </Icon>
+                </ListItemIcon>
+                <Button
+                  onClick={() => onChannleChange(key)}
+                  disabled={isDisabled}
+                  fullWidth
+                  // variant={key === channel ? "contained" : "text"}
+                >
+                  {activeChannels[key].name}
+                </Button>
+              </ListItem>
+            );
+          })}
+        </List>
+      </Card>
+    </>
+          </>
 
       )}
     </>
