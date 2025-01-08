@@ -1,9 +1,9 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useCallback, useState, useRef } from "react";
 import { useAuthContext } from "@/auth/hooks";
 import { Grid, Typography, Paper } from "@mui/material";
 import EmptyContent from "@/components/empty-content";
-import { useState } from "react";
+
 import { reportDefaultTemplate } from "../../utils/report-default-object";
 import {InsightsSummaryCards} from "./insights-summary-cards"
 import { LoadingScreen } from "@/components/loading-screen";
@@ -12,8 +12,16 @@ import { getMonthlyReport, getOrders, getProducts } from "@/lib/shopify";
 
 export default function InsightsSummary() {
   const { user } = useAuthContext();
+  // useRef is a quick fix for useEffect that fetches data to prevent from running twice
+  // rewrite this component logic later (setState in useEffect triggers double API call, plus the logic can be simplified and 
+  // divided into several separate fuhnctions
+  // delete mutability because it is producing unwanted side effects
+  // too many useEffects that arent necessary)
+  const effectRan = useRef(false);
+  // const memoizedUser = useMemo(() => user, [user]);
   const [loading, setLoading] = useState(false);
   const [orders, setOrders] = useState([]);
+  const [co2, setco2] = useState(0)
   const [report, setReport] = useState({
     financeOverview: {
       sales: {
@@ -81,13 +89,12 @@ export default function InsightsSummary() {
       },
     ],
   });
-  useEffect(() => {}, [user]);
 
   const orderProc = ({orders, products, skus}) => {
     const now = new Date()
 
     let reportObj = report;
-
+    
     orders.forEach((order) => {
       const orderDate = new Date(order.createdAt);
       // For FinanceOverview
@@ -124,53 +131,68 @@ export default function InsightsSummary() {
       }
 
       // For Repurposing
-      reportObj.repurposing.co2.data += 0.029;
-
+      reportObj.repurposing.co2.data += 0.029
+      // setco2(reportObj.repurposing.co2.data += 0.029)
+      // console.log(orders.length, 'length')
+      // console.log(reportObj.repurposing.co2.data)
     });
 
+    
     reportObj.financeSalesRevenue[0].data = reportObj.financeSalesRevenue[0].data.map((data) => parseFloat(data.toFixed(2)));
     reportObj.repurposing.co2.data = parseFloat(reportObj.repurposing.co2.data.toFixed(2));
     reportObj.repurposing.products.data = new Set(skus).size;
     return reportObj;
   }
-  useEffect(() => {
+
+  const fetchMonthlyReport = useCallback(async () => {
     const uploader = user?.email;
     const company = user?.company;
-    const fetchMonthlyReport = async () => {
-      setLoading(true);
-      try {
-        const productList = await getProducts({
-          company,
-        });
-        const skuList = productList
-          .map((product) => product.variants.map((variant) => variant.sku))
-          .flat();
+    console.log("Fetching data...");
+    setLoading(true);
+    try {
+      const productList = await getProducts({
+        company,
+      });
+      const skuList = productList
+        .map((product) => product.variants.map((variant) => variant.sku))
+        .flat();
 
-        const afterString = new Date(
-          new Date().setFullYear(new Date().getFullYear() - 1)
-        ).toISOString();
-        const orderList = await getOrders({
-          uploader,
-          skuList,
-          fulfilled: true,
-          after: afterString,
-        })
+      const afterString = new Date(
+        new Date().setFullYear(new Date().getFullYear() - 1)
+      ).toISOString();
+      const orderList = await getOrders({
+        uploader,
+        skuList,
+        fulfilled: true,
+        after: afterString,
+      })
+      // console.log(orderList)
+      setOrders(orderList);
 
-        setOrders(orderList);
+      const report = orderProc({
+        orders: orderList,
+        products: productList,
+        skus: skuList,
+      });
 
-        const report = orderProc({
-          orders: orderList,
-          products: productList,
-          skus: skuList,
-        });
-        console.log(report, 'line 97');
-        setReport(report);
-        setLoading(false);
-      } catch (err) {
-        console.log(err);
-        setLoading(false);
-      }
-    };
+      setReport(report);
+      console.log(report)
+      // if (orderList) {
+      //   const co2calculation = orderList.length * 0.029
+      //   console.log(co2calculation, 'co2calculation')
+      // }
+      // const co2calculation = orders.length += 0.029
+      // console.log(co2calculation, 'co2calculation')
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+      setLoading(false);
+    }
+  });
+  useEffect(() => {
+    if (effectRan.current) return; // Prevent second run
+    effectRan.current = true;
+
 
     fetchMonthlyReport();
   }, []);
@@ -182,7 +204,7 @@ export default function InsightsSummary() {
         <LoadingScreen />
       ) : (
 
-          <InsightsSummaryCards report={report.repurposing} />
+          <InsightsSummaryCards report={report.repurposing} co2={report.repurposing.co2.data}/>
 
       )}
     </>

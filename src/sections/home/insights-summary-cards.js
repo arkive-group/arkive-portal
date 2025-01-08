@@ -6,7 +6,7 @@ import EmptyContent from "@/components/empty-content";
 import { useState } from "react";
 import { reportDefaultTemplate } from "../../utils/report-default-object";
 
-export function InsightsSummaryCards({ report }) {
+export function InsightsSummaryCards({ report, co2 }) {
 
   // Reusable Card Component
   const StatCard = ({ value, label }) => {
@@ -34,7 +34,6 @@ export function InsightsSummaryCards({ report }) {
       </Paper>
     );
   };
-  console.log(report);
 
   return (
     <Grid container spacing={4} sx={{ padding: 4 }}>
@@ -51,7 +50,7 @@ export function InsightsSummaryCards({ report }) {
         />
       </Grid>
       <Grid item xs={12} sm={6} md={3}>
-        <StatCard value={report.co2.data} label="LESS CO2 ON AVERAGE PER PRODUCT" />
+        <StatCard value={co2} label="LESS CO2 ON AVERAGE PER PRODUCT" />
       </Grid>
       <Grid item xs={12} sm={6} md={3}>
         <StatCard value="31%" label="RESCUED MATERIALS + INGREDIENTS" />
