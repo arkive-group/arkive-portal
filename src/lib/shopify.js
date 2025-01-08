@@ -14,7 +14,7 @@ const getOrders = async ({ uploader, skuList, fulfilled, after }) => {
   if (after !== undefined) {
     queryString = `(${queryString}) AND (created_at:>${after})`;
   }
-  // console.log(queryString);
+
   try {
     const params = {
       apiKey: SHOPIFY_API.apiKey,
@@ -87,7 +87,7 @@ const getOrders = async ({ uploader, skuList, fulfilled, after }) => {
       }),
     });
     const data = await response.json();
-    // console.log(data);
+
     let orders = [];
     data.data?.orders?.edges.forEach((edge) => {
       let order = {
@@ -112,7 +112,6 @@ const getOrders = async ({ uploader, skuList, fulfilled, after }) => {
         phone: edge.node.shippingAddress?.phone,
         formattedArea: edge.node.shippingAddress?.formattedArea,
       };
-      // console.log(order);
       orders.push(order);
     });
     return orders;
@@ -170,7 +169,6 @@ const fulfillOrder = async ({
       }),
     });
     const data = await response.json();
-    console.log(data);
     if (data.errors) {
       return {
         userErrors: data.errors,
@@ -284,7 +282,6 @@ const createProductOptions = async (productId, productObj) => {
       }),
     });
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (error) {
     console.error(`---> An error occured`, error);
@@ -345,9 +342,7 @@ const createProductVariants = async (productId, productObj) => {
         variables: variables,
       }),
     });
-    console.log(variables);
     const data = await response.json();
-    // console.log(data.data?.productVariantsBulkCreate?.userErrors);
     return data;
   } catch (error) {
     console.error(`---> An error occured`, error);
@@ -424,7 +419,6 @@ const getProducts = async ({ uploader, company, active }) => {
       }),
     });
     const data = await response.json();
-    // console.log(data);
 
     let products = [];
     data.data?.products?.edges.forEach((edge) => {
@@ -502,7 +496,6 @@ const getMonthlyReport = async () => {
       }),
     });
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (error) {
     console.error(`---> An error occured`, error);
@@ -547,7 +540,6 @@ const getActiveSalesChannels = async () => {
       };
       productRaw?.name !== "Shopify GraphiQL App" ? channels.push(channel) : null;
     });
-    console.log(data)
     return channels;
 
   } catch (error) {

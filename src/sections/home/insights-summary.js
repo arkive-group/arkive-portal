@@ -12,32 +12,23 @@ import {
   ListItemText,
   ListItemIcon,
   Icon,
-  Button,
+
 } from "@mui/material";
-// import Grid from '@mui/material/Grid2';
-import Iconify from 'src/components/iconify';
-import EmptyContent from "@/components/empty-content";
-
-import TiktokIcon from "./icons/TiktokIcon"
-import MailIcon from "./icons/MailIcon"
-import LinktreeIcon from "./icons/LinktreeIcon"
-import ShopIcon from "./icons/ShopIcon"
-import OnlineStoreIcon from "./icons/OnlineStoreIcon"
 
 
-import { reportDefaultTemplate } from "../../utils/report-default-object";
+import TiktokIcon from "./icons/TiktokIcon";
+import MailIcon from "./icons/MailIcon";
+import LinktreeIcon from "./icons/LinktreeIcon";
+import ShopIcon from "./icons/ShopIcon";
+
 import { InsightsSummaryCards } from "./insights-summary-cards";
 import { LoadingScreen } from "@/components/loading-screen";
 import { lowerCase } from "lodash";
 import {
-  getMonthlyReport,
   getOrders,
   getProducts,
   getActiveSalesChannels,
 } from "@/lib/shopify";
-import ActiveChannel from "@/components/active-channel";
-// import MailIcon from '@mui/icons-material/Mail';
-
 
 export default function InsightsSummary() {
   const { user } = useAuthContext();
@@ -47,9 +38,7 @@ export default function InsightsSummary() {
   // delete mutability because it is producing unwanted side effects
   // too many useEffects that arent necessary)
   const effectRan = useRef(false);
-  // const memoizedUser = useMemo(() => user, [user]);
   const [loading, setLoading] = useState(false);
-  const [orders, setOrders] = useState([]);
   const [activeChannels, setActiveChannels] = useState([]);
   const [report, setReport] = useState({
     financeOverview: {
@@ -120,13 +109,13 @@ export default function InsightsSummary() {
   });
 
   const activeChannelsIcons = {
-    "TikTok": <TiktokIcon />,
-    "Inbox": <MailIcon />,
-    "Linktree": <LinktreeIcon />,
-    "Shop": <ShopIcon />,
+    TikTok: <TiktokIcon />,
+    Inbox: <MailIcon />,
+    Linktree: <LinktreeIcon />,
+    Shop: <ShopIcon />,
     "Online Store": null,
     "Facebook & Instagram": null,
-  }
+  };
 
   const orderProc = ({ orders, products, skus }) => {
     const now = new Date();
@@ -171,9 +160,6 @@ export default function InsightsSummary() {
 
       // For Repurposing
       reportObj.repurposing.co2.data += 0.029;
-      // setco2(reportObj.repurposing.co2.data += 0.029)
-      // console.log(orders.length, 'length')
-      // console.log(reportObj.repurposing.co2.data)
     });
 
     reportObj.financeSalesRevenue[0].data =
@@ -190,7 +176,7 @@ export default function InsightsSummary() {
   const fetchMonthlyReport = useCallback(async () => {
     const uploader = user?.email;
     const company = user?.company;
-    console.log("Fetching data...");
+
     setLoading(true);
     try {
       const productList = await getProducts({
@@ -212,9 +198,6 @@ export default function InsightsSummary() {
 
       const channels = await getActiveSalesChannels();
       setActiveChannels(channels);
-      console.log(channels, "channels");
-      // console.log(orderList)
-      setOrders(orderList);
 
       const report = orderProc({
         orders: orderList,
@@ -223,13 +206,6 @@ export default function InsightsSummary() {
       });
 
       setReport(report);
-      console.log(orderList);
-      // if (orderList) {
-      //   const co2calculation = orderList.length * 0.029
-      //   console.log(co2calculation, 'co2calculation')
-      // }
-      // const co2calculation = orders.length += 0.029
-      // console.log(co2calculation, 'co2calculation')
       setLoading(false);
     } catch (err) {
       console.error(err);
@@ -244,37 +220,43 @@ export default function InsightsSummary() {
   }, []);
 
   return (
-    <Grid container spacing={4} sx={{ padding: 4, paddingLeft: 0, paddingRight: 0 }}>
+    <Grid
+      container
+      spacing={4}
+      sx={{ padding: 4, paddingLeft: 0, paddingRight: 0 }}
+    >
       {loading ? (
         <LoadingScreen />
       ) : (
         <>
-        <Grid item xs={9}>
-          <InsightsSummaryCards
-            report={report.repurposing}
-            co2={report.repurposing.co2.data}
-          />
+          <Grid item xs={9}>
+            <InsightsSummaryCards
+              report={report.repurposing}
+              co2={report.repurposing.co2.data}
+            />
           </Grid>
-          <Grid item xs={3} style={{paddingTop: '24px'}}>
+          <Grid item xs={3} style={{ paddingTop: "24px" }}>
             <Card
               sx={{
                 mb: 3,
               }}
             >
-              <List style={{paddingTop: 0}}>
-                <ListItem style={{backgroundColor: "#FF5F1F", opacity: "85%"}}>
+              <List style={{ paddingTop: 0 }}>
+                <ListItem
+                  style={{ backgroundColor: "#FF5F1F", opacity: "85%" }}
+                >
                   <ListItemText
                     primary="Active Channels"
                     secondary={activeChannels?.name}
-                    style={{textAlign: "center", color: "white"}}
+                    style={{ textAlign: "center", color: "white" }}
                   />
                 </ListItem>
                 <Divider />
                 {Object.keys(activeChannels).map((channel) => {
-                  const name = activeChannels[channel].name; // Access the title property
-                  const icon = activeChannelsIcons[name] || "";
+                  const name = activeChannels[channel].name
+                  const icon = activeChannelsIcons[name] || ""
                   return (
-                    <ListItem key={channel} style={{textAlign: "left"}}>
+                    <ListItem key={channel} style={{ textAlign: "left" }}>
                       <ListItemIcon sx={{ marginRight: 1 }}>
                         <Icon
                           sx={{
@@ -287,14 +269,12 @@ export default function InsightsSummary() {
                             justifyContent: "center",
                             fontSize: "16px",
                           }}
-                          
                         >
                           {icon}
                         </Icon>
                       </ListItemIcon>
                       <Typography
                         fullWidth
-                        // variant={key === channel ? "contained" : "text"}
                       >
                         {activeChannels[channel].name}
                       </Typography>
@@ -307,6 +287,5 @@ export default function InsightsSummary() {
         </>
       )}
     </Grid>
-    // <InsightsSummaryCards report={report} />
   );
 }

@@ -2,22 +2,21 @@
 
 // @mui
 import { Container } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import UserProfileView from "@/sections/user/user-profile-view";
-import { getMonthlyReport, getOrders, getProducts } from "@/lib/shopify";
+import { getOrders, getProducts } from "@/lib/shopify";
 import { useAuthContext } from "@/auth/hooks";
 import { LoadingScreen } from "@/components/loading-screen";
 import InsightsCharts from "./insights-charts";
 import { InsightsCards } from "./insights-cards";
-import { parse } from "date-fns";
 import { lowerCase } from "lodash";
-import { reportDefaultTemplate } from "../../utils/report-default-object";
 
 // ----------------------------------------------------------------------
 // not correctly setting data after forEach, that is why it flickers on the screen
 // @FIX
 export default function InsightsView() {
+  const effectRan = useRef(false);
   const [loading, setLoading] = useState(false);
   const [orders, setOrders] = useState([]);
   const [report, setReport] = useState({
@@ -92,7 +91,7 @@ export default function InsightsView() {
 
   const orderProc = ({orders, products, skus}) => {
     const now = new Date()
-    console.log(orders, 'orders total array')
+
     let reportObj = report;
     orders.forEach((order) => {
       const orderDate = new Date(order.createdAt);
@@ -137,11 +136,13 @@ export default function InsightsView() {
     reportObj.financeSalesRevenue[0].data = reportObj.financeSalesRevenue[0].data.map((data) => parseFloat(data.toFixed(2)));
     reportObj.repurposing.co2.data = parseFloat(reportObj.repurposing.co2.data.toFixed(2));
     reportObj.repurposing.products.data = new Set(skus).size;
-    console.log( reportObj.repurposing.products.data, 'data')
+
     return reportObj;
   }
 
   useEffect(() => {
+    if (effectRan.current) return; // Prevent second run
+    effectRan.current = true;
     const uploader = user?.email;
     const company = user?.company;
     const fetchMonthlyReport = async () => {
@@ -169,11 +170,10 @@ export default function InsightsView() {
           products: productList,
           skus: skuList
         });
-        console.log(report);
         setReport(report);
         setLoading(false);
       } catch (err) {
-        console.log(err);
+        console.error(err);
         setLoading(false);
       }
     };

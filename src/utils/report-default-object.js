@@ -1,3 +1,4 @@
+// @TODO use this later for default values of the report
 export const reportDefaultTemplate = {
   financeOverview: {
     sales: {
