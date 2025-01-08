@@ -29,7 +29,7 @@ export function ActiveSalesChannelsSidebar({ activeChannels }) {
   return (
     <Grid item xs={3} style={{ paddingTop: "24px" }}>
       <Card>
-        <List style={{ paddingTop: 0, marginBottom: '6px' }}>
+        <List style={{ paddingTop: 0, marginBottom: "6px" }}>
           <ListItem style={{ backgroundColor: "#FF5F1F", opacity: "85%" }}>
             <ListItemText
               primary="Active Channels"
@@ -37,7 +37,7 @@ export function ActiveSalesChannelsSidebar({ activeChannels }) {
               style={{ textAlign: "center", color: "white" }}
             />
           </ListItem>
-          <Divider style={{marginBottom: '8px'}} />
+          <Divider style={{ marginBottom: "8px" }} />
           {Object.keys(activeChannels).map((channel) => {
             const name = activeChannels[channel].name;
             const icon = activeChannelsIcons[name] || "";
@@ -59,7 +59,9 @@ export function ActiveSalesChannelsSidebar({ activeChannels }) {
                     {icon}
                   </Icon>
                 </ListItemIcon>
-                <Typography style={{opacity: 0.75}} fontSize={'0.875rem'}>{activeChannels[channel].name}</Typography>
+                <Typography style={{ opacity: 0.75 }} fontSize={"0.875rem"}>
+                  {activeChannels[channel].name}
+                </Typography>
               </ListItem>
             );
           })}
