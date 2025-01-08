@@ -1,23 +1,17 @@
 "use client";
-
-// @mui
-import { Container } from "@mui/material";
-import { useEffect, useState } from "react";
-
-import UserProfileView from "@/sections/user/user-profile-view";
-import { getMonthlyReport, getOrders, getProducts } from "@/lib/shopify";
+import { useEffect } from "react";
 import { useAuthContext } from "@/auth/hooks";
-import { LoadingScreen } from "@/components/loading-screen";
-import InsightsCharts from "./insights-charts";
-import { InsightsCards } from "./insights-cards";
-import { parse } from "date-fns";
-import { lowerCase } from "lodash";
+import { Grid, Typography, Paper } from "@mui/material";
+import EmptyContent from "@/components/empty-content";
+import { useState } from "react";
 import { reportDefaultTemplate } from "../../utils/report-default-object";
+import {InsightsSummaryCards} from "./insights-summary-cards"
+import { LoadingScreen } from "@/components/loading-screen";
+import { lowerCase } from "lodash";
+import { getMonthlyReport, getOrders, getProducts } from "@/lib/shopify";
 
-// ----------------------------------------------------------------------
-// not correctly setting data after forEach, that is why it flickers on the screen
-// @FIX
-export default function InsightsView() {
+export default function InsightsSummary() {
+  const { user } = useAuthContext();
   const [loading, setLoading] = useState(false);
   const [orders, setOrders] = useState([]);
   const [report, setReport] = useState({
@@ -87,13 +81,13 @@ export default function InsightsView() {
       },
     ],
   });
-  const { user } = useAuthContext();
-
+  useEffect(() => {}, [user]);
 
   const orderProc = ({orders, products, skus}) => {
     const now = new Date()
 
     let reportObj = report;
+
     orders.forEach((order) => {
       const orderDate = new Date(order.createdAt);
       // For FinanceOverview
@@ -137,10 +131,8 @@ export default function InsightsView() {
     reportObj.financeSalesRevenue[0].data = reportObj.financeSalesRevenue[0].data.map((data) => parseFloat(data.toFixed(2)));
     reportObj.repurposing.co2.data = parseFloat(reportObj.repurposing.co2.data.toFixed(2));
     reportObj.repurposing.products.data = new Set(skus).size;
-    console.log( reportObj.repurposing.products.data, 'data')
     return reportObj;
   }
-
   useEffect(() => {
     const uploader = user?.email;
     const company = user?.company;
@@ -154,22 +146,24 @@ export default function InsightsView() {
           .map((product) => product.variants.map((variant) => variant.sku))
           .flat();
 
-        const afterString = (new Date(new Date().setFullYear(new Date().getFullYear() - 1))).toISOString();
+        const afterString = new Date(
+          new Date().setFullYear(new Date().getFullYear() - 1)
+        ).toISOString();
         const orderList = await getOrders({
-          uploader, 
-          skuList, 
+          uploader,
+          skuList,
           fulfilled: true,
           after: afterString,
-        });
+        })
 
         setOrders(orderList);
 
         const report = orderProc({
           orders: orderList,
           products: productList,
-          skus: skuList
+          skus: skuList,
         });
-        console.log(report);
+        console.log(report, 'line 97');
         setReport(report);
         setLoading(false);
       } catch (err) {
@@ -181,17 +175,17 @@ export default function InsightsView() {
     fetchMonthlyReport();
   }, []);
 
+
   return (
-    <Container maxWidth="xl">
-      <UserProfileView />
+    <>
       {loading ? (
         <LoadingScreen />
       ) : (
-        <>
-          <InsightsCards report={report.repurposing} />
-          <InsightsCharts report={report} />
-        </>
+
+          <InsightsSummaryCards report={report.repurposing} />
+
       )}
-    </Container>
+    </>
+    // <InsightsSummaryCards report={report} />
   );
 }

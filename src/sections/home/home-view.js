@@ -5,6 +5,7 @@ import UserProfileView from '@/sections/user/user-profile-view'
 import ProductUnavailable from '../error/product-unavailable'
 import HomeDashboard from './home-dashboard'
 
+
 // ----------------------------------------------------------------------
 
 export default function HomeView() {
