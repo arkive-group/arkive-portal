@@ -59,7 +59,7 @@ export function ActiveSalesChannelsSidebar({ activeChannels }) {
                     {icon}
                   </Icon>
                 </ListItemIcon>
-                <Typography fontSize={'0.875rem'}>{activeChannels[channel].name}</Typography>
+                <Typography style={{opacity: 0.75}} fontSize={'0.875rem'}>{activeChannels[channel].name}</Typography>
               </ListItem>
             );
           })}
