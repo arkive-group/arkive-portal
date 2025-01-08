@@ -1,36 +1,16 @@
 "use client";
-import { useEffect, useCallback, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useAuthContext } from "@/auth/hooks";
-import {
-  Grid,
-  Typography,
-  Paper,
-  Card,
-  List,
-  Divider,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  Icon,
-
-} from "@mui/material";
-
-
-import TiktokIcon from "./icons/TiktokIcon";
-import MailIcon from "./icons/MailIcon";
-import LinktreeIcon from "./icons/LinktreeIcon";
-import ShopIcon from "./icons/ShopIcon";
+import { Grid } from "@mui/material";
 
 import { InsightsSummaryCards } from "./insights-summary-cards";
+import { ActiveSalesChannelsSidebar } from "./active-sales-channels-sidebar";
 import { LoadingScreen } from "@/components/loading-screen";
 import { lowerCase } from "lodash";
-import {
-  getOrders,
-  getProducts,
-  getActiveSalesChannels,
-} from "@/lib/shopify";
+import { getOrders, getProducts, getActiveSalesChannels } from "@/lib/shopify";
 
 export default function InsightsSummary() {
+  // @ts-ignore
   const { user } = useAuthContext();
   // useRef is a quick fix for useEffect that fetches data to prevent from running twice
   // rewrite this component logic later (setState in useEffect triggers double API call, plus the logic can be simplified and
@@ -39,7 +19,7 @@ export default function InsightsSummary() {
   // too many useEffects that arent necessary)
   const effectRan = useRef(false);
   const [loading, setLoading] = useState(false);
-  const [activeChannels, setActiveChannels] = useState([]);
+  const [activeChannels, setActiveChannels] = useState<any>([]);
   const [report, setReport] = useState({
     financeOverview: {
       sales: {
@@ -108,15 +88,6 @@ export default function InsightsSummary() {
     ],
   });
 
-  const activeChannelsIcons = {
-    TikTok: <TiktokIcon />,
-    Inbox: <MailIcon />,
-    Linktree: <LinktreeIcon />,
-    Shop: <ShopIcon />,
-    "Online Store": null,
-    "Facebook & Instagram": null,
-  };
-
   const orderProc = ({ orders, products, skus }) => {
     const now = new Date();
 
@@ -173,16 +144,18 @@ export default function InsightsSummary() {
     return reportObj;
   };
 
-  const fetchMonthlyReport = useCallback(async () => {
+  const fetchMonthlyReport = async () => {
     const uploader = user?.email;
     const company = user?.company;
 
     setLoading(true);
     try {
+      // @ts-ignore
       const productList = await getProducts({
         company,
       });
       const skuList = productList
+        // @ts-ignore
         .map((product) => product.variants.map((variant) => variant.sku))
         .flat();
 
@@ -211,7 +184,8 @@ export default function InsightsSummary() {
       console.error(err);
       setLoading(false);
     }
-  });
+  };
+
   useEffect(() => {
     if (effectRan.current) return; // Prevent second run
     effectRan.current = true;
@@ -235,55 +209,7 @@ export default function InsightsSummary() {
               co2={report.repurposing.co2.data}
             />
           </Grid>
-          <Grid item xs={3} style={{ paddingTop: "24px" }}>
-            <Card
-              sx={{
-                mb: 3,
-              }}
-            >
-              <List style={{ paddingTop: 0 }}>
-                <ListItem
-                  style={{ backgroundColor: "#FF5F1F", opacity: "85%" }}
-                >
-                  <ListItemText
-                    primary="Active Channels"
-                    secondary={activeChannels?.name}
-                    style={{ textAlign: "center", color: "white" }}
-                  />
-                </ListItem>
-                <Divider />
-                {Object.keys(activeChannels).map((channel) => {
-                  const name = activeChannels[channel].name
-                  const icon = activeChannelsIcons[name] || ""
-                  return (
-                    <ListItem key={channel} style={{ textAlign: "left" }}>
-                      <ListItemIcon sx={{ marginRight: 1 }}>
-                        <Icon
-                          sx={{
-                            width: "2rem",
-                            height: "2rem",
-                            background: "#efefef",
-                            borderRadius: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontSize: "16px",
-                          }}
-                        >
-                          {icon}
-                        </Icon>
-                      </ListItemIcon>
-                      <Typography
-                        fullWidth
-                      >
-                        {activeChannels[channel].name}
-                      </Typography>
-                    </ListItem>
-                  );
-                })}
-              </List>
-            </Card>
-          </Grid>
+          <ActiveSalesChannelsSidebar activeChannels={activeChannels} />
         </>
       )}
     </Grid>

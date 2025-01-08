@@ -1,14 +1,14 @@
-'use client'
-import { useEffect } from 'react'
-import { useAuthContext } from '@/auth/hooks'
-import { Card } from '@mui/material'
-import EmptyContent from '@/components/empty-content'
-import InsightsSummary from './insights-summary'
+"use client";
+import { useEffect } from "react";
+import { useAuthContext } from "@/auth/hooks";
+// import { Card } from '@mui/material'
+// import EmptyContent from '@/components/empty-content'
+import InsightsSummary from "./insights-summary";
 export default function HomeDashboard() {
-  const { user } = useAuthContext()
+  // @ts-ignore
+  const { user } = useAuthContext();
 
-  useEffect (() => {
-  }, [user]);
+  useEffect(() => {}, [user]);
 
   return (
     // <Card sx={{ p: 3 }}>
@@ -26,5 +26,5 @@ export default function HomeDashboard() {
     //   )}
     // </Card>
     <InsightsSummary />
-  )
+  );
 }

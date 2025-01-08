@@ -1,13 +1,7 @@
 "use client";
-import { useEffect } from "react";
-import { useAuthContext } from "@/auth/hooks";
 import { Grid, Typography, Paper } from "@mui/material";
-import EmptyContent from "@/components/empty-content";
-import { useState } from "react";
-import { reportDefaultTemplate } from "../../utils/report-default-object";
 
 export function InsightsSummaryCards({ report, co2 }) {
-
   // Reusable Card Component
   const StatCard = ({ value, label }) => {
     return (
@@ -38,10 +32,7 @@ export function InsightsSummaryCards({ report, co2 }) {
   return (
     <Grid container spacing={4} sx={{ padding: 4, paddingLeft: 0 }}>
       <Grid item xs={12} sm={6} md={3}>
-        <StatCard
-          value={report.products.data}
-          label="PRODUCTS UPLOADED"
-        />
+        <StatCard value={report.products.data} label="PRODUCTS UPLOADED" />
       </Grid>
       <Grid item xs={12} sm={6} md={3}>
         <StatCard
