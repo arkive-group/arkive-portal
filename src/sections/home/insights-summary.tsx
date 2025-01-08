@@ -88,6 +88,7 @@ export default function InsightsSummary() {
     ],
   });
 
+  // @ts-ignore
   const orderProc = ({ orders, products, skus }) => {
     const now = new Date();
 
