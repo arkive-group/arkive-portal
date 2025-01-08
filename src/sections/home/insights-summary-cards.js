@@ -36,7 +36,7 @@ export function InsightsSummaryCards({ report, co2 }) {
   };
 
   return (
-    <Grid container spacing={4} sx={{ padding: 4 }}>
+    <Grid container spacing={4} sx={{ padding: 4, paddingLeft: 0 }}>
       <Grid item xs={12} sm={6} md={3}>
         <StatCard
           value={report.products.data}

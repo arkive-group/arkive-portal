@@ -545,7 +545,7 @@ const getActiveSalesChannels = async () => {
         name: productRaw?.name,
         
       };
-      channels.push(channel);
+      productRaw?.name !== "Shopify GraphiQL App" ? channels.push(channel) : null;
     });
     console.log(data)
     return channels;
