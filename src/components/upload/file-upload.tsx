@@ -2,7 +2,7 @@
 
 import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-import { Button, Typography, Box, Card, Grid, Stack } from "@mui/material";
+import { Button, Typography, Box, Card, Grid, Stack, Container } from "@mui/material";
 import Iconify from "@/components/iconify";
 import Papa from "papaparse";
 
@@ -47,6 +47,7 @@ export default function FileUpload({ setProducts }) {
     // <Grid container spacing={3} sx={{ mt: 3 }} justifyContent="center">
     //   <Grid xs={12} md={6} lg={4}>
     <>
+    <Box>
       <Stack direction="row" alignItems="center" spacing={2}>
         {/* Blue Round Badge */}
         <div
@@ -70,8 +71,11 @@ export default function FileUpload({ setProducts }) {
         </div>
 
         {/* Text Element */}
+
         <Typography variant="h4">Upload CSV</Typography>
+
       </Stack>
+      </Box>
 
       <Card
         sx={{ mb: 8, mt: 8 }}
