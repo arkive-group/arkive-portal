@@ -74,7 +74,7 @@ export default function OrdersOverview() {
   };
 
   const columns = [
-    { field: "id", headerName: "ID", width: 100 },
+    // { field: "id", headerName: "ID", width: 100 },
     { field: "name", headerName: "Name", width: 200 },
     { field: "email", headerName: "Email", width: 100 },
     { field: "totalPrice", headerName: "Total Price", width: 100 },
