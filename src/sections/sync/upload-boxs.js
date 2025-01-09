@@ -66,6 +66,7 @@ export default function UploadBoxs({ setProducts }) {
         {uploadOptions.map((option) => (
           <Grid xs={12} md={6} lg={4} key={option.value}>
             <UploadBox
+              accept=".csv, .xls, .xlsx" // Restrict file types
               onDrop={handleDrop}
               placeholder={
                 <Stack
