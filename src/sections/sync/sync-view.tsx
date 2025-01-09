@@ -18,17 +18,17 @@ export default function SyncView() {
   return (
     <Container maxWidth="xl">
       {/* Row for FileUpload and GenerateExcel */}
-      <Grid container spacing={3} sx={{ mt: 3 }}>
+      {/* <Grid container spacing={3} sx={{ }}> */}
         {/* FileUpload (70% width) */}
-        <Grid item xs={12} md={8}>
+        {/* <Grid item xs={12} md={8}> */}
           <FileUpload setProducts={setProducts} />
-        </Grid>
+        {/* </Grid> */}
 
         {/* GenerateExcel (30% width) */}
-        <Grid item xs={12} md={4}>
+        {/* <Grid item xs={12} md={4}>
           <GenerateExcel />
-        </Grid>
-      </Grid>
+        </Grid> */}
+      {/* </Grid> */}
       <ProductSelection products={products} />
       {/* </Stack> */}
     </Container>

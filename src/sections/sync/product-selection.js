@@ -260,30 +260,30 @@ export default function ProductSelection({ products }) {
         justifyContent="space-between"
       >
         <Stack direction="row" alignItems="center" spacing={2}>
-  {/* Blue Round Badge */}
-  <div
-    style={{
-      backgroundColor: "#0033CC",
-      borderRadius: "50%",
-      width: "30px",
-      height: "30px",
-      display: "flex", // Flexbox for centering content
-      alignItems: "center", // Center vertically
-      justifyContent: "center", // Center horizontally
-    }}
-  >
-    <Typography
-      color="white"
-      variant="h5"
-      sx={{ lineHeight: 1 }} // Adjust line height to keep the character vertically aligned
-    >
-      2
-    </Typography>
-  </div>
+          {/* Blue Round Badge */}
+          <div
+            style={{
+              backgroundColor: "#0033CC",
+              borderRadius: "50%",
+              width: "30px",
+              height: "30px",
+              display: "flex", // Flexbox for centering content
+              alignItems: "center", // Center vertically
+              justifyContent: "center", // Center horizontally
+            }}
+          >
+            <Typography
+              color="white"
+              variant="h5"
+              sx={{ lineHeight: 1 }} // Adjust line height to keep the character vertically aligned
+            >
+              2
+            </Typography>
+          </div>
 
-  {/* Text Element */}
-  <Typography variant="h4">Select files to create products</Typography>
-</Stack>
+          {/* Text Element */}
+          <Typography variant="h4">Select files to create products</Typography>
+        </Stack>
         <Button
           disabled={loading || !selectedRowIds?.length}
           variant="contained"

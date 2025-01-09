@@ -38,8 +38,8 @@ export default function GenerateExcel() {
 
       <Card
         sx={{
-          mb: 8,
-          mt: 8,
+          // mb: 8,
+          // mt: 8,
           maxWidth: "400px",
           minHeight: "200px",
           border: "2px solid rgba(145, 158, 171, 0.16)",

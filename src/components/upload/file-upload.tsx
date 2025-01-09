@@ -2,9 +2,10 @@
 
 import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-import { Button, Typography, Box, Card, Grid, Stack, Container } from "@mui/material";
+import { Button, Typography, Box, Card, Grid, Stack, Container, Paper } from "@mui/material";
 import Iconify from "@/components/iconify";
 import Papa from "papaparse";
+import GenerateExcel from "@/sections/sync/download-excel-template";
 
 export default function FileUpload({ setProducts }) {
   const handleDrop = useCallback(
@@ -43,79 +44,77 @@ export default function FileUpload({ setProducts }) {
   });
 
   return (
-    // <Card sx={{ p: 3, mb: 5 }}>
-    // <Grid container spacing={3} sx={{ mt: 3 }} justifyContent="center">
-    //   <Grid xs={12} md={6} lg={4}>
-    <>
-    <Box>
-      <Stack direction="row" alignItems="center" spacing={2}>
-        {/* Blue Round Badge */}
+    <Paper sx={{ width: "100%", marginBottom: '48px' }}>
+      {/* Header Section */}
+      <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 3 }}>
         <div
           style={{
             backgroundColor: "#0033CC",
             borderRadius: "50%",
             width: "30px",
             height: "30px",
-            display: "flex", // Flexbox for centering content
-            alignItems: "center", // Center vertically
-            justifyContent: "center", // Center horizontally
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
           <Typography
             color="white"
             variant="h5"
-            sx={{ lineHeight: 1, marginRight: "1px" }} // Adjust line height to keep the character vertically aligned
+            sx={{ lineHeight: 1, marginRight: "1px" }}
           >
             1
           </Typography>
         </div>
-
-        {/* Text Element */}
-
         <Typography variant="h4">Upload CSV</Typography>
-
       </Stack>
-      </Box>
 
-      <Card
-        sx={{ mb: 8, mt: 8 }}
-        {...getRootProps({
-          style: {
-            minWidth: "auto",
-            minHeight: "200px",
-            border: "2px dashed rgba(145, 158, 171, 0.16)",
-            borderRadius: "8px",
-            padding: "16px",
-            textAlign: "center",
-            cursor: "pointer",
-            backgroundColor: "rgba(145, 158, 171, 0.08)",
-          },
-        })}
-      >
-        <input {...getInputProps()} />
-        <Stack
-          spacing={5.5}
-          alignItems="center"
-          sx={{ color: "text.disabled" }}
-        >
-          {/* @ts-ignore */}
-          <Iconify icon="eva:cloud-upload-fill" width={40} color="#0033CC" />
-          <Stack spacing={0.5}>
-            <Typography variant="body2">Drag a CSV file here, or</Typography>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={open} // Trigger file explorer
-              sx={{ mt: 1, minWidth: "128px" }}
+      {/* Main Content Section */}
+      <Grid container spacing={2} alignItems="stretch">
+        {/* File Upload (70% width) */}
+        <Grid item xs={12} md={9}>
+          <Card
+            {...getRootProps({
+              style: {
+                height: "100%",
+                border: "2px dashed rgba(145, 158, 171, 0.16)",
+                borderRadius: "8px",
+                padding: "16px",
+                textAlign: "center",
+                cursor: "pointer",
+                backgroundColor: "rgba(145, 158, 171, 0.08)",
+              },
+            })}
+          >
+            <input {...getInputProps()} />
+            <Stack
+              spacing={5.5}
+              alignItems="center"
+              justifyContent="center"
+              sx={{ height: "100%" }}
             >
-              Upload File
-            </Button>
-          </Stack>
-        </Stack>
-      </Card>
-    </>
-    //   </Grid>
-    // </Grid>
-    // </Card>
+              {/* ts-ignore */}
+              <Iconify icon="eva:cloud-upload-fill" width={40} color="#0033CC" />
+              <Stack spacing={0.5}>
+                <Typography variant="body2">Drag a CSV file here, or</Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={open}
+                  sx={{ mt: 1, minWidth: "128px" }}
+                >
+                  Upload File
+                </Button>
+              </Stack>
+            </Stack>
+          </Card>
+        </Grid>
+
+        {/* Generate Excel (30% width) */}
+        <Grid item xs={12} md={3}>
+          <GenerateExcel />
+        </Grid>
+      </Grid>
+    </Paper>
   );
 }
