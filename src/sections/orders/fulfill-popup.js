@@ -84,6 +84,7 @@ export default function FulfillPopup({ fulfillmentOrder, open, setOpen }) {
         <Box noValidate sx={{ mt: 1 }}>
           <TextField
             fullWidth
+            disabled
             margin="normal"
             id="fulfillmentOrderId"
             label="Order ID"
@@ -96,6 +97,7 @@ export default function FulfillPopup({ fulfillmentOrder, open, setOpen }) {
             }}
           />
           <TextField
+            disabled
             fullWidth
             margin="normal"
             id="fulfillmentOrderName"
@@ -111,6 +113,7 @@ export default function FulfillPopup({ fulfillmentOrder, open, setOpen }) {
           {fulfillmentOrderIds.map((fulfillmentOrderId, idx) => (
             <Box component="form" noValidate sx={{ mt: 1 }}>
               <TextField
+                disabled
                 margin="normal"
                 id="fulfillmentOrderId"
                 label="Order ID"
@@ -124,6 +127,7 @@ export default function FulfillPopup({ fulfillmentOrder, open, setOpen }) {
                 }}
               />
               <TextField
+                disabled
                 margin="normal"
                 id="fulfillmentOrderName"
                 label="Order Name"
@@ -137,6 +141,7 @@ export default function FulfillPopup({ fulfillmentOrder, open, setOpen }) {
                 }}
               />
               <TextField
+                disabled
                 fullWidth
                 margin="normal"
                 id="fulfillmentOrderId"
