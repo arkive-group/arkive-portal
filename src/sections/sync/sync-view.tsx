@@ -19,7 +19,10 @@ export default function SyncView() {
       <UserProfileView />
       {/* <ProductUnavailable /> */}
       {/* <Stack direction="row" spacing={5}> */}
-      <FileUpload setProducts={setProducts} />
+      <Stack direction="row">
+        <FileUpload setProducts={setProducts} />
+      </Stack>
+
       <ProductSelection products={products} />
       {/* </Stack> */}
     </Container>
