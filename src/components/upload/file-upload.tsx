@@ -1,75 +1,86 @@
-import React from "react";
+"use client";
+
+import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-import { Button, Typography, Box } from "@mui/material";
-import Papa from "papaparse"; // For CSV parsing (if needed)
+import { Button, Typography, Box, Card, Grid, Stack } from "@mui/material";
+import Iconify from "@/components/iconify";
+import Papa from "papaparse";
 
 export default function FileUpload({ setProducts }) {
-  const { getRootProps, getInputProps, open } = useDropzone({
-    multiple: false, // Only one file at a time
-    accept: {
-      "text/csv": [".csv"], // CSV file
-      "application/vnd.ms-excel": [".xls"], // Older Excel file
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [
-        ".xlsx",
-      ], // Modern Excel file
-    },
-    onDropAccepted: (acceptedFiles) => {
-      console.log("Accepted files:", acceptedFiles);
+  const handleDrop = useCallback(
+    (acceptedFiles) => {
+      acceptedFiles.forEach((file) => {
+        if (file.type !== "text/csv") {
+          console.log("file type is not csv");
+          return;
+        }
 
-      // Handle CSV parsing or Excel processing here
-      const file = acceptedFiles[0];
-      if (file.type === "text/csv") {
         // Parse CSV using PapaParse
         Papa.parse(file, {
           header: true,
           dynamicTyping: true,
           complete: (results) => {
+            // Add unique IDs to each row
+            results.data.forEach((row, index) => {
+              row.id = index;
+            });
+            setProducts(results.data); // Update products state
             console.log("Parsed CSV data:", results.data);
-            setProducts(results.data); // Set the parsed products
           },
         });
-      } else {
-        // Add logic for Excel file processing if needed
-        alert("Excel processing is not implemented yet!");
-      }
+      });
     },
-    onDropRejected: (fileRejections) => {
-      console.error("Rejected files:", fileRejections);
-      alert("Invalid file type. Please upload a CSV or Excel file.");
+    [setProducts]
+  );
+
+  const { getRootProps, getInputProps, open } = useDropzone({
+    multiple: false,
+    accept: {
+      "text/csv": [".csv"],
     },
-    noClick: true, // Prevent automatic file picker opening
-    noKeyboard: true, // Disable keyboard interaction
+    onDrop: handleDrop,
+    noClick: true, // Disable automatic click on the dropzone area
   });
 
   return (
-    <Box
-      sx={{
-        border: "2px dashed #ccc",
-        borderRadius: "8px",
-        padding: "16px",
-        textAlign: "center",
-      }}
-      {...getRootProps()}
-    >
-      {/* Hidden input for file upload */}
-      <input {...getInputProps()} />
-      <Typography variant="body1" sx={{ marginBottom: "8px" }}>
-        Drag and drop a file here, or
-      </Typography>
-      {/* Upload button to trigger file explorer */}
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={open} // Open the file explorer
-      >
-        Upload File
-      </Button>
-      <Typography
-        variant="caption"
-        sx={{ display: "block", marginTop: "8px", color: "gray" }}
-      >
-        Accepted formats: .csv, .xls, .xlsx
-      </Typography>
-    </Box>
+    <Card sx={{ p: 3, mb: 5 }}>
+      <Grid container spacing={3} sx={{ mt: 3 }} justifyContent="center">
+        <Grid xs={12} md={6} lg={4}>
+          <Box
+            {...getRootProps({
+              style: {
+                border: "2px dashed rgba(145, 158, 171, 0.16)",
+                borderRadius: "8px",
+                padding: "16px",
+                textAlign: "center",
+                cursor: "pointer",
+                backgroundColor: 'rgba(145, 158, 171, 0.08)',
+              },
+            })}
+          >
+            <input {...getInputProps()} />
+            <Stack
+              spacing={0.5}
+              alignItems="center"
+              sx={{ color: "text.disabled" }}
+            >
+              {/* @ts-ignore */}
+              <Iconify icon="eva:cloud-upload-fill" width={40} color="#0033CC"/>
+              <Typography variant="body2">
+                Drag and drop a CSV file here, or
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={open} // Trigger file explorer
+                sx={{ mt: 1, minWidth: '128px' }}
+              >
+                Upload File
+              </Button>
+            </Stack>
+          </Box>
+        </Grid>
+      </Grid>
+    </Card>
   );
 }

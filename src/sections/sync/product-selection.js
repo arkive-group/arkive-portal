@@ -28,6 +28,7 @@ export default function ProductSelection({ products }) {
     { field: "Handle", headerName: "Handle", width: 110 },
     { field: "Product Category", headerName: "Product Category", width: 130 },
     { field: "Variant Barcode", headerName: "Variant Barcode", width: 100 },
+    { field: "Image Link", headerName: "Image Link", width: 100 },
   ];
 
   const extractProductFromHandleArray = (handle, products) => {
@@ -82,7 +83,7 @@ export default function ProductSelection({ products }) {
       // Medias
       if (productRaw["Image Src"] !== null && productRaw["Image Src"] !== "") {
         let mediaObj = {
-          originalSource: productRaw["Image Src"],
+          originalSource: productRaw["Image Link"],
           mediaContentType: "IMAGE",
         };
         if (
@@ -132,11 +133,11 @@ export default function ProductSelection({ products }) {
           barcode: productRaw["Variant Barcode"].toString().replaceAll("'", "").replaceAll(`"`, ""),
           price: productRaw["Variant Price"],
           mediaSrc: [productRaw["Variant Image"]],
-          inventoryPolicy: productRaw["Variant Inventory Policy"].toUpperCase(),
+          inventoryPolicy: productRaw["Variant Inventory Policy"]?.toUpperCase(),
           taxable: productRaw["Variant Taxable"],
           taxCode: productRaw["Variant Tax Code"],
           inventoryItem: {
-            sku: productRaw["Variant SKU"].toString().replaceAll("'", "").replaceAll(`"`, ""),
+            sku: productRaw["Variant SKU"]?.toString().replaceAll("'", "").replaceAll(`"`, ""),
             requiresShipping: productRaw["Variant Requires Shipping"],
           },
           optionValues: [],
@@ -217,6 +218,7 @@ export default function ProductSelection({ products }) {
       } else {
         // Create product => options => variants
         var res = await createProduct(productObj);
+        console.log(res, 'res')
         const productId = res.data?.productCreate?.product?.id;
         if (productId) {
           console.log(`Product created with ID: ${productId}`);
@@ -261,6 +263,7 @@ export default function ProductSelection({ products }) {
         <Button
           disabled={loading || !selectedRowIds?.length}
           variant="contained"
+          color="primary"
           onClick={getSelectedProducts}
         >
           {loading ? "Creating..." : "Create Products"}
