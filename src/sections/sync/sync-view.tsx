@@ -1,7 +1,7 @@
 "use client";
 
 // @mui
-import { Container } from "@mui/material";
+import { Container, Stack } from "@mui/material";
 import { useState } from "react";
 
 import UserProfileView from "@/sections/user/user-profile-view";
@@ -18,9 +18,10 @@ export default function SyncView() {
     <Container maxWidth="xl">
       <UserProfileView />
       {/* <ProductUnavailable /> */}
+      {/* <Stack direction="row" spacing={5}> */}
       <FileUpload setProducts={setProducts} />
-      <UploadBoxs setProducts={setProducts} />
       <ProductSelection products={products} />
+      {/* </Stack> */}
     </Container>
   );
 }

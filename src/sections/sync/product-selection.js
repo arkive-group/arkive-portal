@@ -2,7 +2,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
 
-import { Button, Paper, Box, Typography } from "@mui/material";
+import { Button, Paper, Box, Typography, Stack } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import {
   getProducts,
@@ -259,7 +259,31 @@ export default function ProductSelection({ products }) {
         alignItems="center"
         justifyContent="space-between"
       >
-        <Typography variant="h4">Select Products To Upload</Typography>
+        <Stack direction="row" alignItems="center" spacing={2}>
+  {/* Blue Round Badge */}
+  <div
+    style={{
+      backgroundColor: "#0033CC",
+      borderRadius: "50%",
+      width: "30px",
+      height: "30px",
+      display: "flex", // Flexbox for centering content
+      alignItems: "center", // Center vertically
+      justifyContent: "center", // Center horizontally
+    }}
+  >
+    <Typography
+      color="white"
+      variant="h5"
+      sx={{ lineHeight: 1 }} // Adjust line height to keep the character vertically aligned
+    >
+      2
+    </Typography>
+  </div>
+
+  {/* Text Element */}
+  <Typography variant="h4">Select files to create products</Typography>
+</Stack>
         <Button
           disabled={loading || !selectedRowIds?.length}
           variant="contained"

@@ -106,6 +106,7 @@ export default function OrdersOverview() {
         <Button
           disabled={!selectedRowIds?.length}
           variant="contained"
+          color="primary"
           onClick={getSelectedOrders}
         >
           Fulfill Orders
@@ -130,7 +131,7 @@ export default function OrdersOverview() {
             }))}
             getRowId={(row) => row["id"]}
             getEstimatedRowHeight={() => 100}
-            getRowHeight={() => 'auto'}
+            getRowHeight={() => "auto"}
             initialState={{ pagination: { paginationModel: { pageSize: 5 } } }}
             pageSize={5}
             rowsPerPageOptions={[5]}
