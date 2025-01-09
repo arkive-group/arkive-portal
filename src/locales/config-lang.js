@@ -7,7 +7,7 @@ import { enUS as enUSCore } from '@mui/material/locale'
 // date-pickers
 import { enUS as enUSDate } from '@mui/x-date-pickers/locales'
 // data-grid
-import { enUS as enUSDataGrid } from '@mui/x-data-grid'
+// import { enUS as enUSDataGrid } from '@mui/x-data-grid'
 
 // ----------------------------------------------------------------------
 
@@ -15,7 +15,7 @@ export const allLangs = [
   {
     label: 'English',
     value: 'en',
-    systemValue: merge(enUSDate, enUSDataGrid, enUSCore),
+    systemValue: merge(enUSDate, enUSCore),
     adapterLocale: enUSAdapter,
     icon: 'flagpack:gb-nir',
   },
