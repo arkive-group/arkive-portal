@@ -17,7 +17,6 @@ const TootlipedRow = (props) => {
   );
 };
 
-
 export default function OrdersOverview() {
   const { user } = useAuthContext();
   const [selectedRowIds, setSelectedRowIds] = useState([]);
@@ -39,7 +38,9 @@ export default function OrdersOverview() {
           .map((product) => product.variants.map((variant) => variant.sku))
           .flat();
         // console.log(skuList);
-        const afterString = (new Date(new Date().setMonth(new Date().getMonth() - 3))).toISOString();
+        const afterString = new Date(
+          new Date().setMonth(new Date().getMonth() - 3)
+        ).toISOString();
         const orderList = await getOrders({
           uploader,
           skuList,

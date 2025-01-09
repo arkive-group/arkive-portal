@@ -11,12 +11,13 @@ export function InsightsSummaryCards({ report, co2 }) {
           padding: 3,
           textAlign: "center",
           verticalAlign: "middle",
-          backgroundColor: "#0033CC", // Blue background
-          color: "#FFFFFF", // White text
+          backgroundColor: "#0033CC",
+          color: "#FFFFFF",
           borderRadius: 0,
           minHeight: "140px",
           maxHeight: "140px",
           minWidth: "200px",
+          boxShadow: "4px 4px 16px 4px #b8b6b6",
         }}
       >
         <Typography variant="h3" sx={{ fontWeight: "bold" }}>
