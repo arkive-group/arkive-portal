@@ -88,15 +88,15 @@ export default function FileUpload({ setProducts }) {
           >
             <input {...getInputProps()} />
             <Stack
-              spacing={5.5}
+              spacing={6.5}
               alignItems="center"
               justifyContent="center"
               sx={{ height: "100%" }}
             >
-              {/* ts-ignore */}
+              {/* @ts-ignore */}
               <Iconify icon="eva:cloud-upload-fill" width={40} color="#0033CC" />
               <Stack spacing={0.5}>
-                <Typography variant="body2">Drag a CSV file here, or</Typography>
+                <Typography color="gray" variant="body2">Drag a CSV file here, or</Typography>
                 <Button
                   variant="contained"
                   color="primary"

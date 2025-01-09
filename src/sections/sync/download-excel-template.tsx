@@ -50,12 +50,11 @@ export default function GenerateExcel() {
           backgroundColor: "rgba(145, 158, 171, 0.08)",
         }}
       >
-        <Stack spacing={5.5} alignItems="center" sx={{ color: "text.disabled" }}>
-          {/* Icon */}
+        <Stack spacing={6.5} alignItems="center" sx={{ color: "text.disabled" }}>
           {/* @ts-ignore */}
           <Iconify icon="eva:file-text-fill" width={40} color="#0033CC" />
           <Stack spacing={0.5}>
-            <Typography variant="body2">Click below to download the Excel template</Typography>
+            <Typography color="gray" variant="body2">Click below to download the Excel template</Typography>
             <Button
               variant="contained"
               color="primary"
