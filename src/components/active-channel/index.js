@@ -9,44 +9,72 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Icon from "@mui/material/Icon";
 import { useAuthContext, usePremiumStatus } from "@/auth/hooks";
+import RondoUrl from "./icons/rondo.svg";
+import ShopifyUrl from "./icons/shopify.svg";
+import BolUrl from "./icons/bol.svg"
+import GMUrl from "./icons/google-marketplace.svg"
+import FacebookUrl from "./icons/facebook.svg"
+import InstagramUrl from "./icons/IG.svg"
+import TikTokUrl from "./icons/tiktok.svg"
+import ArmoedefondsUrl from "./icons/armoedefonds.svg"
+import ServeUrl from "./icons/servethecityamsterdam.svg"
+import { height } from "@mui/system";
+
+
 export const Channels = {
   shopify: {
     name: "Arkive",
     alias: "Online Store",
-    icon: undefined,
+    icon: ShopifyUrl,
+    url: "https://admin.shopify.com/store/shoparkive",
   },
   bol: {
     name: "Bol.com",
     alias: "Bol.com",
-    icon: undefined,
+    icon: BolUrl,
+    url : "https://www.bol.com/nl/nl/p/arkive-upcycles-natural-handmade-soaps-natural-olive-oil/9300000169592003/",
   },
 
   google: {
     name: "Google Marketplace",
     alias: "Google & YouTube",
-    icon: undefined,
+    icon: GMUrl,
   },
   facebook: {
-    name: "Facebook & Instagram",
-    alias: "Facebook & Instagram",
-    icon: undefined,
+    name: "Facebook",
+    alias: "Facebook",
+    icon: FacebookUrl,
+    url : "https://www.facebook.com/Arkiveshop/",
+  },
+  instagram: {
+    name: "Instagram",
+    alias: "Instagram",
+    icon: InstagramUrl,
+    url : "https://www.instagram.com/arkiveshop/",
   },
   tiktok: {
     name: "TikTok",
     alias: "TikTok",
-    icon: undefined,
+    icon: TikTokUrl,
+    url: "https://www.tiktok.com/@arkiveshop",
   },
   repurposing: {
-    name: "Repurposing",
-    alias: "Repurposing",
-    icon: undefined,
+    name: "Rondo",
+    alias: "Rondo",
+    icon: RondoUrl,
     isPremium: true,
   },
-  charity: {
-    name: "Charity",
-    alias: "Charity",
-    icon: undefined,
-    isPremium: true,
+  armoedefonds: {
+    name: "armoedefonds",
+    alias: "armoedefonds",
+    icon: ArmoedefondsUrl,
+    url : "https://www.armoedefonds.nl/",
+  },
+  servethecity: {
+    name: "Serve The City",
+    alias: "servethecity",
+    icon : ServeUrl,
+    url : "https://www.stcamsterdam.nl/",
   },
 };
 
@@ -72,30 +100,38 @@ export default function ActiveChannel({ channel, onChannleChange }) {
             const isDisabled = Channels[key].isPremium && !premium.isPremium;
             return (
               <ListItem key={key}>
-                <ListItemIcon sx={{ marginRight: 1 }}>
-                  <Icon
-                    sx={{
-                      width: "2rem",
-                      height: "2rem",
-                      background: "#efefef",
-                      borderRadius: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "16px",
-                    }}
-                  >
-                    {Channels[key].name?.slice(0, 1)}
-                  </Icon>
-                </ListItemIcon>
-                <Button
-                  onClick={() => onChannleChange(key)}
-                  disabled={isDisabled}
-                  fullWidth
-                  variant={key === channel ? "contained" : "text"}
+              <ListItemIcon sx={{ marginRight: 1 }}>
+                <Icon
+                sx={{
+                  width: "3rem",
+                  height: "3rem",
+                  background: "#efefef",
+                  borderRadius: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "16px",
+                  boxShadow: 1,
+                }}
                 >
-                  {Channels[key].name}
-                </Button>
+                {Channels[key].icon ? (
+                  <img 
+                  src={Channels[key].icon}
+                  style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }}
+                  />
+                ) : (
+                  Channels[key].name?.slice(0, 1)
+                )}
+                </Icon>
+              </ListItemIcon>
+              <Button
+                onClick={() => onChannleChange(key)}
+                disabled={isDisabled}
+                fullWidth
+                variant={key === channel ? "contained" : "text"}
+              >
+                {Channels[key].name}
+              </Button>
               </ListItem>
             );
           })}
