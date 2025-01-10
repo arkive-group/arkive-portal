@@ -1,5 +1,12 @@
 import Typography from "@mui/material/Typography";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Box } from "@mui/material";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  Box,
+} from "@mui/material";
 
 export default function TermsAndConditionsDialog({ openModal, setOpenModal }) {
   return (
@@ -24,7 +31,7 @@ export default function TermsAndConditionsDialog({ openModal, setOpenModal }) {
             before proceeding.
           </Typography>
 
-          <Typography color="primary" color="primary" variant="h6" gutterBottom>
+          <Typography color="primary" variant="h6" gutterBottom>
             1. Definitions
           </Typography>
           <Typography variant="body2" paragraph>

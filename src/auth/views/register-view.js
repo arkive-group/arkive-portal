@@ -2,7 +2,7 @@
 
 import * as Yup from "yup";
 import { useCallback, useMemo, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 // @mui
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -22,17 +22,10 @@ import FormProvider, {
   RHFTextField,
   RHFUploadAvatar,
 } from "src/components/hook-form";
-import {
-  CardHeader,
-  InputAdornment,
-  IconButton,
-  Iconify,
-  Checkbox,
-} from "@mui/material";
+import { CardHeader, Checkbox } from "@mui/material";
 
 // Firebase
 import { useAuthContext } from "@/auth/hooks/use-auth-context";
-import Link from "next/link";
 import { TermsAndConditionsDialog } from "@/components/terms-and-conditions";
 
 // ----------------------------------------------------------------------
@@ -85,20 +78,16 @@ export default function RegisterView() {
 
   const {
     reset,
-    watch,
-    control,
     setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
-  const values = watch();
   const handleCheckboxChange = (event) => {
     setIsCheckboxChecked(event.target.checked);
   };
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log(data);
       const user = await signup(data);
       reset();
       enqueueSnackbar(
