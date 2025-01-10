@@ -33,12 +33,14 @@ import {
 // Firebase
 import { useAuthContext } from "@/auth/hooks/use-auth-context";
 import Link from "next/link";
+import { TermsAndConditionsDialog } from "@/components/terms-and-conditions";
 
 // ----------------------------------------------------------------------
 
 export default function RegisterView() {
   const { signup } = useAuthContext();
-
+  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
 
@@ -91,7 +93,9 @@ export default function RegisterView() {
   } = methods;
 
   const values = watch();
-
+  const handleCheckboxChange = (event) => {
+    setIsCheckboxChecked(event.target.checked);
+  };
   const onSubmit = handleSubmit(async (data) => {
     try {
       console.log(data);
@@ -121,79 +125,92 @@ export default function RegisterView() {
   );
 
   return (
-    <FormProvider methods={methods} onSubmit={onSubmit}>
-      <Card sx={{ p: 3, mt: "-36px" }}>
-        <CardHeader
-          title="Beauty mastered, now sustainably!"
-          subheader="Sign up - join the eco-hero squad."
-          sx={{ mb: 3, p: 0 }}
-        />
-        <Box sx={{ mb: 5 }}>
-          <RHFUploadAvatar
-            name="avatar"
-            maxSize={3145728}
-            onDrop={handleDrop}
-            helperText={
-              <Typography
-                variant="caption"
-                sx={{
-                  // mt: 3,
-                  mx: "auto",
-                  display: "block",
-                  textAlign: "center",
-                  color: "text.disabled",
-                }}
-              >
-                Allowed *.jpeg, *.jpg, *.png, *.gif
-                <br /> max size of {fData(3145728)}
-              </Typography>
-            }
+    <>
+      <FormProvider methods={methods} onSubmit={onSubmit}>
+        <Card sx={{ p: 3, mt: "-36px" }}>
+          <CardHeader
+            title="Beauty mastered, now sustainably!"
+            subheader="Sign up - join the eco-hero squad."
+            sx={{ mb: 3, p: 0 }}
           />
-        </Box>
-        <Box
-          rowGap={3}
-          columnGap={2}
-          display="grid"
-          gridTemplateColumns={{
-            xs: "repeat(1, 1fr)",
-            sm: "repeat(2, 1fr)",
-          }}
-        >
-          <RHFTextField name="first_name" label="First Name" />
-          <RHFTextField name="last_name" label="Last Name" />
-          <RHFTextField name="email" label="Email Address" />
-          <RHFTextField name="phoneNumber" label="Phone Number" />
-          <RHFTextField name="company" label="Company" />
-          <RHFTextField name="role" label="Role" />
-        </Box>
-        <Box rowGap={3} mt={3} display="grid">
-          <RHFTextField name="password" label="Password" type="password" />
-          <RHFTextField
-            name="confirmPassword"
-            label="Confirm Password"
-            type="password"
-          />
-        </Box>
-        <Box display="flex" alignItems="center" gap={0.7} mt={1} ml="30px">
-          <Checkbox />
-          <Box display="flex" alignItems="center" gap={0.5}>
-            <Typography variant="body2">I accept the</Typography>
-            <Link href="/">
-              {" "}
-              <Typography variant="body2">Terms and Conditions</Typography>
-            </Link>
+          <Box sx={{ mb: 5 }}>
+            <RHFUploadAvatar
+              name="avatar"
+              maxSize={3145728}
+              onDrop={handleDrop}
+              helperText={
+                <Typography
+                  variant="caption"
+                  sx={{
+                    // mt: 3,
+                    mx: "auto",
+                    display: "block",
+                    textAlign: "center",
+                    color: "text.disabled",
+                  }}
+                >
+                  Allowed *.jpeg, *.jpg, *.png, *.gif
+                  <br /> max size of {fData(3145728)}
+                </Typography>
+              }
+            />
           </Box>
-        </Box>
-        <LoadingButton
-          type="submit"
-          color="primary"
-          variant="contained"
-          loading={isSubmitting}
-          sx={{ width: "100%", mt: 2 }}
-        >
-          SIGN UP
-        </LoadingButton>
-      </Card>
-    </FormProvider>
+          <Box
+            rowGap={3}
+            columnGap={2}
+            display="grid"
+            gridTemplateColumns={{
+              xs: "repeat(1, 1fr)",
+              sm: "repeat(2, 1fr)",
+            }}
+          >
+            <RHFTextField name="first_name" label="First Name" />
+            <RHFTextField name="last_name" label="Last Name" />
+            <RHFTextField name="email" label="Email Address" />
+            <RHFTextField name="phoneNumber" label="Phone Number" />
+            <RHFTextField name="company" label="Company" />
+            <RHFTextField name="role" label="Role" />
+          </Box>
+          <Box rowGap={3} mt={3} display="grid">
+            <RHFTextField name="password" label="Password" type="password" />
+            <RHFTextField
+              name="confirmPassword"
+              label="Confirm Password"
+              type="password"
+            />
+          </Box>
+          <Box display="flex" alignItems="center" gap={0.7} mt={1} ml="30px">
+            <Checkbox
+              checked={isCheckboxChecked}
+              onChange={handleCheckboxChange}
+            />
+            <Box display="flex" alignItems="center" gap={0.5}>
+              <Typography variant="body2">I accept the</Typography>
+              <Typography
+                style={{ textDecoration: "underline", cursor: "pointer" }}
+                variant="body2"
+                onClick={() => setOpenModal(true)}
+              >
+                Terms and Conditions
+              </Typography>
+            </Box>
+          </Box>
+          <LoadingButton
+            type="submit"
+            color="primary"
+            variant="contained"
+            loading={isSubmitting}
+            disabled={!isCheckboxChecked}
+            sx={{ width: "100%", mt: 2 }}
+          >
+            SIGN UP
+          </LoadingButton>
+        </Card>
+      </FormProvider>
+      <TermsAndConditionsDialog
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+      />
+    </>
   );
 }
