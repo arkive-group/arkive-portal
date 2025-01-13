@@ -15,7 +15,7 @@ import BolUrl from "./icons/bol.svg";
 import GMUrl from "./icons/google-marketplace.svg";
 import FacebookUrl from "./icons/fb.svg"
 import InstagramUrl from "./icons/IG.svg";
-import TikTokUrl from "./icons/tik-tok.svg";
+import TiktokIcon from "./icons/TiktokIcon";
 import ArmoedefondsUrl from "./icons/armoedefonds.svg";
 import ServeUrl from "./icons/servethecityamsterdam.svg";
 
@@ -53,7 +53,7 @@ export const Channels = {
   tiktok: {
     name: "TikTok",
     alias: "TikTok",
-    icon: TikTokUrl,
+    icon: <TiktokIcon />,
     url: "https://www.tiktok.com/@arkiveshop",
   },
   repurposing: {
