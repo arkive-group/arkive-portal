@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Box, Paper, Typography, Icon } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Link from "next/link";
+import UnwasteDataGridCell from "./unwaste-data-grid-cell";
 
 export default function ProductOverview({ products, productFilters }) {
   const [selectedRowIds, setSelectedRowIds] = useState([]);
@@ -12,35 +13,72 @@ export default function ProductOverview({ products, productFilters }) {
     {
       field: "imageUrl",
       headerName: "Image",
+      headerAlign: "center",
       width: 160,
       editable: true,
       renderCell: (params) => (
         <Link href={`https://arkivegroup.com/products/${params.row.handle}`}>
-        <Icon
-          sx={{
-            width: "100px",
-            height: "100px",
-            background: "#efefef",
-            borderRadius: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "16px",
-            mx: "auto",
-            boxShadow: 3,
-          }}
-        >
-          <img src={params.value} />
-        </Icon>
+          <Icon
+            sx={{
+              width: "100px",
+              height: "100px",
+              background: "#efefef",
+              borderRadius: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "16px",
+              mx: "auto",
+              boxShadow: 3,
+            }}
+          >
+            <img src={params.value} />
+          </Icon>
         </Link>
-      ), // renderCell will render the component
+      ),
     },
     // { field: "id", headerName: "ID", width: 150 },
-    { field: "title", headerName: "Products / Materials / Ingredients", width: 240 },
+    {
+      field: "title",
+      headerName: "Products / Materials / Ingredients",
+      headerAlign: "center",
+      headerClassName: "custom-header",
+      width: 240,
+      renderCell: (params) => <UnwasteDataGridCell value={params.value} />,
+    },
     // { field: "handle", headerName: "Handle", width: 150 },
-    { field: "status", headerName: "Status", width: 100 },
-    // { field: "seoDescription", headerName: "SEO Description", width: 100 },
-    { field: "salesChannels", headerName: "Sales Channels", width: 100 },
+    {
+      field: "status",
+      headerName: "Status",
+      headerAlign: "center",
+      maxWidth: 80,
+      renderCell: (params) => <UnwasteDataGridCell value={params.value} />,
+    },
+    // { field: "seoDescription", headerName: "SEO Description", headerAlign: "center", width: 100 },
+    {
+      field: "salesChannels",
+      headerName: "Sales Channels",
+      headerAlign: "center",
+      headerClassName: "custom-header",
+      width: 100,
+      renderCell: (params) => <UnwasteDataGridCell value={params.value} />,
+    },
+    {
+      field: "availableMarkets",
+      headerName: "Available markets (coming soon)",
+      headerAlign: "center",
+      headerClassName: "custom-header",
+      width: 100,
+      renderCell: (params) => <UnwasteDataGridCell value={"Benelux"} />,
+    },
+    {
+      field: "channelType",
+      headerName: "Channel Type (coming soon)",
+      headerAlign: "center",
+      headerClassName: "custom-header",
+      width: 100,
+      renderCell: (params) => <UnwasteDataGridCell value={"All"} />,
+    },
   ];
 
   console.log(productFilters, "productFilters");
@@ -61,8 +99,8 @@ export default function ProductOverview({ products, productFilters }) {
           rows={products}
           columns={columns.map((col) => ({
             ...col,
-            flex: 1, // Allow flexible sizing based on content
-            minWidth: 100, // Ensure a minimum width to avoid squishing
+            flex: 1,
+            minWidth: 100,
           }))}
           filterModel={{
             items: productFilters,
@@ -77,6 +115,16 @@ export default function ProductOverview({ products, productFilters }) {
           }}
           slots={{
             toolbar: GridToolbar,
+          }}
+          sx={{
+            "& .custom-header .MuiDataGrid-columnHeaderTitle": {
+              whiteSpace: "normal !important", /* Allow text wrapping */
+              lineHeight: "1.2", /* Adjust line spacing */
+              textAlign: "center",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center"
+            },
           }}
         />
       </Box>
