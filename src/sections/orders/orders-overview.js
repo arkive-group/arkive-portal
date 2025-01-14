@@ -17,7 +17,6 @@ const TootlipedRow = (props) => {
   );
 };
 
-
 export default function OrdersOverview() {
   const { user } = useAuthContext();
   const [selectedRowIds, setSelectedRowIds] = useState([]);
@@ -39,7 +38,9 @@ export default function OrdersOverview() {
           .map((product) => product.variants.map((variant) => variant.sku))
           .flat();
         // console.log(skuList);
-        const afterString = (new Date(new Date().setMonth(new Date().getMonth() - 3))).toISOString();
+        const afterString = new Date(
+          new Date().setMonth(new Date().getMonth() - 3)
+        ).toISOString();
         const orderList = await getOrders({
           uploader,
           skuList,
@@ -74,18 +75,18 @@ export default function OrdersOverview() {
   };
 
   const columns = [
-    { field: "id", headerName: "ID", width: 100 },
-    { field: "name", headerName: "Name", width: 200 },
+    // { field: "id", headerName: "ID", width: 100 },
+    { field: "name", headerName: "Name", width: 130 },
     { field: "email", headerName: "Email", width: 100 },
     { field: "totalPrice", headerName: "Total Price", width: 100 },
-    { field: "currencyCode", headerName: "Currency Code", width: 100 },
+    { field: "currencyCode", headerName: "Currency Code", width: 70 },
     { field: "firstName", headerName: "First Name", width: 100 },
     { field: "lastName", headerName: "Last Name", width: 100 },
-    { field: "address1", headerName: "Address", width: 200 },
+    { field: "address1", headerName: "Address", width: 150 },
     { field: "address2", headerName: "Address 2", width: 100 },
     { field: "city", headerName: "City", width: 100 },
     { field: "country", headerName: "Country", width: 100 },
-    { field: "zip", headerName: "Zip", width: 100 },
+    { field: "zip", headerName: "Zip", width: 80 },
     { field: "phone", headerName: "Phone", width: 100 },
     // {
     //   field: "displayFulfillmentStatus",
@@ -106,6 +107,7 @@ export default function OrdersOverview() {
         <Button
           disabled={!selectedRowIds?.length}
           variant="contained"
+          color="primary"
           onClick={getSelectedOrders}
         >
           Fulfill Orders
@@ -130,7 +132,7 @@ export default function OrdersOverview() {
             }))}
             getRowId={(row) => row["id"]}
             getEstimatedRowHeight={() => 100}
-            getRowHeight={() => 'auto'}
+            getRowHeight={() => "auto"}
             initialState={{ pagination: { paginationModel: { pageSize: 5 } } }}
             pageSize={5}
             rowsPerPageOptions={[5]}

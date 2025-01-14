@@ -157,16 +157,6 @@ export default function LoginView() {
       >
         LOG IN
       </LoadingButton>
-
-      <Button
-        variant="contained"
-        color="primary"
-        type="button"
-        size="large"
-        onClick={loginViaEmail}
-      >
-        Login with Email
-      </Button>
     </Stack>
   );
 

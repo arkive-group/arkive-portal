@@ -30,7 +30,7 @@
     "**/*.ts",
     "**/*.tsx",
     "src/app/api/email/route.js",
-    "src/app/api/**/*.js", "src/components/loading-screen/loading-screen.tsx",
+    "src/app/api/**/*.js", "src/components/loading-screen/loading-screen.tsx", "src/sections/sync/product-selection.js", "src/auth/views/register-view.js",
   ],
   "exclude": [
     "node_modules"

@@ -1,8 +1,7 @@
 "use client";
-import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
 
-import { Button, Paper, Box, Typography } from "@mui/material";
+import { Button, Paper, Box, Typography, Stack } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import {
   getProducts,
@@ -15,20 +14,14 @@ import { useAuthContext } from "@/auth/hooks";
 import { useSnackbar } from "src/components/snackbar";
 
 import shopifyTaxonomy from "./shopify-taxonomy.json";
+import { productSelectionColumns } from "@/constants/product-selection-columnns";
 
 export default function ProductSelection({ products }) {
   const [selectedRowIds, setSelectedRowIds] = useState([]);
+  // @ts-ignore
   const { user } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
-
-  const columns = [
-    { field: "Title", headerName: "Title", width: 150 },
-    { field: "Cost per item", headerName: "Cost per item", width: 80 },
-    { field: "Handle", headerName: "Handle", width: 110 },
-    { field: "Product Category", headerName: "Product Category", width: 130 },
-    { field: "Variant Barcode", headerName: "Variant Barcode", width: 100 },
-  ];
 
   const extractProductFromHandleArray = (handle, products) => {
     const productObj = {
@@ -43,7 +36,10 @@ export default function ProductSelection({ products }) {
       if (productRaw.Title !== null && productRaw.Title !== "") {
         productObj.title = productRaw.Title;
       }
-      if (productRaw["Body (HTML)"] !== null && productRaw["Body (HTML)"] !== "") {
+      if (
+        productRaw["Body (HTML)"] !== null &&
+        productRaw["Body (HTML)"] !== ""
+      ) {
         productObj.descriptionHtml = productRaw["Body (HTML)"];
       }
       if (
@@ -82,7 +78,7 @@ export default function ProductSelection({ products }) {
       // Medias
       if (productRaw["Image Src"] !== null && productRaw["Image Src"] !== "") {
         let mediaObj = {
-          originalSource: productRaw["Image Src"],
+          originalSource: productRaw["Image Link"],
           mediaContentType: "IMAGE",
         };
         if (
@@ -129,14 +125,21 @@ export default function ProductSelection({ products }) {
         productRaw["Variant Barcode"] !== ""
       ) {
         let variantObj = {
-          barcode: productRaw["Variant Barcode"].toString().replaceAll("'", "").replaceAll(`"`, ""),
+          barcode: productRaw["Variant Barcode"]
+            .toString()
+            .replaceAll("'", "")
+            .replaceAll(`"`, ""),
           price: productRaw["Variant Price"],
           mediaSrc: [productRaw["Variant Image"]],
-          inventoryPolicy: productRaw["Variant Inventory Policy"].toUpperCase(),
+          inventoryPolicy:
+            productRaw["Variant Inventory Policy"]?.toUpperCase(),
           taxable: productRaw["Variant Taxable"],
           taxCode: productRaw["Variant Tax Code"],
           inventoryItem: {
-            sku: productRaw["Variant SKU"].toString().replaceAll("'", "").replaceAll(`"`, ""),
+            sku: productRaw["Variant SKU"]
+              ?.toString()
+              .replaceAll("'", "")
+              .replaceAll(`"`, ""),
             requiresShipping: productRaw["Variant Requires Shipping"],
           },
           optionValues: [],
@@ -209,21 +212,26 @@ export default function ProductSelection({ products }) {
       console.log(productObj);
 
       // Check if product already exists on Shopify
-      if (allHandles.some(str => str.includes(productObj.handle))) {
-        enqueueSnackbar(`Product with handle ${productObj.handle} already exists`, {
-          variant: "warning",
-        });
+      if (allHandles.some((str) => str.includes(productObj.handle))) {
+        enqueueSnackbar(
+          `Product with handle ${productObj.handle} already exists`,
+          {
+            variant: "warning",
+          }
+        );
         setLoading(false);
       } else {
         // Create product => options => variants
         var res = await createProduct(productObj);
+        console.log(res, "res");
         const productId = res.data?.productCreate?.product?.id;
         if (productId) {
           console.log(`Product created with ID: ${productId}`);
 
           // Create product options
           res = await createProductOptions(productId, productObj);
-          const productOptions = res.data?.productOptionsCreate?.product?.options;
+          const productOptions =
+            res.data?.productOptionsCreate?.product?.options;
           console.log(`Product options created: ${productOptions}`);
 
           // Create product variants
@@ -257,10 +265,30 @@ export default function ProductSelection({ products }) {
         alignItems="center"
         justifyContent="space-between"
       >
-        <Typography variant="h4">Select Products To Upload</Typography>
+        <Stack direction="row" alignItems="center" spacing={2}>
+          <div
+            style={{
+              backgroundColor: "#0033CC",
+              borderRadius: "50%",
+              width: "30px",
+              height: "30px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Typography color="white" variant="h5" sx={{ lineHeight: 1 }}>
+              2
+            </Typography>
+          </div>
+
+          {/* Text Element */}
+          <Typography variant="h4">Select files to create products</Typography>
+        </Stack>
         <Button
           disabled={loading || !selectedRowIds?.length}
           variant="contained"
+          color="primary"
           onClick={getSelectedProducts}
         >
           {loading ? "Creating..." : "Create Products"}
@@ -268,15 +296,14 @@ export default function ProductSelection({ products }) {
       </Box>
       <DataGrid
         rows={products}
-        columns={columns.map((col) => ({
+        columns={productSelectionColumns.map((col) => ({
           ...col,
-          flex: 1, // Allow flexible sizing based on content
-          minWidth: 100, // Ensure a minimum width to avoid squishing
+          flex: 1,
+          minWidth: 100,
         }))}
         getRowId={(row) => row.id}
-        autoHeight // Adjusts height based on content
+        autoHeight
         initialState={{ pagination: { paginationModel: { pageSize: 5 } } }}
-        pageSize={5}
         rowsPerPageOptions={[5]}
         checkboxSelection
         onRowSelectionModelChange={(ids) => {
