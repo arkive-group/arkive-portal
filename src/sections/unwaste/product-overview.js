@@ -35,11 +35,11 @@ export default function ProductOverview({ products, productFilters }) {
         </Link>
       ), // renderCell will render the component
     },
-    { field: "id", headerName: "ID", width: 150 },
-    { field: "title", headerName: "Title", width: 200 },
-    { field: "handle", headerName: "Handle", width: 150 },
+    // { field: "id", headerName: "ID", width: 150 },
+    { field: "title", headerName: "Products / Materials / Ingredients", width: 240 },
+    // { field: "handle", headerName: "Handle", width: 150 },
     { field: "status", headerName: "Status", width: 100 },
-    { field: "seoDescription", headerName: "SEO Description", width: 100 },
+    // { field: "seoDescription", headerName: "SEO Description", width: 100 },
     { field: "salesChannels", headerName: "Sales Channels", width: 100 },
   ];
 

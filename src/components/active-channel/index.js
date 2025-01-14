@@ -65,6 +65,7 @@ export default function ActiveChannel({ channel, onChannleChange }) {
             <ListItemText
               primary="Active Channel"
               secondary={Channels[channel]?.name}
+              sx={{ textAlign: "center" }}
             />
           </ListItem>
           <Divider />
@@ -93,6 +94,10 @@ export default function ActiveChannel({ channel, onChannleChange }) {
                   disabled={isDisabled}
                   fullWidth
                   variant={key === channel ? "contained" : "text"}
+                  sx={{
+                    justifyContent: "flex-start", // Align text to the left
+                    width: "100%",               // Optional: Ensure the button has sufficient width
+                  }}
                 >
                   {Channels[key].name}
                 </Button>
