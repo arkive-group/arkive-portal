@@ -36,7 +36,7 @@ export const Channels = {
   google: {
     name: "Google Marketplace",
     alias: "Google & YouTube",
-    icon: GMUrl,
+    icon: GoogleMarketplaceUrl,
   },
   facebook: {
     name: "Facebook",
