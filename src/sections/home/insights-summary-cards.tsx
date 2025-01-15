@@ -18,6 +18,7 @@ export function InsightsSummaryCards({ report, co2 }) {
           maxHeight: "140px",
           minWidth: "200px",
           boxShadow: "4px 4px 16px 4px #b8b6b6",
+          opacity: 0.9
         }}
       >
         <Typography variant="h3" sx={{ fontWeight: "bold" }}>

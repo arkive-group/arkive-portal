@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "noEmit": true,
@@ -21,8 +25,11 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
-    }
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "target": "ES2017"
   },
   "include": [
     "next-env.d.ts",
@@ -30,7 +37,10 @@
     "**/*.ts",
     "**/*.tsx",
     "src/app/api/email/route.js",
-    "src/app/api/**/*.js", "src/components/loading-screen/loading-screen.tsx", "src/sections/sync/product-selection.js", "src/auth/views/register-view.js",
+    "src/app/api/**/*.js",
+    "src/components/loading-screen/loading-screen.tsx",
+    "src/sections/sync/product-selection.js",
+    "src/auth/views/register-view.js"
   ],
   "exclude": [
     "node_modules"

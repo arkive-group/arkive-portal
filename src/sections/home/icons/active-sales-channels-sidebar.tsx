@@ -11,29 +11,22 @@ import {
   Icon,
 } from "@mui/material";
 
-import TiktokIcon from "@/assets/icons/TiktokIcon"; 
-import FacebookIcon from "./icons/FacebookIcon"; 
-import InstagramIcon from "./icons/InstagramIcon"; 
-import YoutubeIcon from "../../components/active-channel/icons/YoutubeIcon"; 
+import TiktokIcon from "@/assets/icons/TiktokIcon";
+import FacebookIcon from "./icons/FacebookIcon";
+import InstagramIcon from "./icons/InstagramIcon";
+import YoutubeIcon from "./icons/YoutubeIcon";
 import GoogleMarketplaceUrl from "../../components/active-channel/icons/google-marketplace.svg";
-import ArkiveUrl from "./icons/arkive_transparent.svg"; 
-import KauflandIcon from "../../components/active-channel/icons/KauflandIcon"; 
-import ArmoedefondsUrl from "./icons/armoedefonds.svg"; 
-import ServeTheCityUrl from "./icons/servethecityamsterdam.svg"; 
-import RondoUrl from "./icons/rondo.svg"; 
+import ArkiveUrl from "@/components/active-channel/icons/arkive_transparent.svg";
+import KauflandIcon from "./icons/KauflandIcon";
+import ServeTheCityUrl from "./icons/servethecityamsterdam.svg";
+import ArmoedefondsUrl from "./icons/armoedefonds.svg";
+import RondoUrl from "./icons/rondo.svg";
 
 export function ActiveSalesChannelsSidebar({ activeChannels }) {
-
   const activeChannelsIcons = {
-    TikTok: <TiktokIcon />, 
-    Kaufland: <KauflandIcon />, 
-    Facebook: <FacebookIcon />,
-    Instagram: <InstagramIcon />,
-    Youtube: <YoutubeIcon />,
-    ServeTheCity: <img src={ServeTheCityUrl} alt="Serve The City" />, 
-    Arkive: <img src={ArkiveUrl} alt="Arkive" />, 
-    Armoedefonds: <img src={ArmoedefondsUrl} alt="Armoedefonds" />, 
-    Rondo: <img src={RondoUrl} alt="Rondo" />, 
+    TikTok: <TiktokIcon />,
+    Kaufland: <KauflandIcon />,
+    ServeTheCity: <ServeTheCityUrl />,
   };
 
   return (
@@ -49,16 +42,15 @@ export function ActiveSalesChannelsSidebar({ activeChannels }) {
           </ListItem>
           <Divider style={{ marginBottom: "8px" }} />
           {Object.keys(activeChannels)
-            .filter((channel) => !["Inbox", "Linktree"].includes(activeChannels[channel].name)) 
+            .filter((channel) => !["Inbox", "Linktree"].includes(activeChannels[channel].name))
             .map((channel) => {
-              console.log(channel, "channel")
               const name = activeChannels[channel].name;
-              const icon = activeChannelsIcons[name] || ""; 
-              
+              const icon = activeChannelsIcons[name] || "";
+
               if (name === "Facebook & Instagram") {
                 return (
                   <>
-                    <ListItem key={"Facebook"} style={{ textAlign: "left" }}>
+                    <ListItem key={channel} style={{ textAlign: "left" }}>
                       <ListItemIcon sx={{ marginRight: 1 }}>
                         <Icon
                           sx={{
@@ -72,14 +64,14 @@ export function ActiveSalesChannelsSidebar({ activeChannels }) {
                             fontSize: "16px",
                           }}
                         >
-                          <FacebookIcon /> 
+                          <FacebookIcon />
                         </Icon>
                       </ListItemIcon>
                       <Typography style={{ opacity: 0.75 }} fontSize={"0.875rem"}>
                         {"Facebook"}
                       </Typography>
                     </ListItem>
-                    <ListItem key={"Instagram"} style={{ textAlign: "left" }}>
+                    <ListItem key={channel} style={{ textAlign: "left" }}>
                       <ListItemIcon sx={{ marginRight: 1 }}>
                         <Icon
                           sx={{
@@ -93,7 +85,7 @@ export function ActiveSalesChannelsSidebar({ activeChannels }) {
                             fontSize: "16px",
                           }}
                         >
-                          <InstagramIcon /> 
+                          <InstagramIcon />
                         </Icon>
                       </ListItemIcon>
                       <Typography style={{ opacity: 0.75 }} fontSize={"0.875rem"}>
@@ -105,7 +97,7 @@ export function ActiveSalesChannelsSidebar({ activeChannels }) {
               } else if (name === "Google & YouTube") {
                 return (
                   <>
-                    <ListItem key={"Google"} style={{ textAlign: "left" }}>
+                    <ListItem key={channel} style={{ textAlign: "left" }}>
                       <ListItemIcon sx={{ marginRight: 1 }}>
                         <Icon
                           sx={{
@@ -129,7 +121,7 @@ export function ActiveSalesChannelsSidebar({ activeChannels }) {
                         {"Google Shopping"}
                       </Typography>
                     </ListItem>
-                    <ListItem key={"YouTube"} style={{ textAlign: "left" }}>
+                    <ListItem key={channel} style={{ textAlign: "left" }}>
                       <ListItemIcon sx={{ marginRight: 1 }}>
                         <Icon
                           sx={{
@@ -143,39 +135,13 @@ export function ActiveSalesChannelsSidebar({ activeChannels }) {
                             fontSize: "16px",
                           }}
                         >
-                          <YoutubeIcon /> 
+                          <YoutubeIcon />
                         </Icon>
                       </ListItemIcon>
                       <Typography style={{ opacity: 0.75 }} fontSize={"0.875rem"}>
                         {"YouTube"}
                       </Typography>
                     </ListItem>
-                  </>
-                );
-              }else if (name === "HerculesApps Kaufland") {
-                return (
-                  <>
-                    <ListItem key={"HerculesApps Kaufland"} style={{ textAlign: "left" }}>
-                      <ListItemIcon sx={{ marginRight: 1 }}>
-                        <Icon
-                          sx={{
-                            width: "2rem",
-                            height: "2rem",
-                            background: "#efefef",
-                            borderRadius: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontSize: "16px",
-                          }}
-                          />
-                            <KauflandIcon />  
-                      </ListItemIcon>
-                      <Typography style={{ opacity: 0.75 }} fontSize={"0.875rem"}>
-                        {"Kaufland"}
-                      </Typography>
-                    </ListItem>
-                    
                   </>
                 );
               } else {
@@ -194,7 +160,7 @@ export function ActiveSalesChannelsSidebar({ activeChannels }) {
                           fontSize: "16px",
                         }}
                       >
-                        {icon || <img src={activeChannels[channel].icon} alt={name} />} 
+                        {icon}
                       </Icon>
                     </ListItemIcon>
                     <Typography style={{ opacity: 0.75 }} fontSize={"0.875rem"}>

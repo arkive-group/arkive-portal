@@ -1,5 +1,6 @@
 "use client";
 
+import React from 'react'; 
 import { Button } from "@mui/material";
 import Card from "@mui/material/Card";
 import List from "@mui/material/List";
@@ -11,50 +12,40 @@ import Icon from "@mui/material/Icon";
 import { useAuthContext, usePremiumStatus } from "@/auth/hooks";
 import RondoUrl from "./icons/rondo.svg";
 import ArkiveUrl from "./icons/arkive_transparent.svg";
-import BolUrl from "./icons/bol.svg";
 import GoogleMarketplaceUrl from "./icons/google-marketplace.svg";
-import FacebookUrl from "./icons/fb.svg"
+import FacebookUrl from "./icons/fb.svg";
 import InstagramUrl from "./icons/IG.svg";
-import TiktokIcon from "./icons/TiktokIcon";
+import TiktokIcon from "./icons/TiktokIcon"; 
 import ArmoedefondsUrl from "./icons/armoedefonds.svg";
 import ServeTheCityUrl from "./icons/servethecityamsterdam.svg";
+import KauflandIcon from './icons/KauflandIcon';
+import YoutubeIcon from './icons/YoutubeIcon';
 
 export const Channels = {
-  shopify: {
+  arkive: {
     name: "Arkive",
-    alias: "Online Store",
+    alias: "Arkive",
     icon: ArkiveUrl,
-    url: "https://admin.shopify.com/store/shoparkive",
   },
-  bol: {
-    name: "Bol.com",
-    alias: "Bol.com",
-    icon: BolUrl,
-    url: "https://www.bol.com/nl/nl/p/arkive-upcycles-natural-handmade-soaps-natural-olive-oil/9300000169592003/",
-  },
-
   google: {
-    name: "Google Marketplace",
-    alias: "Google & YouTube",
+    name: "Google Shopping",
+    alias: "Google Shopping",
     icon: GoogleMarketplaceUrl,
   },
   facebook: {
     name: "Facebook",
     alias: "Facebook",
     icon: FacebookUrl,
-    url: "https://www.facebook.com/Arkiveshop/",
   },
   instagram: {
     name: "Instagram",
     alias: "Instagram",
     icon: InstagramUrl,
-    url: "https://www.instagram.com/arkiveshop/",
   },
   tiktok: {
     name: "TikTok",
     alias: "TikTok",
-    icon: <TiktokIcon />,
-    url: "https://www.tiktok.com/@arkiveshop",
+    icon: TiktokIcon, 
   },
   repurposing: {
     name: "Rondo",
@@ -66,17 +57,26 @@ export const Channels = {
     name: "Armoedefonds",
     alias: "Armoedefonds",
     icon: ArmoedefondsUrl,
-    url: "https://www.armoedefonds.nl/",
   },
   serveTheCity: {
     name: "Serve The City",
-    alias: "serveTheCity",
+    alias: "Serve The City",
     icon: ServeTheCityUrl,
-    url: "https://www.stcamsterdam.nl/",
+  },
+  kaufland: {
+    name: "Kaufland",
+    alias: "Kaufland",
+    icon: KauflandIcon,
+  },
+  youtube: {
+    name: "YouTube",
+    alias: "YouTube",
+    icon: YoutubeIcon,
   },
 };
 
 export default function ActiveChannel({ channel, onChannleChange }) {
+  // @ts-ignore
   const { user } = useAuthContext();
   const { premium } = usePremiumStatus(user);
 
@@ -93,15 +93,16 @@ export default function ActiveChannel({ channel, onChannleChange }) {
         <Divider />
         {Object.keys(Channels).map((key) => {
           const isDisabled = Channels[key].isPremium && !premium.isPremium;
+
           return (
             <ListItem key={key}>
               <ListItemIcon sx={{ marginRight: 1 }}>
                 <Icon
                   sx={{
-                    width: "3rem",
-                    height: "3rem",
+                    width: "2rem",  
+                    height: "2rem", 
                     background: "#efefef",
-                    backgroundImage: `url(${Channels[key].icon})`,
+                    backgroundImage: `url(${typeof Channels[key].icon === 'string' ? Channels[key].icon : ''})`,
                     backgroundSize: "contain",
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
@@ -112,7 +113,9 @@ export default function ActiveChannel({ channel, onChannleChange }) {
                     fontSize: "16px",
                     boxShadow: 1,
                   }}
-                />
+                >
+                  {typeof Channels[key].icon === 'function' ? React.createElement(Channels[key].icon) : null}
+                </Icon>
               </ListItemIcon>
               <Button
                 onClick={() => onChannleChange(key)}
@@ -123,7 +126,7 @@ export default function ActiveChannel({ channel, onChannleChange }) {
                   pl: 3,
                   display: "flex",
                   justifyContent: "flex-start",
-                  textAlign: "left", // Added from Code #1
+                  textAlign: "left",  
                 }}
               >
                 {Channels[key].name}
