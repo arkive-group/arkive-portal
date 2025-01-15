@@ -98,8 +98,8 @@ export default function ActiveChannel({ channel, onChannleChange }) {
               <ListItemIcon sx={{ marginRight: 1 }}>
                 <Icon
                   sx={{
-                    width: "3rem",
-                    height: "3rem",
+                    width: "2rem",
+                    height: "2rem",
                     background: "#efefef",
                     backgroundImage: `url(${Channels[key].icon})`,
                     backgroundSize: "contain",
