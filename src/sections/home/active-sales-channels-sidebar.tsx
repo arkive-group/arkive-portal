@@ -19,6 +19,8 @@ import FacebookIcon from "./icons/FacebookIcon";
 import InstagramIcon from "./icons/InstagramIcon";
 import YoutubeIcon from "./icons/YoutubeIcon";
 import GoogleMarketplaceUrl from "../../components/active-channel/icons/google-marketplace.svg";
+import ArkiveUrl from "../../components/active-channel/icons/arkive_transparent.svg";
+import OnlineShopurl from "./icons/shopping-cart-02-svgrepo-com.svg"
 
 export function ActiveSalesChannelsSidebar({ activeChannels }) {
   const activeChannelsIcons = {
@@ -26,11 +28,6 @@ export function ActiveSalesChannelsSidebar({ activeChannels }) {
     Inbox: <MailIcon />,
     Linktree: <LinktreeIcon />,
     Shop: <ShopIcon />,
-    Facebook: "",
-    Instagram: "",
-    Google: "",
-    Youtube: "",
-    "Online Store": null,
   };
 
   return (
@@ -146,8 +143,61 @@ export function ActiveSalesChannelsSidebar({ activeChannels }) {
                   </ListItem>
                 </>
               );
-            } else
+            } else if (name === "Online Store") {
+              return(
+                <ListItem key={channel} style={{ textAlign: "left" }}>
+                <ListItemIcon sx={{ marginRight: 1 }}>
+                  <Icon
+                    sx={{
+                      width: "2rem",
+                      height: "2rem",
+                      background: "#efefef",
+                      backgroundImage: `url(${ArkiveUrl})`,
+                      backgroundSize: "contain",
+                      backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat",
+                      borderRadius: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "16px",
+                      boxShadow: 1,
+                    }}
+                  />
+                </ListItemIcon>
+                <Typography style={{ opacity: 0.75 }} fontSize={"0.875rem"}>
+                  {"Arkive Shop"}
+                </Typography>
+              </ListItem>
+              )
+            } else if (name === "Shop") {
               return (
+                <ListItem key={channel} style={{ textAlign: "left" }}>
+                  <ListItemIcon sx={{ marginRight: 1 }}>
+                    <Icon
+                      sx={{
+                        width: "2rem",
+                        height: "2rem",
+                        background: "#efefef",
+                        backgroundImage: `url(${OnlineShopurl})`,
+                        backgroundSize: "contain",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                        borderRadius: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "16px",
+                        boxShadow: 1,
+                      }}
+                    />
+                  </ListItemIcon>
+                  <Typography style={{ opacity: 0.75 }} fontSize={"0.875rem"}>
+                    {"Shop"}
+                  </Typography>
+                </ListItem>
+              );
+            } else return (
                 <ListItem key={channel} style={{ textAlign: "left" }}>
                   <ListItemIcon sx={{ marginRight: 1 }}>
                     <Icon
