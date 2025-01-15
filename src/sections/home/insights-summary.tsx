@@ -1,24 +1,25 @@
 "use client";
-
-// @mui
-import { Container } from "@mui/material";
 import { useEffect, useState, useRef } from "react";
-
-import UserProfileView from "@/sections/user/user-profile-view";
-import { getOrders, getProducts } from "@/lib/shopify";
 import { useAuthContext } from "@/auth/hooks";
-import { LoadingScreen } from "@/components/loading-screen";
-import InsightsCharts from "./insights-charts";
-import { InsightsCards } from "./insights-cards";
-import { lowerCase } from "lodash";
+import { Grid } from "@mui/material";
 
-// ----------------------------------------------------------------------
-// not correctly setting data after forEach, that is why it flickers on the screen
-// @FIX
-export default function InsightsView() {
+import { InsightsSummaryCards } from "./insights-summary-cards";
+import { ActiveSalesChannelsSidebar } from "./active-sales-channels-sidebar";
+import { LoadingScreen } from "@/components/loading-screen";
+import { lowerCase } from "lodash";
+import { getOrders, getProducts, getActiveSalesChannels } from "@/lib/shopify";
+
+export default function InsightsSummary() {
+  // @ts-ignore
+  const { user } = useAuthContext();
+  // useRef is a quick fix for useEffect that fetches data to prevent from running twice
+  // rewrite this component logic later (setState in useEffect triggers double API call, plus the logic can be simplified and
+  // divided into several separate fuhnctions
+  // delete mutability because it is producing unwanted side effects
+  // too many useEffects that arent necessary)
   const effectRan = useRef(false);
   const [loading, setLoading] = useState(false);
-  const [orders, setOrders] = useState([]);
+  const [activeChannels, setActiveChannels] = useState<any>([]);
   const [report, setReport] = useState({
     financeOverview: {
       sales: {
@@ -61,7 +62,7 @@ export default function InsightsView() {
       {
         name: "Monthly Revenue",
         data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      }
+      },
     ],
     channelBreakdown: [
       {
@@ -86,17 +87,20 @@ export default function InsightsView() {
       },
     ],
   });
-  const { user } = useAuthContext();
 
-
-  const orderProc = ({orders, products, skus}) => {
-    const now = new Date()
+  // @ts-ignore
+  const orderProc = ({ orders, products, skus }) => {
+    const now = new Date();
 
     let reportObj = report;
+
     orders.forEach((order) => {
       const orderDate = new Date(order.createdAt);
       // For FinanceOverview
-      if (orderDate.getMonth() === now.getMonth() && orderDate.getFullYear() === now.getFullYear()) {
+      if (
+        orderDate.getMonth() === now.getMonth() &&
+        orderDate.getFullYear() === now.getFullYear()
+      ) {
         reportObj.financeOverview.sales.current += parseFloat(order.totalPrice);
         reportObj.repurposing.sales.current += parseFloat(order.totalPrice);
       } else if (orderDate.getMonth() === (now.getMonth() - 1) % 12) {
@@ -107,91 +111,108 @@ export default function InsightsView() {
       // For FinanceSalesRevenue
       for (let i = 0; i < 12; i++) {
         if (orderDate.getMonth() === now.getMonth() - i) {
-          reportObj.financeSalesRevenue[0].data[11 - i] += parseFloat(order.totalPrice);
+          reportObj.financeSalesRevenue[0].data[11 - i] += parseFloat(
+            order.totalPrice
+          );
         }
       }
 
       // For ChannelBreakdown
       const name = lowerCase(order.name);
-      
-      
-      if (name.includes("bol")){
+
+      if (name.includes("bol")) {
         reportObj.channelBreakdown[1].data += parseFloat(order.totalPrice);
-      }
-      else if (name.includes("amazon")) {
+      } else if (name.includes("amazon")) {
         reportObj.channelBreakdown[2].data += parseFloat(order.totalPrice);
-      }
-      else if (name.includes("google")) {
+      } else if (name.includes("google")) {
         reportObj.channelBreakdown[3].data += parseFloat(order.totalPrice);
-      }
-      else {
+      } else {
         reportObj.channelBreakdown[0].data += parseFloat(order.totalPrice);
       }
 
       // For Repurposing
       reportObj.repurposing.co2.data += 0.029;
-
     });
 
-    reportObj.financeSalesRevenue[0].data = reportObj.financeSalesRevenue[0].data.map((data) => parseFloat(data.toFixed(2)));
-    reportObj.repurposing.co2.data = parseFloat(reportObj.repurposing.co2.data.toFixed(2));
+    reportObj.financeSalesRevenue[0].data =
+      reportObj.financeSalesRevenue[0].data.map((data) =>
+        parseFloat(data.toFixed(2))
+      );
+    reportObj.repurposing.co2.data = parseFloat(
+      reportObj.repurposing.co2.data.toFixed(2)
+    );
     reportObj.repurposing.products.data = new Set(skus).size;
-
     return reportObj;
-  }
+  };
+
+  const fetchMonthlyReport = async () => {
+    const uploader = user?.email;
+    const company = user?.company;
+
+    setLoading(true);
+    try {
+      // @ts-ignore
+      const productList = await getProducts({
+        company,
+      });
+      const skuList = productList
+        // @ts-ignore
+        .map((product) => product.variants.map((variant) => variant.sku))
+        .flat();
+
+      const afterString = new Date(
+        new Date().setFullYear(new Date().getFullYear() - 1)
+      ).toISOString();
+      const orderList = await getOrders({
+        uploader,
+        skuList,
+        fulfilled: true,
+        after: afterString,
+      });
+
+      const channels = await getActiveSalesChannels();
+      setActiveChannels(channels);
+
+      const report = orderProc({
+        orders: orderList,
+        products: productList,
+        skus: skuList,
+      });
+
+      setReport(report);
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (effectRan.current) return; // Prevent second run
     effectRan.current = true;
-    const uploader = user?.email;
-    const company = user?.company;
-    const fetchMonthlyReport = async () => {
-      setLoading(true);
-      try {
-        const productList = await getProducts({
-          company,
-        });
-        const skuList = productList
-          .map((product) => product.variants.map((variant) => variant.sku))
-          .flat();
-
-        const afterString = (new Date(new Date().setFullYear(new Date().getFullYear() - 1))).toISOString();
-        const orderList = await getOrders({
-          uploader, 
-          skuList, 
-          fulfilled: true,
-          after: afterString,
-        });
-
-        setOrders(orderList);
-
-        const report = orderProc({
-          orders: orderList,
-          products: productList,
-          skus: skuList
-        });
-        setReport(report);
-        setLoading(false);
-      } catch (err) {
-        console.error(err);
-        setLoading(false);
-      }
-    };
 
     fetchMonthlyReport();
   }, []);
 
   return (
-    <Container maxWidth="xl">
-      <UserProfileView />
+    <Grid
+      container
+      spacing={4}
+      sx={{ padding: 4, paddingLeft: 0, paddingRight: 0 }}
+    >
       {loading ? (
         <LoadingScreen />
       ) : (
         <>
-          <InsightsCards report={report.repurposing} />
-          <InsightsCharts report={report} />
+          <Grid item xs={9}>
+            <InsightsSummaryCards
+              report={report.repurposing}
+              co2={report.repurposing.co2.data}
+            />
+          </Grid>
+          <ActiveSalesChannelsSidebar activeChannels={activeChannels} />
         </>
       )}
-    </Container>
+    </Grid>
   );
 }

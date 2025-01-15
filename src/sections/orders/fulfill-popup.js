@@ -82,8 +82,9 @@ export default function FulfillPopup({ fulfillmentOrder, open, setOpen }) {
       <DialogTitle id="scroll-dialog-title">Fulfill Orders</DialogTitle>
       <DialogContent dividers={scroll === "paper"}>
         <Box noValidate sx={{ mt: 1 }}>
-          <TextField
+          {/* <TextField
             fullWidth
+            disabled
             margin="normal"
             id="fulfillmentOrderId"
             label="Order ID"
@@ -94,8 +95,9 @@ export default function FulfillPopup({ fulfillmentOrder, open, setOpen }) {
                 readOnly: true,
               },
             }}
-          />
+          /> */}
           <TextField
+            disabled
             fullWidth
             margin="normal"
             id="fulfillmentOrderName"
@@ -110,7 +112,8 @@ export default function FulfillPopup({ fulfillmentOrder, open, setOpen }) {
           />
           {fulfillmentOrderIds.map((fulfillmentOrderId, idx) => (
             <Box component="form" noValidate sx={{ mt: 1 }}>
-              <TextField
+              {/* <TextField
+                disabled
                 margin="normal"
                 id="fulfillmentOrderId"
                 label="Order ID"
@@ -124,6 +127,7 @@ export default function FulfillPopup({ fulfillmentOrder, open, setOpen }) {
                 }}
               />
               <TextField
+                disabled
                 margin="normal"
                 id="fulfillmentOrderName"
                 label="Order Name"
@@ -135,8 +139,9 @@ export default function FulfillPopup({ fulfillmentOrder, open, setOpen }) {
                     readOnly: true,
                   },
                 }}
-              />
+              /> */}
               <TextField
+                disabled
                 fullWidth
                 margin="normal"
                 id="fulfillmentOrderId"

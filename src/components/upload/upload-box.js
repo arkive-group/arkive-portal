@@ -18,7 +18,12 @@ export default function UploadBox({
   const { getRootProps, getInputProps, isDragActive, isDragReject } =
     useDropzone({
       multiple: false,
-      disabled,
+      // disabled,
+      accept: {
+        'text/csv': ['.csv'], // Accept CSV files
+        'application/vnd.ms-excel': ['.xls'], // Accept older Excel format
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'], // Accept modern Excel format
+      },
       ...other,
     })
 
@@ -59,7 +64,6 @@ export default function UploadBox({
       }}
     >
       <input {...getInputProps()} />
-
       {placeholder || <Iconify icon="eva:cloud-upload-fill" width={28} />}
     </Box>
   )
