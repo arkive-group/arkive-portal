@@ -62,21 +62,21 @@ export function avatar(theme) {
           };
         },
         root: {
-          width: 56, // Keep consistent avatar size
+          width: 56, 
           height: 56,
           borderRadius: '50%',
-          overflow: 'hidden', // Prevent overflow
+          overflow: 'hidden', 
           position: 'relative',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'transparent', // Background transparency to prevent color overlap
+          background: 'transparent', 
         },
         img: {
-          objectFit: 'contain',  // Ensures that the entire image fits within the avatar
+          objectFit: 'contain', 
           width: '100%',
           height: '100%',
-          objectPosition: 'center', // Ensure the image is centered
+          objectPosition: 'center', 
         },
       },
     },

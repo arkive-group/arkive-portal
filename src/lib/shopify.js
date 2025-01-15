@@ -91,7 +91,7 @@ const getOrders = async ({ uploader, skuList, fulfilled, after }) => {
     let orders = [];
     data.data?.orders?.edges.forEach((edge) => {
       let order = {
-        orderId: edge.node.id,
+        id: edge.node.id,
         name: edge.node.name,
         email: edge.node.email,
         createdAt: edge.node.createdAt,
