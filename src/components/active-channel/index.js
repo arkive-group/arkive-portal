@@ -15,7 +15,7 @@ import BolUrl from "./icons/bol.svg";
 import GoogleMarketplaceUrl from "./icons/google-marketplace.svg";
 import FacebookUrl from "./icons/fb.svg"
 import InstagramUrl from "./icons/IG.svg";
-import TiktokIcon from "./icons/TiktokIcon";
+import TiktokIcon from "./icons/tiktok-icon.svg";
 import ArmoedefondsUrl from "./icons/armoedefonds.svg";
 import ServeTheCityUrl from "./icons/servethecityamsterdam.svg";
 
@@ -53,7 +53,7 @@ export const Channels = {
   tiktok: {
     name: "TikTok",
     alias: "TikTok",
-    icon: <TiktokIcon />,
+    icon: TiktokIcon,
     url: "https://www.tiktok.com/@arkiveshop",
   },
   repurposing: {
@@ -123,7 +123,7 @@ export default function ActiveChannel({ channel, onChannleChange }) {
                   pl: 3,
                   display: "flex",
                   justifyContent: "flex-start",
-                  textAlign: "left", // Added from Code #1
+                  textAlign: "left",
                 }}
               >
                 {Channels[key].name}

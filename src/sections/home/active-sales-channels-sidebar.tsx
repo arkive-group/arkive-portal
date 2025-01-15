@@ -11,10 +11,11 @@ import {
   Icon,
 } from "@mui/material";
 
-import TiktokIcon from "./icons/TiktokIcon";
+
 import MailIcon from "./icons/MailIcon";
 import LinktreeIcon from "./icons/LinktreeIcon";
 import ShopIcon from "./icons/ShopIcon";
+import TiktokIcon from "@/assets/icons/TiktokIcon";
 
 export function ActiveSalesChannelsSidebar({ activeChannels }) {
   const activeChannelsIcons = {
