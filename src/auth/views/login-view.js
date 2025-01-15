@@ -82,8 +82,6 @@ export default function LoginView() {
     }
   });
 
-
-
   const renderHead = (
     <Stack spacing={1} sx={{ my: 5 }}>
       <Typography variant="h4">Welcome, you beautiful</Typography>
@@ -149,7 +147,6 @@ export default function LoginView() {
       >
         LOG IN
       </LoadingButton>
-
     </Stack>
   );
 
