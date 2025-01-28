@@ -61,6 +61,23 @@ export function avatar(theme) {
             }),
           };
         },
+        root: {
+          width: 56, 
+          height: 56,
+          borderRadius: '50%',
+          overflow: 'hidden', 
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: 'transparent', 
+        },
+        img: {
+          objectFit: 'contain', 
+          width: '100%',
+          height: '100%',
+          objectPosition: 'center', 
+        },
       },
     },
     MuiAvatarGroup: {

@@ -30,7 +30,7 @@ import { enqueueSnackbar } from "notistack";
 // ----------------------------------------------------------------------
 
 export default function LoginView() {
-  const { login, loginWithLink } = useAuthContext();
+  const { login } = useAuthContext();
 
   const [errorMsg, setErrorMsg] = useState("");
   const password = useBoolean();
@@ -81,16 +81,6 @@ export default function LoginView() {
       // setErrorMsg(typeof error === 'string' ? error : error.message)
     }
   });
-
-  const loginViaEmail = async () => {
-    const { email } = methods.getValues();
-
-    if (!email) {
-      enqueueSnackbar("Please Enter Your Email address");
-      return null;
-    }
-    await loginWithLink(email);
-  };
 
   const renderHead = (
     <Stack spacing={1} sx={{ my: 5 }}>
