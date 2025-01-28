@@ -392,6 +392,7 @@ const getProducts = async ({ uploader, company, active }) => {
                   nodes {
                     id
                     sku
+                    inventoryQuantity
                   }
                 }
                 resourcePublications(first: 10) {
