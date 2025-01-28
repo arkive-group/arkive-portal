@@ -13,7 +13,6 @@ export default function ProductOverview({ products, productFilters }) {
     {
       field: "imageUrl",
       headerName: "Image",
-      headerAlign: "center",
       width: 160,
       editable: true,
       renderCell: (params) => (
@@ -41,7 +40,6 @@ export default function ProductOverview({ products, productFilters }) {
     {
       field: "title",
       headerName: "Products / Materials / Ingredients",
-      headerAlign: "center",
       headerClassName: "custom-header",
       width: 240,
       renderCell: (params) => <UnwasteDataGridCell value={params.value} />,
@@ -50,7 +48,7 @@ export default function ProductOverview({ products, productFilters }) {
     {
       field: "status",
       headerName: "Status",
-      headerAlign: "center",
+      headerAlign: "left",
       maxWidth: 80,
       renderCell: (params) => <UnwasteDataGridCell value={params.value} />,
     },
@@ -58,15 +56,13 @@ export default function ProductOverview({ products, productFilters }) {
     {
       field: "salesChannels",
       headerName: "Sales Channels",
-      headerAlign: "center",
       headerClassName: "custom-header",
       width: 100,
-      renderCell: (params) => <UnwasteDataGridCell value={params.value} />,
+      renderCell: (params) => <UnwasteDataGridCell value={"All Channels"} />,
     },
     {
       field: "availableMarkets",
       headerName: "Available markets (coming soon)",
-      headerAlign: "center",
       headerClassName: "custom-header",
       width: 100,
       renderCell: (params) => <UnwasteDataGridCell value={"Benelux"} />,
@@ -74,7 +70,6 @@ export default function ProductOverview({ products, productFilters }) {
     {
       field: "channelType",
       headerName: "Channel Type (coming soon)",
-      headerAlign: "center",
       headerClassName: "custom-header",
       width: 100,
       renderCell: (params) => <UnwasteDataGridCell value={"All"} />,
@@ -115,16 +110,6 @@ export default function ProductOverview({ products, productFilters }) {
           }}
           slots={{
             toolbar: GridToolbar,
-          }}
-          sx={{
-            "& .custom-header .MuiDataGrid-columnHeaderTitle": {
-              whiteSpace: "normal !important", /* Allow text wrapping */
-              lineHeight: "1.2", /* Adjust line spacing */
-              textAlign: "center",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center"
-            },
           }}
         />
       </Box>
