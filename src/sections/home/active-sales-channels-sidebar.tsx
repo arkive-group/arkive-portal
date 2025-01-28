@@ -21,6 +21,12 @@ import YoutubeIcon from "./icons/YoutubeIcon";
 import GoogleMarketplaceUrl from "../../components/active-channel/icons/google-marketplace.svg";
 import ArkiveUrl from "../../components/active-channel/icons/arkive_transparent.svg";
 import OnlineShopurl from "./icons/shopping-cart-02-svgrepo-com.svg"
+import KauflandImage from "@/components/active-channel/icons/kaufland-image";
+import KauflandIcon from "./icons/KauflandIcon";
+import RondoUrl from "../../components/active-channel/icons/rondo.svg";
+import ArmoedefondsUrl from "../../components/active-channel/icons/armoedefonds.svg";
+import ServeTheCityUrl from "../../components/active-channel/icons/servethecityamsterdam.svg";
+
 
 export function ActiveSalesChannelsSidebar({ activeChannels }) {
   const activeChannelsIcons = {
@@ -28,6 +34,7 @@ export function ActiveSalesChannelsSidebar({ activeChannels }) {
     Inbox: <MailIcon />,
     Linktree: <LinktreeIcon />,
     Shop: <ShopIcon />,
+    "Kaufland": <KauflandImage />,
   };
 
   return (
@@ -37,8 +44,8 @@ export function ActiveSalesChannelsSidebar({ activeChannels }) {
           <ListItem style={{ backgroundColor: "#FF5F1F", opacity: "85%" }}>
             <ListItemText
               primary="Active Channels"
-              secondary={activeChannels?.name}
               style={{ textAlign: "center", color: "white" }}
+              secondary={activeChannels?.name}
             />
           </ListItem>
           <Divider style={{ marginBottom: "8px" }} />
@@ -50,7 +57,7 @@ export function ActiveSalesChannelsSidebar({ activeChannels }) {
               return (
                 <>
                   <ListItem key={channel} style={{ textAlign: "left" }}>
-                    <ListItemIcon sx={{ marginRight: 1 }}>
+                    <ListItemIcon sx={{ marginRight: 2 }}>
                       <Icon
                         sx={{
                           width: "2rem",
@@ -71,7 +78,7 @@ export function ActiveSalesChannelsSidebar({ activeChannels }) {
                     </Typography>
                   </ListItem>
                   <ListItem key={channel} style={{ textAlign: "left" }}>
-                    <ListItemIcon sx={{ marginRight: 1 }}>
+                    <ListItemIcon sx={{ marginRight: 2 }}>
                       <Icon
                         sx={{
                           width: "2rem",
@@ -97,7 +104,7 @@ export function ActiveSalesChannelsSidebar({ activeChannels }) {
               return (
                 <>
                   <ListItem key={channel} style={{ textAlign: "left" }}>
-                    <ListItemIcon sx={{ marginRight: 1 }}>
+                    <ListItemIcon sx={{ marginRight: 2 }}>
                       <Icon
                         sx={{
                           width: "2rem",
@@ -117,11 +124,11 @@ export function ActiveSalesChannelsSidebar({ activeChannels }) {
                       />
                     </ListItemIcon>
                     <Typography style={{ opacity: 0.75 }} fontSize={"0.875rem"}>
-                      {"Google Marketplace"}
+                      {"Google Shopping"}
                     </Typography>
                   </ListItem>
                   <ListItem key={channel} style={{ textAlign: "left" }}>
-                    <ListItemIcon sx={{ marginRight: 1 }}>
+                    <ListItemIcon sx={{ marginRight: 2 }}>
                       <Icon
                         sx={{
                           width: "2rem",
@@ -144,36 +151,36 @@ export function ActiveSalesChannelsSidebar({ activeChannels }) {
                 </>
               );
             } else if (name === "Online Store") {
-              return(
+              return (
                 <ListItem key={channel} style={{ textAlign: "left" }}>
-                <ListItemIcon sx={{ marginRight: 1 }}>
-                  <Icon
-                    sx={{
-                      width: "2rem",
-                      height: "2rem",
-                      background: "#efefef",
-                      backgroundImage: `url(${ArkiveUrl})`,
-                      backgroundSize: "contain",
-                      backgroundPosition: "center",
-                      backgroundRepeat: "no-repeat",
-                      borderRadius: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "16px",
-                      boxShadow: 1,
-                    }}
-                  />
-                </ListItemIcon>
-                <Typography style={{ opacity: 0.75 }} fontSize={"0.875rem"}>
-                  {"Arkive Shop"}
-                </Typography>
-              </ListItem>
-              )
+                  <ListItemIcon sx={{ marginRight: 2 }}>
+                    <Icon
+                      sx={{
+                        width: "2rem",
+                        height: "2rem",
+                        background: "#efefef",
+                        backgroundImage: `url(${ArkiveUrl})`,
+                        backgroundSize: "contain",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                        borderRadius: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "16px",
+                        boxShadow: 1,
+                      }}
+                    />
+                  </ListItemIcon>
+                  <Typography style={{ opacity: 0.75 }} fontSize={"0.875rem"}>
+                    {"Arkive"}
+                  </Typography>
+                </ListItem>
+              );
             } else if (name === "Shop") {
               return (
                 <ListItem key={channel} style={{ textAlign: "left" }}>
-                  <ListItemIcon sx={{ marginRight: 1 }}>
+                  <ListItemIcon sx={{ marginRight: 2 }}>
                     <Icon
                       sx={{
                         width: "2rem",
@@ -197,30 +204,176 @@ export function ActiveSalesChannelsSidebar({ activeChannels }) {
                   </Typography>
                 </ListItem>
               );
-            } else return (
-                <ListItem key={channel} style={{ textAlign: "left" }}>
-                  <ListItemIcon sx={{ marginRight: 1 }}>
-                    <Icon
-                      sx={{
-                        width: "2rem",
-                        height: "2rem",
-                        background: "#efefef",
-                        borderRadius: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: "16px",
-                      }}
-                    >
-                      {icon}
-                    </Icon>
-                  </ListItemIcon>
-                  <Typography style={{ opacity: 0.75 }} fontSize={"0.875rem"}>
-                    {activeChannels[channel].name}
-                  </Typography>
-                </ListItem>
+            } else if (name === "Linktree" || "Inbox") {
+              return <></>;
+            } else
+              return (
+                <>
+                  <ListItem key={channel} style={{ textAlign: "left" }}>
+                    <ListItemIcon sx={{ marginRight: 2 }}>
+                      <Icon
+                        sx={{
+                          width: "2rem",
+                          height: "2rem",
+                          background: "#efefef",
+                          borderRadius: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: "16px",
+                        }}
+                      >
+                        {icon}
+                      </Icon>
+                    </ListItemIcon>
+                    <Typography style={{ opacity: 0.75 }} fontSize={"0.875rem"}>
+                      {activeChannels[channel].name}
+                    </Typography>
+                  </ListItem>
+                </>
               );
           })}
+          <ListItem key={"TikTok"} style={{ textAlign: "left" }}>
+            <ListItemIcon sx={{ marginRight: 2 }}>
+              <Icon
+                sx={{
+                  width: "2rem",
+                  height: "2rem",
+                  background: "#efefef",
+                  backgroundSize: "contain",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                  borderRadius: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "16px",
+                  boxShadow: 1,
+                }}
+              >
+                <TiktokIcon />
+              </Icon>
+            </ListItemIcon>
+            <Typography style={{ opacity: 0.75 }} fontSize={"0.875rem"}>
+              {"TikTok"}
+            </Typography>
+          </ListItem>
+          <ListItem key={"Rondo"} style={{ textAlign: "left" }}>
+            <ListItemIcon sx={{ marginRight: 2 }}>
+              <Icon
+                sx={{
+                    width: "2rem",
+                    height: "2rem",
+                    background: "#efefef",
+                    backgroundImage: `url(${RondoUrl})`,
+                    backgroundSize: "contain",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    borderRadius: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "16px",
+                    boxShadow: 1,
+                }}>
+                </Icon>
+            </ListItemIcon>
+            <Typography style={{ opacity: 0.75 }} fontSize={"0.875rem"}>
+              {"Rondo"}
+            </Typography>
+          </ListItem>
+          <ListItem key={"Armoedefonds"} style={{ textAlign: "left" }}>
+            <ListItemIcon sx={{ marginRight: 2 }}>
+              <Icon
+                sx={{
+                  width: "2rem",
+                  height: "2rem",
+                  background: "#efefef",
+                  backgroundImage: `url(${ArmoedefondsUrl})`,
+                  backgroundSize: "contain",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                  borderRadius: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "16px",
+                  boxShadow: 1,
+                }}
+              ></Icon>
+            </ListItemIcon>
+            <Typography style={{ opacity: 0.75 }} fontSize={"0.875rem"}>
+              {"Armoedefonds"}
+            </Typography>
+          </ListItem>
+          <ListItem key={"ServeTheCityUrl"} style={{ textAlign: "left" }}>
+            <ListItemIcon sx={{ marginRight: 2 }}>
+              <Icon
+                sx={{
+                  width: "2rem",
+                  height: "2rem",
+                  background: "#efefef",
+                  backgroundImage: `url(${ServeTheCityUrl})`,
+                  backgroundSize: "contain",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                  borderRadius: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "16px",
+                  boxShadow: 1,
+                }}
+              ></Icon>
+            </ListItemIcon>
+            <Typography style={{ opacity: 0.75 }} fontSize={"0.875rem"}>
+              {"Serve The City"}
+            </Typography>
+          </ListItem>
+          <ListItem key={"HerculesApps Kaufland"} style={{ textAlign: "left" }}>
+            <ListItemIcon sx={{ marginRight: 2 }}>
+              <Icon
+                sx={{
+                  width: "2rem",
+                  height: "2rem",
+                  background: "#efefef",
+                  borderRadius: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "16px",
+                }}
+              >
+                <KauflandIcon />
+              </Icon>
+            </ListItemIcon>
+            <Typography style={{ opacity: 0.75 }} fontSize={"0.875rem"}>
+              {"Kaufland"}
+            </Typography>
+          </ListItem>
+          <ListItem key={"Tradedoubler"} style={{ textAlign: "left" }}>
+            <ListItemIcon sx={{ marginRight: 2 }}>
+              <Icon
+                sx={{
+                  width: "2rem",
+                  height: "2rem",
+                  background: "#efefef",
+                  borderRadius: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "16px",
+                }}
+              >
+                <Typography sx={{ color: "#2B73FF" }}>TD</Typography>
+              </Icon>
+            </ListItemIcon>
+            <Typography style={{ opacity: 0.75 }} fontSize={"0.875rem"}>
+              {"Tradedoubler"}
+            </Typography>
+          </ListItem>
+
+          
         </List>
       </Card>
     </Grid>
