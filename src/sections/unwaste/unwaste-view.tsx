@@ -6,7 +6,6 @@ import { Container } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { Channels } from "@/components/active-channel";
 import UserProfileView from "@/sections/user/user-profile-view";
-import ProductUnavailable from "../error/product-unavailable";
 import ProductOverview from "./product-overview";
 import ActiveChannel from "@/components/active-channel";
 import { getProducts } from "@/lib/shopify";
@@ -16,21 +15,28 @@ import { LoadingScreen } from "@/components/loading-screen";
 // ----------------------------------------------------------------------
 
 export default function UnwasteView() {
+  // @ts-ignore
   const { user } = useAuthContext();
   const [channel, setChannel] = useState("");
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
   const [productFilters, setProductFilters] = useState([]);
 
+  // @TODO: probably some side effects and extra rerenders here coz
+  // of two useEffects; check
+  // @ts-ignore
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
 
       try {
         const company = user?.company;
+        // @ts-ignore
         const productList = await getProducts({
+          // @ts-ignore
           company,
         });
+        // @ts-ignore
         setProducts(productList);
       } catch (err) {
         console.error("Failed to fetch products:", err);
