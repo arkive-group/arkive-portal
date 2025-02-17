@@ -78,13 +78,13 @@ export default function UnwasteView() {
         <LoadingScreen />
       ) : (
         <Grid container spacing={2}>
-          <Grid item xs={10}>
+          <Grid item xs={9}>
             <ProductOverview
               products={products}
               productFilters={productFilters}
             />
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <ActiveChannel
               channel={channel}
               onChannleChange={onChannleChange}
